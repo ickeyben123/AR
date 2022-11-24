@@ -342,7 +342,7 @@ spec:
     - name: deploy-to-kubernetes
       taskRef:
         name: iks-deploy-to-kubernetes
-      runAfter: [unit-tests]
+      runAfter: [containerize]
       params:
         - name: ibmcloud-api
           value: $(params.ibmcloud-api)
@@ -392,7 +392,7 @@ spec:
         - name: artifacts
           workspace: pipeline-ws
     - name: publish-deployable-task
-      runAfter: [deploy-to-kubernetes]
+      runAfter: [unit-tests]
       taskRef:
         name: toolchain-publish-deployable-mapping
       params:
