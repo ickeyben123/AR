@@ -210,9 +210,6 @@ spec:
     - name: code-risk-analyzer
       runAfter:
         - git-clone
-      t
-      
-      
       params:
         - name: pipeline-debug
           value: $(params.pipeline-debug)
