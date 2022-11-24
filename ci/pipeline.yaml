@@ -69,11 +69,6 @@ spec:
       default: "true"
     - name: commons-hosted-region
       default: "https://raw.githubusercontent.com/open-toolchain/commons/master"
-    #Cra specific params
-    - name: ibmcloud-region
-      description: (Optional) ibmcloud region to use
-      default: ""
-
     # Common command related params
     - name: env-props
       description: (Optional) A custom configuration of environment properties to source before execution, ex. 'export ABC=123 export DEF=456'
@@ -110,8 +105,6 @@ spec:
     - name: docker-build-flags
       description: (Optional) Customize docker build command for build stage scanning
       default: ""
-    - name: docker-build-context
-      description: (Optional) If specified, CRA will use the directory in the path parameter as docker build context
     - name: dockerfile-pattern
       description: (Optional) Pattern to identify Dockerfile in the repository
     - name: docker-registry-url
@@ -148,10 +141,6 @@ spec:
     - name: vulnerability-report
       description: Filepath to store Vulnerability report, not stored if empty
       default: "vulnerability.json"
-
-    # User control params
-    - name: cra-scan-image
-      description: Image to use for `scan` task
 
   workspaces:
     - name: pipeline-ws
@@ -221,8 +210,9 @@ spec:
     - name: code-risk-analyzer
       runAfter:
         - git-clone
-      taskRef:
-        name: cra-v2-cra
+      t
+      
+      
       params:
         - name: pipeline-debug
           value: $(params.pipeline-debug)
@@ -276,8 +266,6 @@ spec:
           value: $(params.exclude-dev)
         - name: vulnerability-report
           value: $(params.vulnerability-report)
-        - name: cra-scan-image
-          value: $(params.cra-scan-image)
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
