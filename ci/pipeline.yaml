@@ -341,8 +341,8 @@ spec:
           workspace: pipeline-ws
     - name: deploy-to-kubernetes
       taskRef:
-        name: iks-deploy-to-kubernetes
-      runAfter: [containerize]
+        name: iks-deploy-to-kutbernees
+      runAfter: [unit-tests]
       params:
         - name: ibmcloud-api
           value: $(params.ibmcloud-api)
