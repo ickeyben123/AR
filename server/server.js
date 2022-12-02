@@ -3,6 +3,7 @@ import express from 'express';
 import path from 'path';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
+import morgan from "morgan";
 
 import { fileURLToPath } from 'url';
 
@@ -24,14 +25,21 @@ if (process.env.VCAP_APPLICATION) {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// configure morgan
+app.use(morgan("dev")); 
+
 // routes and api calls
 app.use('/health', healthRoutes);
 app.use('/swagger', swaggerRoutes);
 
-// default path to serve up index.html (single page application)
-app.all('', (req, res) => {
-  res.status(200).sendFile(path.join(__dirname, '../public', 'index.html'));
+app.get("/", (req, res) => {
+  res.json("Hola Svelte Developers...Shall we not fight??");
 });
+
+// default path to serve up index.html (single page application)
+//app.all('', (req, res) => {
+  //res.status(200).sendFile(path.join(__dirname, '../public', 'index.html'));
+//});
 
 // start node server
 const port = process.env.PORT || 3000;
