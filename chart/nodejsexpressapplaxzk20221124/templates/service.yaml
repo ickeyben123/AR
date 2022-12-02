@@ -9,9 +9,13 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-   {{- range .Values.ports }}
-    - port: {{ .port }}
-      name: {{ .name }}
-    {{- end }}
+  - name: frontend 
+    protocol: TCP
+    port: 32160
+    targetPort: 8080
+  - name: backend 
+    protocol: TCP
+    port: 32157
+    targetPort: 3000
   selector:
     app: "{{  .Chart.Name }}"
