@@ -27,13 +27,13 @@ EXPOSE 3000
 #ENV PORT 8080
 #EXPOSE 8080
 #ENV HOST=0.0.0.0
-#ENV PORT 8080
-#EXPOSE 8080
+ENV PORT 8080
+EXPOSE 8080
 
-#COPY wrapper_script.sh /opt/app-root/src
+COPY wrapper_script.sh /opt/app-root/src
 #COPY frontend_process.sh /opt/app-root/src/AR-app
-#COPY backend_process.sh /opt/app-root/src
+COPY backend_process.sh /opt/app-root/src
 
-CMD ["npm","start"]
-#CMD ["/bin/sh", "/opt/app-root/src/wrapper_script.sh"]
+#CMD ["npm","start"]
+CMD ["/bin/sh", "/opt/app-root/src/wrapper_script.sh"]
 

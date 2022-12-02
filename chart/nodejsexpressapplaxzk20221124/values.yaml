@@ -16,6 +16,10 @@ service:
   name: node
   type: NodePort
   servicePort: 3000
+service:
+  name: svelt
+  type: SveltPort
+  servicePort: 8080
 hpa:
   enabled: false
   minReplicas: 1
