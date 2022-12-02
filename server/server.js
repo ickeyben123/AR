@@ -28,13 +28,13 @@ app.use(bodyParser.json());
 app.use('/health', healthRoutes);
 app.use('/swagger', swaggerRoutes);
 
-// default path to serve up index.html (single page application)
-app.all('', (req, res) => {
-  res.status(200).sendFile(path.join(__dirname, '../public', 'index.html'));
+// define first route
+app.get("/", (req, res) => {
+  res.json("Hola Svelte Developers...Shall we fight??");
 });
 
 // start node server
-const port = process.env.PORT || 3000;
+const port = process.env.SERVER_PORT || 3000;
 app.listen(port, () => {
   console.log(`App UI available http://localhost:${port}`);
   console.log(`Swagger UI available http://localhost:${port}/swagger/api-docs`);

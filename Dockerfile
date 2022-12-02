@@ -1,15 +1,40 @@
-FROM registry.access.redhat.com/ubi8/nodejs-18-minimal:1
+FROM node:14-alpine
+
 
 WORKDIR /opt/app-root/src
+
 
 COPY package.json /opt/app-root/src
 RUN npm install --only=prod
 COPY server /opt/app-root/src/server
-COPY public /opt/app-root/src/public
-
-ENV NODE_ENV production
-ENV PORT 3000
-
+ENV SERVER_PORT 3000
 EXPOSE 3000
 
-CMD ["npm", "start"]
+
+WORKDIR /opt/app-root/src/AR-app
+
+COPY --chmod=0755 clientApps/AR-app/rollup.config.js ./
+COPY --chmod=0755 clientApps/AR-app/package*.json ./
+
+
+COPY --chmod=0755 clientApps/AR-app/src ./src
+COPY --chmod=0755 clientApps/AR-app/public ./public
+
+RUN npm install
+RUN npm run-script build
+
+
+#ENV PORT 8080
+#EXPOSE 8080
+#ENV HOST=0.0.0.0
+ENV PORT 8080
+EXPOSE 8080
+
+COPY wrapper_script.sh /opt/app-root/src
+COPY frontend_process.sh /opt/app-root/src/AR-app
+COPY backend_process.sh /opt/app-root/src
+
+
+#CMD ["npm","run","dev"]
+CMD ["/bin/sh", "/opt/app-root/src/wrapper_script.sh"]
+
