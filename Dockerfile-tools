@@ -1,8 +1,11 @@
 FROM registry.access.redhat.com/ubi8/nodejs-18:1 as build
 
-ENV PORT 3000
+
+ENV SERVER_PORT 3000
+ENV PORT 8080
 ENV NODE_HEAPDUMP_OPTIONS nosignal
 EXPOSE 3000
+EXPOSE 8080
 EXPOSE 9229
 
 USER root
