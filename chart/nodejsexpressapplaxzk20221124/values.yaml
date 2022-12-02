@@ -16,9 +16,9 @@ service:
   name: node
   type: NodePort
 ports:
--  name: ex1
+-  name: html1
    port: 3000
--  name: ex2
+-  name: html2
    port: 8080
 hpa:
   enabled: false

@@ -11,7 +11,7 @@ spec:
   ports:
    {{- range .Values.ports }}
     - port: {{ .port }}
-      name: http
+      name: {{ .name }}
     {{- end }}
   selector:
     app: "{{  .Chart.Name }}"
