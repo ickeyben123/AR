@@ -13,12 +13,12 @@ EXPOSE 3000
 
 WORKDIR /opt/app-root/src/AR-app
 
-COPY --chmod=0755 clientApps/AR-app/rollup.config.js ./
-COPY --chmod=0755 clientApps/AR-app/package*.json ./
+COPY clientApps/AR-app/rollup.config.js ./
+COPY clientApps/AR-app/package*.json ./
 
 
-COPY --chmod=0755 clientApps/AR-app/src ./src
-COPY --chmod=0755 clientApps/AR-app/public ./public
+COPY clientApps/AR-app/src ./src
+COPY  clientApps/AR-app/public ./public
 
 RUN npm install
 RUN npm run-script build
