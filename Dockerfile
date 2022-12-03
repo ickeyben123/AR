@@ -38,7 +38,7 @@ WORKDIR /opt/app-root/src/
 
 RUN chmod +x /opt/app-root/src/wrapper_script.sh
 RUN chmod +x /opt/app-root/src/backend_process.sh
-RUN chmod +x /opt/app-root/src/wrapper_script.sh
+RUN chmod +x /opt/app-root/src/AR-app/frontend_process.sh
 #RUN ./wrapper_script.sh
 #CMD ["/bin/sh", "-c", "npm run start&;cd /AR-app;npm start"]
 #ENTRYPOINT ["/bin/sh"]
