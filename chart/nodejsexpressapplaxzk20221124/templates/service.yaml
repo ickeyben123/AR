@@ -14,9 +14,8 @@ spec:
  #   protocol: TCP
  #   targetPort: 8080s
   #  nodePort: 30043
-  - name: backend 
-    port: 3000
-    targetPort: 3000
+  - name: http 
+    port: {{ .Values.service.servicePort }}
     nodePort: 32157
   selector:
     app: "{{  .Chart.Name }}"
