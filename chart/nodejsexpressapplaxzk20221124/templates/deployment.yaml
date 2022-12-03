@@ -29,7 +29,7 @@ spec:
  #       - ./backend_process.sh
       - env:
         - name: PORT
-          value : "{{ .Values.service.servicePort }}"
+          value : "3000"
         - name: APPLICATION_NAME
           value: "{{ .Release.Name }}"
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -37,7 +37,7 @@ spec:
         livenessProbe:
           httpGet:
             path: /health
-            port: {{ .Values.service.servicePort }}
+            port: 3000
             scheme: HTTP
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds}}
