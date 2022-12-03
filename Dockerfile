@@ -32,8 +32,9 @@ EXPOSE 4000
 
 COPY wrapper_script.sh /opt/app-root/src
 COPY frontend_process.sh /opt/app-root/src/AR-app
-#COPY backend_process.sh /opt/app-root/src
 
+#COPY backend_process.sh /opt/app-root/src
 #CMD ["npm","start"]
-CMD ["/bin/sh", "/opt/app-root/src/wrapper_script.sh"]
+ENTRYPOINT /bin/sh /opt/app-root/src/wrapper_script.sh
+
 
