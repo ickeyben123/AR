@@ -1,3 +1,5 @@
+#!/bin/sh
+
 cd /opt/app-root/src/
 # Start the first process
 ./backend_process.sh &
@@ -12,4 +14,3 @@ wait -n
 # Exit with status of process that exited first
 echo $?
 
-while true; do sleep 1; done 
