@@ -15,12 +15,7 @@ livenessProbe:
 service:
   name: node
   type: NodePort
-  port: 3000
-ports:
--  name: html1
-   port: 3000
--  name: html2
-   port: 8080
+  servicePort: 3000
 hpa:
   enabled: false
   minReplicas: 1
