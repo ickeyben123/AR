@@ -13,9 +13,9 @@ spec:
     port: 4000
     targetPort: 4000
     nodePort: 30043
-   name: http 
-   port: 3000
-   targetPort: 3000
-   nodePort: 32157
+  - name: http 
+    port: 3000
+    targetPort: 3000
+    nodePort: 32157
   selector:
     app: "{{  .Chart.Name }}"
