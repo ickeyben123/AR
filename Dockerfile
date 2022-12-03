@@ -34,10 +34,12 @@ COPY wrapper_script.sh /opt/app-root/src
 COPY frontend_process.sh /opt/app-root/src/AR-app
 COPY backend_process.sh /opt/app-root/src
 
-RUN chmod +x /opt/app-root/src/wrapper_script.s
-RUN /opt/app-root/src/wrapper_script.sh
+WORKDIR /opt/app-root/src/
 
-CMD ["npm","start"]
-#ENTRYPOINT ["/bin/sh", "/opt/app-root/src/wrapper_script.sh"]
+RUN chmod +x /opt/app-root/src/wrapper_script.sh
+#RUN ./wrapper_script.sh 
+#CMD ["npm","start"]
+#ENTRYPOINT ["/bin/sh"]
+ENTRYPOINT ["/bin/sh", "-c", "./wrapper_script.sh"]
 
 
