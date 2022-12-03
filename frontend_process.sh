@@ -1,1 +1,1 @@
-npm start --port 4000
+npm start

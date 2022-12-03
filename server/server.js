@@ -34,7 +34,7 @@ app.get("/", (req, res) => {
 });
 
 // start node server
-const port = 3000;
+const port = process.env.SERVER_PORT || 4000;
 app.listen(port, () => {
   console.log(`App UI available http://localhost:${port}`);
   console.log(`Swagger UI available http://localhost:${port}/swagger/api-docs`);

@@ -7,8 +7,8 @@ WORKDIR /opt/app-root/src
 COPY package.json /opt/app-root/src
 RUN npm install --only=prod
 COPY server /opt/app-root/src/server
-ENV SERVER_PORT 3000
-EXPOSE 3000
+ENV SERVER_PORT 4000
+EXPOSE 4000
 
 
 WORKDIR /opt/app-root/src/AR-app
@@ -27,8 +27,8 @@ RUN npm run-script build
 #ENV PORT 8080
 #EXPOSE 8080
 #ENV HOST=0.0.0.0
-ENV PORT 4000
-EXPOSE 4000
+ENV PORT 3000
+EXPOSE 3000
 
 COPY wrapper_script.sh /opt/app-root/src
 COPY frontend_process.sh /opt/app-root/src/AR-app
