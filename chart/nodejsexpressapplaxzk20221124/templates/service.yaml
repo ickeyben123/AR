@@ -16,6 +16,7 @@ spec:
   #  nodePort: 30043
   - name: http 
     port: {{ .Values.service.servicePort }}
-    nodePort: 32157
+ #   targetPort: 3000
+   # nodePort: 32157
   selector:
     app: "{{  .Chart.Name }}"
