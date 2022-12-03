@@ -4,7 +4,7 @@ cd /opt/app-root/src/
 
 #cd ./AR-app
 # Start the second process
-./frontend_process.sh &
+#./frontend_process.sh &
   
 # Wait for any process to exit
 #wait -n
