@@ -14,7 +14,7 @@ container-path-run : "/app"
 container-path-tools : "/app"
 
 # The port mappings between the host and the container in the form [host:container]
-container-port-map : "3000:3000,8080:8080"
+container-port-map : "3000:3000,4000:4000"
 # The port mappings between the host and the container for the debug port in the form [host:container]
 container-port-map-debug : "9229:9229"
 

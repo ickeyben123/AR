@@ -41,5 +41,5 @@ spec:
         name: "{{  .Chart.Name  }}"
         ports:
         - containerPort: {{ .Values.service.servicePort }}
-        - containerPort: 8080
+        - containerPort: 4000
           protocol: TCP
