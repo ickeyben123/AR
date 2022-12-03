@@ -24,6 +24,9 @@ spec:
         version: "current"
     spec:
       containers:
+ #     - command:
+ #       - cd /opt/app-root/src/
+ #       - ./backend_process.sh
       - env:
         - name: PORT
           value : "{{ .Values.service.servicePort }}"
