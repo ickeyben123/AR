@@ -34,12 +34,12 @@ spec:
         livenessProbe:
           httpGet:
             path: /health
-            port: 3000
+            port: {{ .Values.service.servicePort }}
             scheme: HTTP
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds}}
         name: "{{  .Chart.Name  }}"
         ports:
-        - containerPort: 3000
+        - containerPort: {{ .Values.service.servicePort }}
       #  - containerPort: 8080
           protocol: TCP
