@@ -29,7 +29,7 @@ spec:
  #       - ./backend_process.sh
       - env:
         - name: PORT
-          value : "3000"
+          value : "4000"
         - name: APPLICATION_NAME
           value: "{{ .Release.Name }}"
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
