@@ -30,7 +30,7 @@ app.use('/swagger', swaggerRoutes);
 
 // define first route
 app.get("/", (req, res) => {
-  res.json("Hola Svelte Developers...Shall we fight??");
+  res.json("Why do I exist, but to suffer?");
 });
 
 // start node server
