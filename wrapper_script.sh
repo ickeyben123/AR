@@ -4,12 +4,12 @@ cd /opt/app-root/src/
 
 cd ./AR-app
 # Start the second process
-./frontend_process.sh &
+./frontend_process.sh
   
 # Wait for any process to exit
-wait -n
+#wait -n
   
 # Exit with status of process that exited first
-echo $?
+#echo $?
 
-
+while true; do sleep 1; done 
