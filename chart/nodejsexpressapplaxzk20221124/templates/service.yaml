@@ -9,15 +9,14 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-  - name: frontend 
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
-    nodePort: 30043
+#  - name: frontend 
+ #   port: 8080
+ #   protocol: TCP
+ #   targetPort: 8080s
+  #  nodePort: 30043
   - name: backend 
     port: 3000
-    protocol: TCP
     targetPort: 3000
-    nodePort: 30443
+    nodePort: 32157
   selector:
     app: "{{  .Chart.Name }}"
