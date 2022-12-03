@@ -7,7 +7,7 @@ cd /opt/app-root/src/
 ./frontend_process.sh &
   
 # Wait for any process to exit
-wait -n
+#wait -n
   
 # Exit with status of process that exited first
-exit $?
+#exit $?
