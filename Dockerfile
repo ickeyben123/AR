@@ -37,8 +37,8 @@ COPY backend_process.sh /opt/app-root/src
 WORKDIR /opt/app-root/src/
 
 RUN chmod +x /opt/app-root/src/wrapper_script.sh
-#RUN ./wrapper_script.sh 
-#CMD ["npm","start"]
+#RUN ./wrapper_script.sh
+#CMD ["/bin/sh", "-c", "npm run start&;cd /AR-app;npm start"]
 #ENTRYPOINT ["/bin/sh"]
 ENTRYPOINT ["/bin/sh", "-c", "./wrapper_script.sh"]
 
