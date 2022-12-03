@@ -40,7 +40,8 @@ spec:
           periodSeconds: {{ .Values.livenessProbe.periodSeconds}}
         name: "{{  .Chart.Name  }}"
         ports:
-        - containerPort: {{ .Values.service.servicePort}}
+        - containerPort: 3000
+        - containerPort: 8080
           protocol: TCP
         resources:
           requests:
