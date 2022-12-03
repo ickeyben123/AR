@@ -10,9 +10,9 @@ spec:
   type: {{ .Values.service.type }}
   ports:
   - name: frontend 
-    port: 8080
+    port: 4000
     protocol: TCP
-    targetPort: 8080
+    targetPort: 4000
     nodePort: 30043
   - name: http 
     port: {{ .Values.service.servicePort }}
