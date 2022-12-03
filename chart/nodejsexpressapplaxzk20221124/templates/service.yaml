@@ -11,11 +11,11 @@ spec:
   ports:
   - name: frontend 
     port: 4000
-    targetPort: 4000
+    targetPort: {{ .Values.service.servicePort }}
     nodePort: 30043
-  - name: http 
-    port: {{ .Values.service.servicePort }}
-    targetPort: 3000
-    nodePort: 32157
+  #- name: http 
+ #   port: {{ .Values.service.servicePort }}
+ #   targetPort: 3000
+ #   nodePort: 32157
   selector:
     app: "{{  .Chart.Name }}"
