@@ -1,11 +1,11 @@
 FROM node:14-alpine
 
-WORKDIR /opt/app-root/src/AR-app
-COPY clientApps/AR-app/rollup.config.js ./
-COPY clientApps/AR-app/package*.json ./
+#WORKDIR /opt/app-root/src/AR-app
+#COPY clientApps/AR-app/rollup.config.js ./
+#COPY clientApps/AR-app/package*.json ./
 
-COPY clientApps/AR-app/src ./src
-COPY  clientApps/AR-app/public ./public
+#COPY clientApps/AR-app/src ./src
+#COPY  clientApps/AR-app/public ./public
 
 WORKDIR /opt/app-root/src
 
