@@ -11,21 +11,7 @@
         <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
     </head>
 
-    <body style="margin: 0; overflow: hidden;">
-        <a-scene
-            embedded
-            loading-screen="enabled: false;"
-            arjs="sourceType: webcam; debugUIEnabled: false;">
-                <a-image
-                    src="assets/asset.png"
-                    look-at="[gps-camera]"
-                    scale="1 1 1"
-                    gps-entity-place="latitude: 52.930759331905115; longitude: -1.2089677155290701;"
-                ></a-image>
-
-            <a-camera gps-camera rotation-reader></a-camera>
-        </a-scene>
-    </body>
+    <h>THis is a test.</h>
 </main>
 
 <style>

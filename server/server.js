@@ -4,6 +4,7 @@ import path from 'path';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 
+
 import { fileURLToPath } from 'url';
 
 import healthRoutes from './routes/health-route.js';
@@ -11,6 +12,21 @@ import swaggerRoutes from './routes/swagger-route.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+//Add mongodb functionality
+import mongoose from 'mongoose';
+import config from './config/db.js';
+
+//mongoose.set('strictQuery', true); // Make sure everything follows the schemas.
+
+mongoose
+  .connect(config.database)
+  .then(() => {
+    console.log("Database is connected");
+  })
+  .catch(err => {
+    console.log({ database_error: err });
+  });
 
 const app = express();
 
@@ -30,7 +46,7 @@ app.use('/swagger', swaggerRoutes);
 
 // define first route
 app.get("/", (req, res) => {
-  res.json("Backend replied.");
+  res.json("Hello.");
 });
 
 // start node server
