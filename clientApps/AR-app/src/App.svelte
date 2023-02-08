@@ -1,6 +1,26 @@
 <script>
-	export let name;
+	import {Router, Route, Link} from "svelte-routing";
+	import Tags from "./routes/tags.svelte";
+	import Login from "./routes/login.svelte";
+	import Home from "./routes/home.svelte";
+
+	export let url = "";
 </script>
+
+<Router url="{url}">
+	<nav>
+		<Link to="tags">Tags here :OOOO</Link>
+		<Link to="login">Login here for SQL injection</Link>
+		<Link to="/">Home</Link>
+	</nav>
+	<div>
+		<Route path="tags" component="{Tags}" />
+		<Route path="login" component="{Login}" />
+		<Route path="/" component="{Home}" />
+	</div>
+
+</Router>
+
 
 <main>
   <head>
@@ -10,8 +30,6 @@
         <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
         <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
     </head>
-
-    <h>THis is a test.</h>
 </main>
 
 <style>
