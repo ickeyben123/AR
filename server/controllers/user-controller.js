@@ -39,6 +39,10 @@ exports.deleteUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
+    if(req.body.username!=null){
+      res.status(500).json({ error: "Cannot edit username!" });
+      return;
+    }
     const id = req.params.userId;
     let result = await User.findByIdAndUpdate(id, req.body);
     res.status(200).json(result);
