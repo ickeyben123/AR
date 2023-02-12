@@ -12,12 +12,12 @@ exports.getUsers = async (req, res) => {
 
 exports.addUser = async (req, res) => {
   try {
-    if(User.find({ userName: req.body.username }).limit(1).size()==1){
+    if(User.find({ userName: req.body.userName }).limit(1).size()==1){
       res.status(500).json({ error: "Username already exists!" });
       return;
     }
     const user = new User({
-        userName: req.body.username,
+        userName: req.body.userName,
         password: req.body.password
     });
     let newUser = await user.save();
@@ -39,7 +39,7 @@ exports.deleteUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    if(req.body.username!=null){
+    if(req.body.userName!=null){
       res.status(500).json({ error: "Cannot edit username!" });
       return;
     }
@@ -54,7 +54,7 @@ exports.updateUser = async (req, res) => {
         user[key] = data[key];
       }
     }
-    
+
     // Save data
     let savedUser = await user.save();
     res.status(200).json({ data: savedUser });
