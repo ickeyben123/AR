@@ -3,6 +3,7 @@
 	import Tags from "./routes/tags.svelte";
 	import Login from "./routes/login.svelte";
 	import Home from "./routes/home.svelte";
+	import Ar from "./routes/ar.svelte";
 
 	export let url = "";
 </script>
@@ -12,12 +13,13 @@
 		<Link to="tags">Tags here :OOOO</Link>
 		<Link to="login">Login here for SQL injection</Link>
 		<Link to="/">Home</Link>
-		<!--testing branching-->>
+		<Link to="ar"> Ar Testing</Link>
 	</nav>
 	<div>
 		<Route path="tags" component="{Tags}" />
 		<Route path="login" component="{Login}" />
 		<Route path="/" component="{Home}" />
+		<Route path="ar" component="{Ar}"/>
 	</div>
 
 </Router>
