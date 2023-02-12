@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import User from '../models/users'
 
-exports.allBlogPost = async (req, res) => {
+exports.getUsers = async (req, res) => {
   try {
     let users = await User.find();
     res.status(200).json(users);
@@ -44,9 +44,21 @@ exports.updateUser = async (req, res) => {
       return;
     }
     const id = req.params.userId;
-    let result = await User.findByIdAndUpdate(id, req.body);
-    res.status(200).json(result);
+    let user = await User.findById(id);
+
+    var data = req.body;
+
+    // Set data
+    for(var key in data) {
+      if(data.hasOwnProperty(key)){
+        user[key] = data[key];
+      }
+    }
+    
+    // Save data
+    let savedUser = await user.save();
+    res.status(200).json({ data: savedUser });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ error: err });
   }
 };
