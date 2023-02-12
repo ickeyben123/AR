@@ -12,6 +12,10 @@ exports.allBlogPost = async (req, res) => {
 
 exports.addUser = async (req, res) => {
   try {
+    if(User.find({ userName: req.body.username }).limit(1).size()==1){
+      res.status(500).json({ error: "Username already exists!" });
+      return;
+    }
     const user = new User({
         userName: req.body.username,
         password: req.body.password
