@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import User from '../models/users.js'
 
+// Returns all users in the db
 export const getUsers = async (req, res) => {
   try {
     let users = await User.find();
@@ -10,23 +11,37 @@ export const getUsers = async (req, res) => {
   }
 };
 
+// Adds a user with specified userName and password entries in body.
 export const addUser = async (req, res) => {
   try {
-    // if(User.find({ userName: req.body.userName }).limit(1).size()==1){
+    // const count = User.find()
+    // res.status(200).json({ error: count});
+    // return;
+    // if(User.countDocuments({ userName: req.body.userName })>0){
     //   res.status(500).json({ error: "Username already exists!" });
     //   return;
+    // }
+    const count = await User.find({ userName: req.body.userName }).count();
+    if(count>0){
+      res.status(500).json({ error: "Username already exists!" });
+      return;
+    }
+    // if(query instanceof User){
+    //   res.status(500).json({ error: "Cannot edit username!" });
+    //   return; 
     // }
     const user = new User({
         userName: req.body.userName,
         password: req.body.password
     });
     let newUser = await user.save();
-    res.status(200).json({ data: newUser });
+    res.status(200).json({ data: newUser});
   } catch (err) {
     res.status(500).json({ error: err });
   }
 };
 
+// Deletes a user by its object id.
 export const deleteUser = async (req, res) => {
   try {
     const id = req.params.userId;
@@ -37,6 +52,7 @@ export const deleteUser = async (req, res) => {
   }
 };
 
+//Updates user password. Cannot edit username.
 export const updateUser = async (req, res) => {
   try {
     if(req.body.userName!=null){
@@ -62,3 +78,27 @@ export const updateUser = async (req, res) => {
     res.status(500).json({ error: err });
   }
 };
+
+export const loginUser = async (req,res) => {
+  try{
+    if(req.body.userName==null|| req.body.password==null){
+      res.status(500).json({ error: "Must include userName and password entries!"});
+      return;
+    }
+
+    const {userName, password} = req.body;
+
+    User.findOne({ userName: userName}, function(err, user){
+      if (err)  res.status(500).json({ error: err });
+
+      user.comparePassword(password, function(err,isMatch){
+        if (err)  res.status(500).json({ error: err });
+        res.status(200).json({ data: isMatch });
+      });
+
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+}
