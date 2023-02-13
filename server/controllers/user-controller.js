@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
-import User from '../models/users'
+import User from '../models/users.js'
 
-exports.getUsers = async (req, res) => {
+export const getUsers = async (req, res) => {
   try {
     let users = await User.find();
     res.status(200).json(users);
@@ -10,12 +10,12 @@ exports.getUsers = async (req, res) => {
   }
 };
 
-exports.addUser = async (req, res) => {
+export const addUser = async (req, res) => {
   try {
-    if(User.find({ userName: req.body.userName }).limit(1).size()==1){
-      res.status(500).json({ error: "Username already exists!" });
-      return;
-    }
+    // if(User.find({ userName: req.body.userName }).limit(1).size()==1){
+    //   res.status(500).json({ error: "Username already exists!" });
+    //   return;
+    // }
     const user = new User({
         userName: req.body.userName,
         password: req.body.password
@@ -27,7 +27,7 @@ exports.addUser = async (req, res) => {
   }
 };
 
-exports.deleteUser = async (req, res) => {
+export const deleteUser = async (req, res) => {
   try {
     const id = req.params.userId;
     let result = await User.remove({ _id: id });
@@ -37,7 +37,7 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
-exports.updateUser = async (req, res) => {
+export const updateUser = async (req, res) => {
   try {
     if(req.body.userName!=null){
       res.status(500).json({ error: "Cannot edit username!" });

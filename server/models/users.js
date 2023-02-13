@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-bcrypt = require('bcrypt'),
-SALT_WORK_FACTOR = 10;
+import mongoose from 'mongoose';
+import bcrypt  from 'bcrypt';
+var SALT_WORK_FACTOR = 10;
 
 const userSchema = new mongoose.Schema({
 
@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
 });
 
      
-UserSchema.pre('save', function(next) {
+userSchema.pre('save', function(next) {
     var user = this;
     
     // only hash the password if it has been modified (or is new)
@@ -36,7 +36,7 @@ UserSchema.pre('save', function(next) {
     });
 });
      
-UserSchema.methods.comparePassword = function(candidatePassword, cb) {
+userSchema.methods.comparePassword = function(candidatePassword, cb) {
     bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
         if (err) return cb(err);
         cb(null, isMatch);

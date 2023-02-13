@@ -4,6 +4,7 @@ import path from 'path';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import cors from 'cors';
+import morgan from 'morgan';
 
 
 import { fileURLToPath } from 'url';
@@ -48,6 +49,9 @@ app.use(cors());
 // routes and api calls
 app.use('/health', healthRoutes);
 app.use('/swagger', swaggerRoutes);
+
+// configure debugging
+app.use(morgan("dev"))
 
 // define first route
 app.get("/", (req, res) => {
