@@ -24,4 +24,6 @@ const tagSchema = new mongoose.Schema({
     }
 });
 
-export default tagSchema;
+var Tag = mongoose.model("Tag", tagSchema);
+
+export default Tag;

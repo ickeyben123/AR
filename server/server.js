@@ -55,7 +55,7 @@ app.use(morgan("dev"))
 
 // define first route
 app.get("/", (req, res) => {
-  res.json("Hello uh?.");
+  res.json("Hello lol?.");
 });
 
 // start node server
