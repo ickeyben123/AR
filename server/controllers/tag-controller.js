@@ -74,6 +74,9 @@ export const updateTag = async (req, res) => {
             res.status(500).json({ error: "No user for this tag!" });
             return;
         }
+        const id = req.params.tagId;
+        let tag = await Tag.findById(id);
+
 
         var data = req.body;
         
@@ -91,7 +94,7 @@ export const updateTag = async (req, res) => {
     
         // Save data
         let savedTag = await tag.save();
-        res.status(200).json({ data: savedUser });
+        res.status(200).json({ data: savedTag });
     } catch (err) {
         res.status(500).json({ error: err });
     }
