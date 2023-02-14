@@ -66,6 +66,8 @@ app.listen(port, () => {
 });
 
 app.use("/user", userRoutes);
+app.use("/tags", tagRoutes);
+
 
 // error handler for unmatched routes or api calls
 app.use((req, res, next) => {
