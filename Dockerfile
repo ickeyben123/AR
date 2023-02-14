@@ -16,7 +16,7 @@ RUN cd /tmp && mkdir frontend && mkdir backend
 WORKDIR /opt/app-root/src
 
 ADD package.json /tmp/backend/package.json
-RUN cd /tmp/backend && npm install --only=prod
+RUN cd /tmp/backend && npm install
 
 #Copy node modules into backend
 RUN cp -a /tmp/backend/node_modules /opt/app-root/src
