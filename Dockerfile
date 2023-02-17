@@ -45,16 +45,8 @@ WORKDIR /opt/app-root/src
 
 #Load Backend Application in
 
-ADD backend_process.sh /opt/app-root/src/backend_process.sh
-
 COPY package.json ./
 COPY server /opt/app-root/src/server
 
-RUN chmod +x /opt/app-root/src/backend_process.sh
-
-#RUN ./wrapper_script.sh
-#CMD ["/bin/sh", "-c", "npm run start&;cd /AR-app;npm start"]
-#ENTRYPOINT ["/bin/sh"]
-ENTRYPOINT ["/bin/sh","/opt/app-root/src/backend_process.sh"]
-
-
+#This runs both node servers. I cannot separate them into .sh files as windows WSL seems to mess with permissions.
+ENTRYPOINT ["/bin/sh", "-c" , "npm run dev & cd /opt/app-root/src/AR-app && npm start & wait -n && echo $?"]
