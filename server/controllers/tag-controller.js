@@ -79,9 +79,6 @@ export const updateTag = async (req, res) => {
 
 
         var data = req.body;
-        
-
-        //not sure how to get the tag here,cant just make a new tag
 
 
 

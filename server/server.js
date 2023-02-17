@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url';
 import healthRoutes from './routes/health-route.js';
 import swaggerRoutes from './routes/swagger-route.js';
 import userRoutes from './routes/user-route.js';
+import tagRoutes from './routes/tagRoutes.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
