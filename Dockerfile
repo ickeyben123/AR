@@ -48,9 +48,9 @@ WORKDIR /opt/app-root/src
 COPY package.json ./
 COPY server /opt/app-root/src/server
 
-COPY wrapper_script.sh /opt/app-root/src
-COPY frontend_process.sh /opt/app-root/src/AR-app
-COPY backend_process.sh /opt/app-root/src
+ADD wrapper_script.sh /opt/app-root/src/wrapper_script.sh
+ADD frontend_process.sh /opt/app-root/src/AR-app/frontend_process.sh
+ADD backend_process.sh /opt/app-root/src/backend_process.sh
 
 WORKDIR /opt/app-root/src/
 
@@ -60,6 +60,6 @@ RUN chmod +x /opt/app-root/src/AR-app/frontend_process.sh
 #RUN ./wrapper_script.sh
 #CMD ["/bin/sh", "-c", "npm run start&;cd /AR-app;npm start"]
 #ENTRYPOINT ["/bin/sh"]
-CMD ["/bin/sh", "-c", "./wrapper_script.sh"]
+CMD ["/opt/app-root/src/wrapper_script.sh"]
 
 
