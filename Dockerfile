@@ -45,21 +45,16 @@ WORKDIR /opt/app-root/src
 
 #Load Backend Application in
 
+ADD backend_process.sh /opt/app-root/src/backend_process.sh
+
 COPY package.json ./
 COPY server /opt/app-root/src/server
 
-ADD wrapper_script.sh /opt/app-root/src/wrapper_script.sh
-ADD frontend_process.sh /opt/app-root/src/AR-app/frontend_process.sh
-ADD backend_process.sh /opt/app-root/src/backend_process.sh
-
-WORKDIR /opt/app-root/src/
-
-RUN chmod +x /opt/app-root/src/wrapper_script.sh
 RUN chmod +x /opt/app-root/src/backend_process.sh
-RUN chmod +x /opt/app-root/src/AR-app/frontend_process.sh
+
 #RUN ./wrapper_script.sh
 #CMD ["/bin/sh", "-c", "npm run start&;cd /AR-app;npm start"]
 #ENTRYPOINT ["/bin/sh"]
-CMD ["/opt/app-root/src/wrapper_script.sh"]
+ENTRYPOINT ["/bin/sh","/opt/app-root/src/backend_process.sh"]
 
 
