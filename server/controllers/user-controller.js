@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import User from '../models/users.js'
+import * as Validation from '../middleware/validation.js'
 
 // Returns all users in the db
 export const getUsers = async (req, res) => {
@@ -34,6 +35,15 @@ export const addUser = async (req, res) => {
         userName: req.body.userName,
         password: req.body.password
     });
+    
+    //Perform validation
+    var succ = Validation.validatePassword(req.body.password);
+
+    if(succ != ""){
+      res.status(500).json({ error: succ });
+      return;
+    }
+
     let newUser = await user.save();
     res.status(200).json({ data: newUser});
   } catch (err) {
