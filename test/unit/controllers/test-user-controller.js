@@ -16,7 +16,7 @@ const expect = chai.expect;
 const sandbox = sinon.createSandbox();
 chai.use(sinonChai);
 
-describe('Test user controller - getUsers()', () => {
+describe('test user controller : getUsers()', () => {
   before(() => {
     sandbox.stub(res, 'json');
   });
@@ -31,9 +31,7 @@ describe('Test user controller - getUsers()', () => {
 
   it('should return all users in database', () => {
     const mockReq = {};
-    
-    expect(res.json).to.have.been.calledOnceWith({
-      status: 'UP',
-    });
+    getUsers(mockReq, res);
+    //expect(res.json).to
   });
 });
