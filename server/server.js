@@ -12,7 +12,7 @@ import { fileURLToPath } from 'url';
 import healthRoutes from './routes/health-route.js';
 import swaggerRoutes from './routes/swagger-route.js';
 import userRoutes from './routes/user-route.js';
-import tagRoutes from './routes/tagRoutes.js'
+import tagRoutes from './routes/tag-route.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -67,7 +67,7 @@ app.listen(port, () => {
 });
 
 app.use("/user", userRoutes);
-app.use("/tags", tagRoutes);
+app.use("/tag", tagRoutes);
 
 
 // error handler for unmatched routes or api calls

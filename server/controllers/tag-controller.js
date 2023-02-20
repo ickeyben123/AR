@@ -46,7 +46,7 @@ export const deleteTag = async (req, res) => {
         //check user exists first
 
         //duplicated code, make this a separate function
-        const count = await User.find({ _id: req.body.owner }).count();
+        const count = await User.findById({ _id: req.body.owner }).count();
         if(count==0){
             res.status(500).json({ error: "No user for this tag!" });
             return;
