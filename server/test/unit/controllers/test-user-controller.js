@@ -1,36 +1,37 @@
-//During the test the env variable is set to test
-process.env.NODE_ENV = 'test';
-
-let mongoose = require("mongoose");
-let Book = require('..');
-
-
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-chai.use(chaiHttp);
-//Our parent block
-describe('Tags', () => {
-    beforeEach((done) => { //Before each test we empty the database
-        Book.remove({}, (err) => { 
-           done();           
-        });        
-    });
-/*
-  * Test the /GET route
-  */
-  describe('/GET book', () => {
-      it('it should GET all the books', (done) => {
-        chai.request(server)
-            .get('/book')
-            .end((err, res) => {
-                  res.should.have.status(200);
-                  res.body.should.be.a('array');
-                  res.body.length.should.be.eql(0);
-              done();
-            });
-      });
+import {
+    getUsers, 
+    addUser, 
+    deleteUser, 
+    updateUser, 
+    loginUser
+} from '../../server/controllers/user-controller';
+
+import res from 'express/lib/response.js';
+
+const expect = chai.expect;
+const sandbox = sinon.createSandbox();
+chai.use(sinonChai);
+
+describe('test user controller : getUsers()', () => {
+  before(() => {
+    sandbox.stub(res, 'json');
   });
 
+  afterEach(() => {
+    sandbox.reset();
+  });
+
+  after(() => {
+    sandbox.restore();
+  });
+
+  it('should return all users in database', () => {
+    const mockReq = {};
+    getUsers(mockReq, res);
+    //expect(res.json).to
+  });
 });
