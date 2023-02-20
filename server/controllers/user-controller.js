@@ -15,22 +15,12 @@ export const getUsers = async (req, res) => {
 // Adds a user with specified userName and password entries in body.
 export const addUser = async (req, res) => {
   try {
-    // const count = User.find()
-    // res.status(200).json({ error: count});
-    // return;
-    // if(User.countDocuments({ userName: req.body.userName })>0){
-    //   res.status(500).json({ error: "Username already exists!" });
-    //   return;
-    // }
     const count = await User.find({ userName: req.body.userName }).count();
     if(count>0){
       res.status(500).json({ error: "Username already exists!" });
       return;
     }
-    // if(query instanceof User){
-    //   res.status(500).json({ error: "Cannot edit username!" });
-    //   return; 
-    // }
+
     const user = new User({
         userName: req.body.userName,
         password: req.body.password

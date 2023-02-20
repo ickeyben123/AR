@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import bcrypt  from 'bcrypt';
+import bcrypt  from 'bcryptjs';
 var SALT_WORK_FACTOR = 10;
 
 const userSchema = new mongoose.Schema({
