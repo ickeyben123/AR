@@ -2,7 +2,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-import HealthController from '../../../server/controllers/health-controller.js';
+import HealthController from '../../../controllers/health-controller.js';
 import res from 'express/lib/response.js';
 
 const expect = chai.expect;

@@ -11,7 +11,7 @@ host-path-tools : "."
 # The project root in the run container to mount to host-path-run
 container-path-run : "/app"
 # The project root in the tools container that will be mounted to host-path-tools
-container-path-tools : "/app"
+container-path-tools : "/opt/app-root/src"
 
 # The port mappings between the host and the container in the form [host:container]
 container-port-map : "3000:3000,4000:4000"

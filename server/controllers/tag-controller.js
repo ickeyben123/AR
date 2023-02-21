@@ -5,7 +5,7 @@ import User from '../models/users.js'
 export const getTags = async(req,res) => {
     try {
         let tags = await Tag.find();
-        res.status(200).json(users);
+        res.status(200).json(tags);
     } catch (err) {
         res.status(500).json(err);
     }
@@ -17,14 +17,14 @@ export const getTags = async(req,res) => {
 export const addTag = async (req,res) => {
     try{
         //see if user exists first
-        const count = await User.find({ userName: req.body.userName }).count();
+        const count = await User.findById({ _id: req.body.owner }).count();
         if(count==0){
         res.status(500).json({ error: "No user for this tag!" });
         return;
         }
 
         const tag = new Tag({
-            tagName: req.body.tag,
+            tagName: req.body.tagName,
             coords: req.body.coords,
             placed: req.body.placed,
             owner: req.body.owner
@@ -46,7 +46,7 @@ export const deleteTag = async (req, res) => {
         //check user exists first
 
         //duplicated code, make this a separate function
-        const count = await User.find({ userName: req.body.userName }).count();
+        const count = await User.findById({ _id: req.body.owner }).count();
         if(count==0){
             res.status(500).json({ error: "No user for this tag!" });
             return;
@@ -79,9 +79,6 @@ export const updateTag = async (req, res) => {
 
 
         var data = req.body;
-        
-
-        //not sure how to get the tag here,cant just make a new tag
 
 
 
