@@ -2,17 +2,7 @@ import mongoose from 'mongoose'
 import User from '../models/users.js'
 import * as Validation from '../middleware/validation.js'
 
-// Returns all users in the db
-export const getUsers = async (req, res) => {
-  try {
-    let users = await User.find();
-    res.status(200).json(users);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-};
-
-// Adds a user with specified userName and password entries in body.
+// Adds a user with specified username and password entries in body
 export const addUser = async (req, res) => {
   try {
     const count = await User.find({ userName: req.body.userName }).count();
@@ -26,7 +16,7 @@ export const addUser = async (req, res) => {
         password: req.body.password
     });
     
-    //Perform validation
+    // Perform validation
     var succ = Validation.validatePassword(req.body.password);
 
     if(succ != ""){
@@ -34,6 +24,7 @@ export const addUser = async (req, res) => {
       return;
     }
 
+    // Saves data
     let newUser = await user.save();
     res.status(200).json({ data: newUser});
   } catch (err) {
@@ -41,18 +32,28 @@ export const addUser = async (req, res) => {
   }
 };
 
-// Deletes a user by its object id.
-export const deleteUser = async (req, res) => {
+// Returns all users in the db
+export const getUsers = async (req, res) => {
   try {
-    const id = req.params.userId;
-    let result = await User.remove({ _id: id });
-    res.status(200).json(result);
+    let users = await User.find();
+    res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
-//Updates user password. Cannot edit username.
+// Returns the user with specified id
+export const getUser = async (req, res) => {
+  try {
+    const id = req.params.userId;
+    let user = await User.find({ _id: id });
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+// Updates user password. Cannot edit username
 export const updateUser = async (req, res) => {
   try {
     if(req.body.userName!=null){
@@ -79,6 +80,18 @@ export const updateUser = async (req, res) => {
   }
 };
 
+// Deletes a user by its object id
+export const deleteUser = async (req, res) => {
+  try {
+    const id = req.params.userId;
+    let result = await User.remove({ _id: id });
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+// Logs in a user via the supplied username and password
 export const loginUser = async (req,res) => {
   try{
     if(req.body.userName==null|| req.body.password==null){
