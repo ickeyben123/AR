@@ -84,13 +84,13 @@
 {#each tags as tag}
     <div class="accordionPanel">
         <button on:click={() => expand(tag)} class="accordionButton">
-            <div class="accordionIcon">L</div> {tag.tagName} 
+            <div class="accordionIcon">&#128273</div> {tag.tagName} 
         </button>
         
         {#if tag.active}
             <div transition:slide class="accordionContent" >
                 <p>
-                    Description
+                    (Description)
                 </p>
                 <button on:click={() => viewTag(tag.owner)}>Find</button>
                 <button on:click={() => placeTag(tag.owner)}>Place</button>
