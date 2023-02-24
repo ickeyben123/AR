@@ -2,7 +2,7 @@
     let name = '';
     let pass = '';
         
-    function logIn()
+    function signUp()
         {
             if (name == '')
                 {
@@ -14,21 +14,17 @@
                 }
             else
                 {
-                    alert("Logging In");
+                    alert("Signing Up");
                 }
         }
         
-        function signIn()
-        {
-            alert("Going To Sign In Page")
-        }
     </script>
     
     <body>
         <div class = "content">
             
             <div class="topBar">
-                <h1>Please Log In</h1>
+                <h1>Please Sign Up</h1>
             </div>
     
             <div class ="input">
@@ -37,17 +33,7 @@
             </div>
             
             <div class = "buttons">
-                <button on:click={logIn}>
-                    Log In
-                </button>
-            </div>
-            
-            <div class="topBar">
-                <h1>----- OR -----</h1>
-            </div>
-            
-            <div class = "buttons">
-                <button on:click={signIn}>
+                <button on:click={signUp}>
                     Sign Up
                 </button>
             </div>
@@ -66,7 +52,7 @@
         .topBar {
             position:sticky;
             margin: auto;
-            width: 50%;
+            width: 53%;
             text-align: centre;
         }
         .input {

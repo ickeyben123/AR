@@ -33,7 +33,7 @@
     
             <div class ="input">
                 <input bind:value={name} placeholder = Name><br>
-                <input bind:value={pass} placeholder = Passord><br>
+                <input bind:value={pass} placeholder = Password><br>
             </div>
             
             <div class = "buttons">
