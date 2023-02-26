@@ -1,27 +1,66 @@
 <script>
+    import {goto} from '$app/navigation';
     let name = '';
     let pass = '';
-        
-    function logIn()
-        {
-            if (name == '')
-                {
-                    alert("NAME IS EMPTY");
-                }
-            else if (pass = '')
-                {
-                    alert("PASSWORD IS EMPTY");
-                }
-            else
-                {
-                    alert("Logging In");
-                }
+    
+    /*  Function to display all names in db, used during testing
+    async function loadNames() {
+        await fetch("http://localhost:3000/user")
+        .then(async (response) => {
+            try {
+                const data = await response.json();
+                names = data;
+                alert("got names");
+            } catch (err) {
+                console.log(err);
+            }
+            });
+  
         }
-        
-        function signIn()
+    */
+
+    function logIn() {
+/*
+        if(name == '' || pass == '')
         {
-            alert("Going To Sign In Page")
+            alert("Invalid Entry");
+            return;
         }
+*/
+        loginReq();
+    }
+
+    async function loginReq() {
+        
+
+        const response = await fetch("http://localhost:3000/user/login",
+        {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userName: "person176",
+                password: "iQb.cN3Z.QrdM2A9k/s/vOtwSsp39gNiDtSjKqrXRiWOT9M/o0/zS"
+            })
+        });
+
+        response.json().then(data => {
+            console.log(JSON.stringify(data));
+            const resp = JSON.stringify(data);
+            if(resp == '{"data":false}'){
+                alert("INCORRECT");
+            }
+            else if(resp == '{"data":true}')
+            {
+                alert("Successful!")
+            }
+            
+        });
+
+    }
+
     </script>
     
     <body>
@@ -47,12 +86,19 @@
             </div>
             
             <div class = "buttons">
-                <button on:click={signIn}>
+                <button on:click={() => goto('/signup')}>
                     Sign Up
                 </button>
             </div>
     
-        </div>	
+        </div>
+        
+        <!-- Used with loadNames()
+        {#each names as unName}
+            <p>{unName.userName}</p>
+        {/each}
+        -->
+        
         
     </body>
     
