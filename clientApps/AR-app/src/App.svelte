@@ -3,6 +3,7 @@
 	import Tags from "./routes/tags.svelte";
 	import Login from "./routes/login.svelte";
 	import Home from "./routes/home.svelte";
+	import Ar from "./routes/ar.svelte";
 
 	export let url = "";
 </script>
@@ -12,11 +13,13 @@
 		<Link to="tags">Tags here :OOOO</Link>
 		<Link to="login">Login here for SQL injection</Link>
 		<Link to="/">Home</Link>
+		<Link to="ar"> Ar Testing</Link>
 	</nav>
 	<div>
 		<Route path="tags" component="{Tags}" />
 		<Route path="login" component="{Login}" />
 		<Route path="/" component="{Home}" />
+		<Route path="ar" component="{Ar}"/>
 	</div>
 
 </Router>
@@ -29,7 +32,7 @@
         <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
         <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
         <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
-  </head>
+    </head>
 </main>
 
 <style>

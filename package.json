@@ -13,7 +13,7 @@
     "check-coverage": "c8 report --check-coverage --lines 100",
     "lint": "eslint --ignore-path .gitignore .",
     "fix": "eslint --ignore-path .gitignore . --fix",
-    "test": "c8 mocha '/opt/app-root/src/server/test' --recursive --timeout 6000 --exit"
+    "test": "c8 mocha '/opt/app-root/src/server/test' --recursive --exit"
   },
   "type": "module",
   "husky": {
