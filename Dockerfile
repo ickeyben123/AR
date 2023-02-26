@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:18-alpine
 
 #Expose ports
 ENV SERVER_PORT 3000
@@ -16,7 +16,7 @@ RUN cd /tmp && mkdir frontend && mkdir backend
 WORKDIR /opt/app-root/src
 
 ADD package.json /tmp/backend/package.json
-RUN cd /tmp/backend && npm install --only=prod
+RUN cd /tmp/backend && npm install
 
 #Copy node modules into backend
 RUN cp -a /tmp/backend/node_modules /opt/app-root/src
@@ -24,22 +24,30 @@ RUN cp -a /tmp/backend/node_modules /opt/app-root/src
 ## Cache frontend package.json and install dependencies
 WORKDIR /opt/app-root/src/AR-app
 
-ADD clientApps/AR-app/package.json /tmp/frontend/package.json
+# RUN cp -a clientApps/AR-app/ /tmp/frontend/
+COPY clientApps/AR-app/package.json /tmp/frontend/
+COPY clientApps/AR-app/playwright.config.js /tmp/frontend/
+COPY clientApps/AR-app/svelte.config.js /tmp/frontend/
+COPY clientApps/AR-app/vite.config.js /tmp/frontend/
+COPY clientApps/AR-app/jsconfig.json /tmp/frontend/
 
 # Install dependencies for frontend
 RUN cd /tmp/frontend && npm install
 
 # Copy node modules into frontned
 RUN cp -a /tmp/frontend/node_modules /opt/app-root/src/AR-app
+RUN cp -a /tmp/frontend/.svelte-kit /opt/app-root/src/AR-app
 
 #Load Frontend Application in
 
-COPY clientApps/AR-app/rollup.config.js ./
+COPY clientApps/AR-app/playwright.config.js ./
+COPY clientApps/AR-app/svelte.config.js ./
+COPY clientApps/AR-app/vite.config.js ./
+COPY clientApps/AR-app/jsconfig.json ./
 COPY clientApps/AR-app/package.json ./
 COPY clientApps/AR-app/src ./src
-COPY  clientApps/AR-app/public ./public
 
-RUN npm run-script build
+RUN npm run build
 
 WORKDIR /opt/app-root/src
 
@@ -48,18 +56,5 @@ WORKDIR /opt/app-root/src
 COPY package.json ./
 COPY server /opt/app-root/src/server
 
-COPY wrapper_script.sh /opt/app-root/src
-COPY frontend_process.sh /opt/app-root/src/AR-app
-COPY backend_process.sh /opt/app-root/src
-
-WORKDIR /opt/app-root/src/
-
-RUN chmod +x /opt/app-root/src/wrapper_script.sh
-RUN chmod +x /opt/app-root/src/backend_process.sh
-RUN chmod +x /opt/app-root/src/AR-app/frontend_process.sh
-#RUN ./wrapper_script.sh
-#CMD ["/bin/sh", "-c", "npm run start&;cd /AR-app;npm start"]
-#ENTRYPOINT ["/bin/sh"]
-CMD ["/bin/sh", "-c", "./wrapper_script.sh"]
-
-
+#This runs both node servers. I cannot separate them into .sh files as windows WSL seems to mess with permissions.
+ENTRYPOINT ["/bin/sh", "-c" , "npm run dev & cd /opt/app-root/src/AR-app && npm run dev & wait -n && echo $?"]
