@@ -1,3 +1,10 @@
+<!-- Scipt is here to make sure ar.js is loaded in proper order:
+  
+Svelte Calls onMount -> Libraries loaded -> a-scene created
+
+a counter is kept of the libraries loaded so a-scene is only created
+once more all 3 libraries have been loaded in.
+-->>
 <script>
   import { onMount } from "svelte";
   let mounted;
@@ -15,6 +22,11 @@
   });
 </script>
 
+<!-- 
+each script also calls loadComponent function when loaded
+loadComponent increments componentsLoaded, this is only called 
+once svelte has mounted this page.  
+-->>
 <svelte:head>
   {#if mounted}
     <script 
@@ -30,6 +42,14 @@
 
 </svelte:head>
 
+
+<!--
+once svelte has mounted and libraries have been loaded ready boolean will be
+true and a-scene will be loaded in.
+
+TODO : remove simulateLatitude and simulateLongitude once finished, as they're 
+for testing
+-->
 {#if ready}
 <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
   <a-camera gps-new-camera='gpsMinDistance: 5 simulateLatitude: 52.930926 simulateLongitude:-1.208513'></a-camera>
