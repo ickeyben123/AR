@@ -20,17 +20,41 @@
     */
 
     function logIn() {
-/*
+
         if(name == '' || pass == '')
         {
             alert("Invalid Entry");
             return;
         }
-*/
+        console.log(name);
+        console.log(pass);
         loginReq();
     }
 
     async function loginReq() {
+        
+        
+        var nameObj = {};
+        var passObj = {};
+        var nameObj2 = name;
+        var passObj2 = pass;
+        var fieldN = "userName"
+        var fieldP = "password"
+
+        nameObj[fieldN] = name;
+        passObj[fieldP] = pass;
+
+
+        console.log(JSON.stringify({userName: "xxx", password: "yyy"}));
+        console.log((JSON.stringify(nameObj)).concat(JSON.stringify(passObj)));
+        //var request = ((JSON.stringify(nameObj)).concat(JSON.stringify(passObj)));
+        /*
+        console.log(JSON.stringify({
+            userName: nameObj2,
+            password: passObj2
+        }));*/
+        //console.log(request);
+
         
 
         const response = await fetch("http://localhost:3000/user/login",
@@ -40,10 +64,9 @@
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                userName: "person176",
-                password: "iQb.cN3Z.QrdM2A9k/s/vOtwSsp39gNiDtSjKqrXRiWOT9M/o0/zS"
-            })
+            body: JSON.stringify({userName: "tester", password: "password"}) 
+
+
         });
 
         response.json().then(data => {
