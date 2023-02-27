@@ -91,6 +91,11 @@ export const loginUser = async (req,res) => {
     User.findOne({ userName: userName}, function(err, user){
       if (err)  res.status(500).json({ error: err });
 
+      if(!user){
+        res.status(500).json({ error: "Username doesn't exist!" })
+        return;
+      }
+
       user.comparePassword(password, function(err,isMatch){
         if (err)  res.status(500).json({ error: err });
         res.status(200).json({ data: isMatch });

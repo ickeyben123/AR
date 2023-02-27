@@ -64,7 +64,10 @@
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({userName: "tester", password: "password"}) 
+            body: JSON.stringify({
+        "userName": name,
+        "password" : pass
+}) 
 
 
         });
@@ -77,7 +80,7 @@
             }
             else if(resp == '{"data":true}')
             {
-                alert("Successful!")
+                alert("CORRECT")
             }
             
         });
