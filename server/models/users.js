@@ -6,13 +6,26 @@ const userSchema = new mongoose.Schema({
 
     userName: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+    },
+
+    email: {
+        type: String,
+        required: true,
+        unique: true
     },
 
     password: {
         type: String,
         required: true
     },
+
+    // array of roles
+    roles : [{
+        type : mongoose.Schema.Types.ObjectId,
+        ref: "Role" // It references a Role object
+    }]
 });
 
      
