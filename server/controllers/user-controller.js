@@ -2,25 +2,17 @@ import mongoose from 'mongoose'
 import User from '../models/users.js'
 import Role from '../models/roles.js'
 import jwt from 'jsonwebtoken'
+import jwtconfig from '../config/jwt.js'
 import * as Validation from '../middleware/validation.js'
 
 // Adds a user with specified username and password entries in body
 export const addUser = async (req, res) => {
   try {
-    const count = await User.find({ userName: req.body.userName }).count();
-    if(count>0){
-      res.status(400).json({ error: "Username already exists!" });
-      return;
-    }
-
     const user = new User({
         userName: req.body.userName,
         email: req.body.email,
         password: req.body.password
     });
-    
-    // Perform validation
-    var succ = Validation.validatePassword(req.body.password);
 
     if(succ != ""){
       res.status(500).json({ error: succ });
@@ -146,7 +138,7 @@ export const loginUser = async (req,res) => {
           });
         }
 
-        var token = jwt.sign({ id: user.id }, config.secret, {
+        var token = jwt.sign({ id: user.id }, jwtconfig.secret, {
           expiresIn: 86400 // 24 hours
         });
 
@@ -154,13 +146,14 @@ export const loginUser = async (req,res) => {
         for (let i = 0; i < user.roles.length; i++) {
           roles.push(user.roles[i].name.toUpperCase());
         }
+
+        req.session.token = token;
         
         res.status(200).send({
           id: user._id,
-          username: user.username,
+          username: user.userName,
           email: user.email,
           roles: roles,
-          accessToken: token
         });
       });
 
@@ -170,3 +163,12 @@ export const loginUser = async (req,res) => {
     res.status(500).json({ error: err });
   }
 }
+
+export const signout = async (req, res) => {
+  try {
+    req.session = null;
+    return res.status(200).send({ message: "You've been signed out!" });
+  } catch (err) {
+    this.next(err);
+  }
+};

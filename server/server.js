@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
 import Role from './models/roles.js'
+import cookieSession from 'cookie-session';
 
 
 import { fileURLToPath } from 'url';
@@ -84,6 +85,16 @@ app.use('/swagger', swaggerRoutes);
 
 // configure debugging
 app.use(morgan("dev"))
+
+//Setup cookie session
+app.use(
+  cookieSession({
+    name: "ar-session",
+    secret: "COOKIE_SECRET", // should use as secret environment variable
+    httpOnly: true
+  })
+);
+
 
 // define first route
 app.get("/", (req, res) => {

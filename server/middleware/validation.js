@@ -1,8 +1,9 @@
 const ROLES = ["user", "admin"];
 import User from '../models/users.js'
 
-export function validatePassword(password) {
-    var p = password;
+export function validatePassword(req, res, next) {
+
+    var p = req.body.password || "";
     var errors = [];
     if (p.length < 8) {
         errors.push("Your password must be at least 8 characters"); 
@@ -16,13 +17,13 @@ export function validatePassword(password) {
     if (errors.length > 0) {
         return errors.join("\n");
     }
-    return "";
+    next();
 }
 
-checkDuplicateUsernameOrEmail = (req, res, next) => {
+export function checkDuplicateUsernameOrEmail(req, res, next) {
     // Username
     User.findOne({
-      username: req.body.username
+      username: req.body.userName
     }).exec((err, user) => {
       if (err) {
         res.status(500).send({ message: err });
@@ -53,7 +54,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
     });
   };
 
-  checkRolesExists = (req, res, next) => {
+export function checkRolesExists (req, res, next) {
     if (req.body.roles) {
       for (let i = 0; i < req.body.roles.length; i++) {
         if (!ROLES.includes(req.body.roles[i])) {
