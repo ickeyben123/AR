@@ -1,6 +1,5 @@
 <script>
     import {slide} from 'svelte/transition';
-    import App from '../App.svelte';
 
     let tags = [];
 

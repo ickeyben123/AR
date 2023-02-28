@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-16@sha256:3460b93cc53d52e1fe32c06c220edbf3a05958a7d5c491fab5b78c73ae22bcd4 as build
+FROM registry.access.redhat.com/ubi8/nodejs-18:1 as build
 
 ENV PORT 4000
 ENV NODE_HEAPDUMP_OPTIONS nosignal

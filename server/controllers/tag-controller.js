@@ -19,7 +19,7 @@ export const addTag = async (req,res) => {
         //see if user exists first
         const count = await User.findById({ _id: req.body.owner }).count();
         if(count==0){
-        res.status(500).json({ error: "No user for this tag!" });
+        res.status(400).json({ error: "No user for this tag!" });
         return;
         }
 
@@ -46,9 +46,9 @@ export const deleteTag = async (req, res) => {
         //check user exists first
 
         //duplicated code, make this a separate function
-        const count = await User.find({ _id: req.body.owner }).count();
+        const count = await User.findById({ _id: req.body.owner }).count();
         if(count==0){
-            res.status(500).json({ error: "No user for this tag!" });
+            res.status(400).json({ error: "No user for this tag!" });
             return;
         }
 
@@ -71,7 +71,7 @@ export const updateTag = async (req, res) => {
         //duplicated code, make this a separate function
         const user = await User.find({ userName: req.body.userName });
         if(user==null){
-            res.status(500).json({ error: "No user for this tag!" });
+            res.status(400).json({ error: "No user for this tag!" });
             return;
         }
         const id = req.params.tagId;

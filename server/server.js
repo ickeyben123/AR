@@ -5,6 +5,8 @@ import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
+import Role from './models/roles.js'
+import cookieSession from 'cookie-session';
 
 
 import { fileURLToPath } from 'url';
@@ -12,10 +14,11 @@ import { fileURLToPath } from 'url';
 import healthRoutes from './routes/health-route.js';
 import swaggerRoutes from './routes/swagger-route.js';
 import userRoutes from './routes/user-route.js';
-import tagRoutes from './routes/tagRoutes.js'
+import tagRoutes from './routes/tag-route.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 
 //Add mongodb functionality
 import mongoose from 'mongoose';
@@ -27,10 +30,39 @@ mongoose
   .connect(config.database)
   .then(() => {
     console.log("Database is connected");
+    initial();
   })
   .catch(err => {
     console.log({ database_error: err });
   });
+
+
+function initial() {
+  Role.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new Role({
+        name: "user"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'user' to roles collection");
+      });
+
+      new Role({
+        name: "admin"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'admin' to roles collection");
+      });
+    }
+  });
+}
+
 
 const app = express();
 
@@ -54,6 +86,16 @@ app.use('/swagger', swaggerRoutes);
 // configure debugging
 app.use(morgan("dev"))
 
+//Setup cookie session
+app.use(
+  cookieSession({
+    name: "ar-session",
+    secret: "COOKIE_SECRET", // should use as secret environment variable
+    httpOnly: true
+  })
+);
+
+
 // define first route
 app.get("/", (req, res) => {
   res.json("Hello lol?.");
@@ -67,7 +109,8 @@ app.listen(port, () => {
 });
 
 app.use("/user", userRoutes);
-app.use("/tags", tagRoutes);
+app.use("/tag", tagRoutes);
+app.use("/", healthRoutes);
 
 
 // error handler for unmatched routes or api calls
