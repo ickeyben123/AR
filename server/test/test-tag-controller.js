@@ -58,7 +58,7 @@ describe('Tags', () => {
         .post('/tag')
         .send(tag)
         .end((err, res) => {
-          res.should.have.status(500);
+          res.should.have.status(400);
           res.body.should.be.a('object');
           res.body.should.have.property('error');
           res.body.error.should.be.eql('No user for this tag!');

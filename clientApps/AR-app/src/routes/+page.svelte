@@ -20,7 +20,7 @@
                            <p></p>
                            <a class="btn" href="/tags">Tags</a>
                            <p></p>
-                           <a class="btn" href>AR Camera</a>
+                           <a class="btn" href="/ar">AR Camera</a>
                         </td>
                    </tr>
                </table>
