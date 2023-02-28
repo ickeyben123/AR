@@ -60,6 +60,7 @@
         const response = await fetch("http://localhost:3000/user/login",
         {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

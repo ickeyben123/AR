@@ -1,22 +1,14 @@
 <script>
     import {slide} from 'svelte/transition';
-
+    import { onMount } from 'svelte';
     let tags = [];
+    let loaded = false;
 
-    async function loadTags() {
-        return await fetch("http://localhost:3000/tags")
-        .then(async (response) => {
-            try {
-                const data = await response.json();
-                tags = data;
-            } catch (err) {
-                console.log(err);
-            }
-        });
-    }
+    // Get data from page.js
+    /** @type {import('./$types').PageData} */  
+    export let data;
+    tags = data.tags;
 
-    loadTags();
-    console.log(tags);
 
     /*let tags = [
         {
@@ -80,26 +72,28 @@
     <h1>Your Tags</h1>
 </div>
 
-{#each tags as tag}
-    <div class="accordionPanel">
-        <button on:click={() => expand(tag)} class="accordionButton">
-            <div class="accordionIcon">&#128273</div> {tag.tagName} 
-        </button>
-        
-        {#if tag.active}
-            <div transition:slide class="accordionContent" >
-                <p>
-                    (Description)
-                </p>
-                <button on:click={() => viewTag(tag.owner)}>Find</button>
-                <button on:click={() => placeTag(tag.owner)}>Place</button>
-                <button on:click={() => editTag(tag.owner)}>Edit</button>
-                <button on:click={() => deleteTag(tag.owner)}>Delete</button>
+{#if !data.failed}
+    {#each tags as tag}
+        <div class="accordionPanel">
+            <button on:click={() => expand(tag)} class="accordionButton">
+                <div class="accordionIcon">&#128273</div> {tag.tagName} 
+            </button>
+            
+            {#if tag.active}
+                <div transition:slide class="accordionContent" >
+                    <p>
+                        (Description)
+                    </p>
+                    <button on:click={() => viewTag(tag.owner)}>Find</button>
+                    <button on:click={() => placeTag(tag.owner)}>Place</button>
+                    <button on:click={() => editTag(tag.owner)}>Edit</button>
+                    <button on:click={() => deleteTag(tag.owner)}>Delete</button>
 
-            </div>
-        {/if}
-    </div>
-{/each}
+                </div>
+            {/if}
+        </div>
+    {/each}
+{/if}
 
 <button class="menuButton" on:click={() =>createNewTag()}>Create Tag +</button>
 </body>
