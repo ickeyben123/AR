@@ -24,7 +24,7 @@ const __dirname = path.dirname(__filename);
 import mongoose from 'mongoose';
 import config from './config/db.js';
 
-//mongoose.set('strictQuery', true); // Make sure everything follows the schemas.
+mongoose.set('strictQuery', true); // Make sure everything follows the schemas.
 
 mongoose
   .connect(config.database)

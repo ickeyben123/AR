@@ -1,7 +1,24 @@
 <script>
     import {slide} from 'svelte/transition';
 
-    let tags = [
+    let tags = [];
+
+    async function loadTags() {
+        return await fetch("http://localhost:3000/tags")
+        .then(async (response) => {
+            try {
+                const data = await response.json();
+                tags = data;
+            } catch (err) {
+                console.log(err);
+            }
+        });
+    }
+
+    loadTags();
+    console.log(tags);
+
+    /*let tags = [
         {
             id: 1,
             name: "Wallet",
@@ -24,7 +41,7 @@
             description:"headache",
             active:false,
         },
-    ];
+    ];*/
 
     function expand(section) {
         for (let i = 0; i < tags.length; i++) {
@@ -66,18 +83,18 @@
 {#each tags as tag}
     <div class="accordionPanel">
         <button on:click={() => expand(tag)} class="accordionButton">
-            <div class="accordionIcon">{tag.icon}</div> {tag.name} 
+            <div class="accordionIcon">&#128273</div> {tag.tagName} 
         </button>
         
         {#if tag.active}
             <div transition:slide class="accordionContent" >
                 <p>
-                    {tag.description}
+                    (Description)
                 </p>
-                <button on:click={() => viewTag(tag.id)}>Find</button>
-                <button on:click={() => placeTag(tag.id)}>Place</button>
-                <button on:click={() => editTag(tag.id)}>Edit</button>
-                <button on:click={() => deleteTag(tag.id)}>Delete</button>
+                <button on:click={() => viewTag(tag.owner)}>Find</button>
+                <button on:click={() => placeTag(tag.owner)}>Place</button>
+                <button on:click={() => editTag(tag.owner)}>Edit</button>
+                <button on:click={() => deleteTag(tag.owner)}>Delete</button>
 
             </div>
         {/if}
