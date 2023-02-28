@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
     // array of roles
     roles : [{
         type : mongoose.Schema.Types.ObjectId,
+        ref: "Role" // It references a Role object
     }]
 });
 

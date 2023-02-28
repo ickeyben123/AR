@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 import User from '../models/users.js'
+import Role from '../models/roles.js'
+import jwt from 'jsonwebtoken'
 import * as Validation from '../middleware/validation.js'
 
 // Adds a user with specified username and password entries in body
@@ -7,12 +9,13 @@ export const addUser = async (req, res) => {
   try {
     const count = await User.find({ userName: req.body.userName }).count();
     if(count>0){
-      res.status(500).json({ error: "Username already exists!" });
+      res.status(400).json({ error: "Username already exists!" });
       return;
     }
 
     const user = new User({
         userName: req.body.userName,
+        email: req.body.email,
         password: req.body.password
     });
     
@@ -22,6 +25,24 @@ export const addUser = async (req, res) => {
     if(succ != ""){
       res.status(500).json({ error: succ });
       return;
+    }
+
+    //See if a role is specified.
+    if (req.body.roles) {
+       // Get any role thats name is in bodie's role's array
+      Role.find(  { name: {$in: req.body.roles} }, (err,Roles) =>{
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+ 
+        // Map, {{Role Name,ID}} => {ID}
+        user.roles = Roles.map(role=> role._id); 
+      })
+    } else {
+      // Add default user role
+      const role = await Role.findOne({ name: "user" });
+      user.roles = [role._id];
     }
 
     // Saves data
@@ -57,7 +78,7 @@ export const getUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     if(req.body.userName!=null){
-      res.status(500).json({ error: "Cannot edit username!" });
+      res.status(400).json({ error: "Cannot edit username!" });
       return;
     }
     const id = req.params.userId;
@@ -95,18 +116,52 @@ export const deleteUser = async (req, res) => {
 export const loginUser = async (req,res) => {
   try{
     if(req.body.userName==null|| req.body.password==null){
-      res.status(500).json({ error: "Must include userName and password entries!"});
+      res.status(400).json({ error: "Must include userName and password entries!"});
       return;
     }
 
     const {userName, password} = req.body;
 
-    User.findOne({ userName: userName}, function(err, user){
-      if (err)  res.status(500).json({ error: err });
-
+    // Populate the roles, meaning replace them with the actual representation.
+    User.findOne({ userName: userName}).populate("roles").exec((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+      
       user.comparePassword(password, function(err,isMatch){
-        if (err)  res.status(500).json({ error: err });
-        res.status(200).json({ data: isMatch });
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+
+        if (!isMatch) {
+          return res.status(401).send({
+            accessToken: null,
+            message: "Invalid Password!"
+          });
+        }
+
+        var token = jwt.sign({ id: user.id }, config.secret, {
+          expiresIn: 86400 // 24 hours
+        });
+
+        var roles = [];
+        for (let i = 0; i < user.roles.length; i++) {
+          roles.push(user.roles[i].name.toUpperCase());
+        }
+        
+        res.status(200).send({
+          id: user._id,
+          username: user.username,
+          email: user.email,
+          roles: roles,
+          accessToken: token
+        });
       });
 
     });
