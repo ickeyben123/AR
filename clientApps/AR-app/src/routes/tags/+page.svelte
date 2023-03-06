@@ -1,39 +1,13 @@
 <script>
+
     import {slide} from 'svelte/transition';
     import { onMount } from 'svelte';
-    let tags = [];
     let loaded = false;
 
     // Get data from page.js
     /** @type {import('./$types').PageData} */  
     export let data;
-    tags = data.tags;
-
-
-    /*let tags = [
-        {
-            id: 1,
-            name: "Wallet",
-            icon: "💰",
-            description: "Tag description 1",
-            active:false,
-
-        },
-        {
-            id: 2,
-            name: "Keys",
-            icon: "🔑",
-            description: "Tag description 2 bla bla bla",
-            active:false,
-        },
-        {
-            id: 3,
-            name: "Paracetamol",
-            icon: "💊",
-            description:"headache",
-            active:false,
-        },
-    ];*/
+    let tags = data.tags;
 
     function expand(section) {
         for (let i = 0; i < tags.length; i++) {
