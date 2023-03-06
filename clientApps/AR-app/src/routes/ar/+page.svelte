@@ -4,11 +4,12 @@ Svelte Calls onMount -> Libraries loaded -> a-scene created
 
 a counter is kept of the libraries loaded so a-scene is only created
 once more all 3 libraries have been loaded in.
--->>
+-->
 <script>
   import { onMount } from "svelte";
   let mounted;
-  let componentLoaded = 0
+  let componentLoaded = 0;
+  let altitude = 3; 
   $: ready = componentLoaded == 3;
 
 
@@ -20,17 +21,47 @@ once more all 3 libraries have been loaded in.
     console.log("mounted");
     mounted = true;
   });
-</script>
+
+  const getLatitude = () => {
+    return "52.930851"
+  }
+
+  const getLongitude = () => {
+    return "-1.209076"
+  }
+
+  const options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+  };
+
+  const handlePositionCallback = (pos) => {
+      console.log(pos);
+  }
+
+  function getCurrentCords(){
+      const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+
+    navigator.geolocation.watchPosition(handlePositionCallback,console.log,options);
+  }
+
+
+  </script>
 
 <!-- 
 each script also calls loadComponent function when loaded
 loadComponent increments componentsLoaded, this is only called 
 once svelte has mounted this page.  
--->>
+-->
 <svelte:head>
   {#if mounted}
     <script 
-      src="https://aframe.io/releases/1.4.1/aframe.min.js"
+      src="https://aframe.io/releases/1.0.4/aframe.min.js"
       on:load={loadComponent}></script>
     <script 
       type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'
@@ -52,8 +83,8 @@ for testing
 -->
 {#if ready}
 <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
-  <a-camera gps-new-camera='gpsMinDistance: 5 simulateLatitude: 52.930926 simulateLongitude:-1.208513'></a-camera>
-  <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: 52.930926; longitude: -1.208513" scale="10 10 10"></a-entity>
+  <a-camera gps-new-camera='gpsMinDistance: 1; simulateAltitude: {altitude}'></a-camera>
+  <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: {getLatitude()}; longitude: {getLongitude()}" scale="10 10 10"></a-entity>
 </a-scene>
 {/if}
 
