@@ -5,7 +5,7 @@ import * as validation from '../middleware/validation.js';
 import * as validationJWT from '../middleware/validateJWT.js';
 
 router.post("/", [validation.checkDuplicateUsernameOrEmail,validation.validatePassword],userController.addUser);
-router.get("/", userController.getUsers);
+router.get("/all",[validationJWT.verifyToken,validationJWT.isAdmin], userController.getUsers);
 router.get("/",[validationJWT.verifyToken], userController.getUser);
 router.put("/",[validationJWT.verifyToken], userController.updateUser);
 router.delete("/:userId", [validationJWT.verifyToken,validationJWT.isAdmin], userController.deleteUser);
