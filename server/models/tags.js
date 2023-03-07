@@ -10,7 +10,7 @@ const tagSchema = new mongoose.Schema({
     },
 
     coords: {
-        type: Double,
+        type: Number,
         required: true
     },
 
