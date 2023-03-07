@@ -8,7 +8,7 @@ router.post("/", [validation.checkDuplicateUsernameOrEmail,validation.validatePa
 router.get("/all",[validationJWT.verifyToken,validationJWT.isAdmin], userController.getUsers);
 router.get("/",[validationJWT.verifyToken], userController.getUser);
 router.put("/",[validationJWT.verifyToken], userController.updateUser);
-router.delete("/:userId", [validationJWT.verifyToken,validationJWT.isAdmin], userController.deleteUser);
+router.delete("/", [validationJWT.verifyToken,validationJWT.isAdmin], userController.deleteUser);
 router.post("/login", userController.loginUser);
 
 export default router
