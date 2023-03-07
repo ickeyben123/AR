@@ -58,7 +58,7 @@ export const getUsers = async (req, res) => {
 // Returns the user with specified id
 export const getUser = async (req, res) => {
   try {
-    const id = req.params.userId;
+    const id = req.userId;
     let user = await User.find({ _id: id });
     res.status(200).json(user);
   } catch (err) {
@@ -73,7 +73,7 @@ export const updateUser = async (req, res) => {
       res.status(400).json({ error: "Cannot edit username!" });
       return;
     }
-    const id = req.params.userId;
+    const id = req.userId;
     let user = await User.findById(id);
 
     var data = req.body;
@@ -96,7 +96,7 @@ export const updateUser = async (req, res) => {
 // Deletes a user by its object id
 export const deleteUser = async (req, res) => {
   try {
-    const id = req.params.userId;
+    const id = req.userId;
     let result = await User.remove({ _id: id });
     res.status(200).json(result);
   } catch (err) {
