@@ -5,8 +5,8 @@ import * as validation from '../middleware/validateJWT.js';
 
 
 router.get("/",[validation.verifyToken], tagController.getTags);
-router.post("/", tagController.addTag);
-router.delete("/:tagId", tagController.deleteTag);
-router.put("/:tagId", tagController.updateTag);
+router.post("/",[validation.verifyToken], tagController.addTag);
+router.delete("/:tagId",[validation.verifyToken], tagController.deleteTag);
+router.put("/:tagId",[validation.verifyToken], tagController.updateTag);
 
 export default router
