@@ -4,7 +4,15 @@ import User from '../models/users.js'
 
 export const getTags = async(req,res) => {
     try {
-        let tags = await Tag.find();
+        //get the user from the request as the user is already verified
+        const id = req.userId;
+
+        //get the tags associated with the user
+        let tags = await Tag.find({
+            owner: id
+        });
+
+
         res.status(200).json(tags);
     } catch (err) {
         res.status(500).json(err);
