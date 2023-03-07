@@ -1,14 +1,13 @@
 <script>
+
     import {slide} from 'svelte/transition';
     import { onMount } from 'svelte';
-    let tags = [];
     let loaded = false;
 
     // Get data from page.js
     /** @type {import('./$types').PageData} */  
     export let data;
-    tags = data.tags;
-
+    let tags = data.tags;
 
     function expand(section) {
         for (let i = 0; i < tags.length; i++) {
