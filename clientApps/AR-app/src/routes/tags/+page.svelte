@@ -11,7 +11,7 @@
 
     function expand(section) {
         for (let i = 0; i < tags.length; i++) {
-            if (tags[i].id == section.id && tags[i].active == false) {
+            if (tags[i]._id == section._id && tags[i].active == false) {
                 tags[i].active = true;
             }
             else {
@@ -58,10 +58,10 @@
                     <p>
                         (Description)
                     </p>
-                    <button on:click={() => viewTag(tag.owner)}>Find</button>
-                    <button on:click={() => placeTag(tag.owner)}>Place</button>
-                    <button on:click={() => editTag(tag.owner)}>Edit</button>
-                    <button on:click={() => deleteTag(tag.owner)}>Delete</button>
+                    <button on:click={() => viewTag(tag._id)}>Find</button>
+                    <button on:click={() => placeTag(tag._id)}>Place</button>
+                    <button on:click={() => editTag(tag._id)}>Edit</button>
+                    <button on:click={() => deleteTag(tag._id)}>Delete</button>
 
                 </div>
             {/if}
