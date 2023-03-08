@@ -14,10 +14,6 @@ export const addUser = async (req, res) => {
         password: req.body.password
     });
 
-    if(succ != ""){
-      res.status(500).json({ error: succ });
-      return;
-    }
 
     //See if a role is specified.
     if (req.body.roles) {
