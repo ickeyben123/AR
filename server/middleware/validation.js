@@ -23,7 +23,7 @@ export function validatePassword(req, res, next) {
 export function checkDuplicateUsernameOrEmail(req, res, next) {
     // Username
     User.findOne({
-      username: req.body.userName
+      userName: req.body.userName
     }).exec((err, user) => {
       if (err) {
         res.status(500).send({ message: err });
