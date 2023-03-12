@@ -10,8 +10,9 @@ const tagSchema = new mongoose.Schema({
     },
 
     coords: {
-        type: Number,
-        required: true
+         latitude: "number",
+         longitude: "number",
+         elevation: "number"
     },
 
     placed: {
