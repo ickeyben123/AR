@@ -7,5 +7,5 @@ vcap-local.js
 credentials.json
 localdev-config.json
 .nyc*
-.ibm-project*
+.ibm-project
 .npm/
