@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"build-release-ready":true,"build-debug-ready":false,"devops":false,"deploy-image":"","chart-path":"","ibm-cluster":"","cluster-namespace":"","motd-access":"Sun, 12 Mar 2023 15:06:28 GMT","app-id":"","deploy-target":""}
-=======
 {"build-release-ready":true,"build-debug-ready":false,"devops":false,"deploy-image":"","chart-path":"","ibm-cluster":"","cluster-namespace":"","motd-access":"Sun, 12 Mar 2023 14:48:26 GMT","app-id":"","deploy-target":""}
->>>>>>> 18-create-frontend-functionality
