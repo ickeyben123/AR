@@ -2,7 +2,11 @@
 
     import {slide} from 'svelte/transition';
     import { onMount } from 'svelte';
+    import Modal from './Modal.svelte';
+
     let loaded = false;
+    let showModal = false;
+    let tagName = '';
 
     // Get data from page.js
     /** @type {import('./$types').PageData} */  
@@ -19,8 +23,28 @@
             }
         }
     }
+
+    async function newTag()
+    {
+        const response = await fetch("http://localhost:3000/tag",
+        {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify
+            ({
+        "tagName": tagName,
+        "coords" : {"longitude" : 0.2547005, "latitude" : 745.210, "evlevation": 0},
+        "placed" : true
+            }) 
+        });
+    }
+
     function createNewTag() {
         console.log("You made a new tag!");
+        showModal = true;
     }
 
     function placeTag(id) {
@@ -37,6 +61,10 @@
 
     function deleteTag(id) {
         console.log("You deleted tag " + id + "!");
+    }
+    function submitInfo() {
+        console.log(tagName);
+        newTag();
     }
 
 </script>
@@ -70,12 +98,22 @@
 {/if}
 
 <button class="menuButton" on:click={() =>createNewTag()}>Create Tag +</button>
+
+<Modal bind:showModal>
+    <h2>Enter Tag Name</h2>
+    <input bind:value={tagName} placeholder = Name><br>
+    <button class="menuButton" on:click ={() =>submitInfo()}>Sumbit</button>
+</Modal>
+
+
 </body>
 
 <style>
+    /*
     .topBar {
         position:sticky;
     }
+    */
     .menuButton {
         text-align: center;
         font-size: large;
