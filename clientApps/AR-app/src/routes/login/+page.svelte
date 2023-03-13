@@ -34,41 +34,24 @@
     async function loginReq() {
         
         
-        var nameObj = {};
-        var passObj = {};
-        var nameObj2 = name;
-        var passObj2 = pass;
-        var fieldN = "userName"
-        var fieldP = "password"
 
-        nameObj[fieldN] = name;
-        passObj[fieldP] = pass;
-
+        var req = {
+            "userName": name,
+            "password": pass
+        }
 
         console.log(JSON.stringify({userName: "xxx", password: "yyy"}));
-        console.log((JSON.stringify(nameObj)).concat(JSON.stringify(passObj)));
-        //var request = ((JSON.stringify(nameObj)).concat(JSON.stringify(passObj)));
-        /*
-        console.log(JSON.stringify({
-            userName: nameObj2,
-            password: passObj2
-        }));*/
-        //console.log(request);
-
-        
+        console.log(JSON.stringify(req));
+   
 
         const response = await fetch("http://localhost:3000/user/login",
         {
             method: 'POST',
-            credentials: 'include',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-        "userName": name,
-        "password" : pass
-}) 
+            body: JSON.stringify(req) 
 
 
         });
@@ -76,12 +59,13 @@
         response.json().then(data => {
             console.log(JSON.stringify(data));
             const resp = JSON.stringify(data);
-            if(resp == '{"data":false}'){
+            if(resp == '{"message":"User Not found."}'){
                 alert("INCORRECT");
             }
-            else if(resp == '{"data":true}')
+            else
             {
                 alert("CORRECT")
+                window.location.href = "http://localhost:4000/tags";
             }
             
         });
