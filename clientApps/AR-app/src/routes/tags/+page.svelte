@@ -26,6 +26,13 @@
 
     async function newTag()
     {
+
+        var req = {
+            "tagName": tagName,
+            "coords": {"longitude" : 0.2547005, "latitude" : 745.210, "elevation": 0},
+            "placed" : true
+        }
+
         const response = await fetch("http://localhost:3000/tag",
         {
             method: 'POST',
@@ -34,11 +41,7 @@
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify
-            ({
-        "tagName": tagName,
-        "coords" : {"longitude" : 0.2547005, "latitude" : 745.210, "evlevation": 0},
-        "placed" : true
-            }) 
+            (req) 
         });
     }
 
