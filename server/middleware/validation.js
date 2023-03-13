@@ -65,6 +65,7 @@ export function checkDuplicateUsernameOrEmail(req, res, next) {
 
   };
 
+// This function seems to be unused...
 export function checkRolesExists (req, res, next) {
     if (req.body.roles) {
       for (let i = 0; i < req.body.roles.length; i++) {
