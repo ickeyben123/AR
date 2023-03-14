@@ -19,6 +19,21 @@ export const getTags = async(req,res) => {
     }
 };
 
+export const getTag = async(req,res) => {
+    try {
+        //get the user from the request as the user is already verified
+        const id = req.userId;
+        const tag_id = req.params.tagId;
+
+        //get the tags associated with the user
+        let tag = await Tag.findOne({ "_id" : tag_id, owner : user_id});
+
+
+        res.status(200).json(tag);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
 
 // add a tag => need to first verify the user
 
