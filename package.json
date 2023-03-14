@@ -13,7 +13,7 @@
     "check-coverage": "c8 report --check-coverage --lines 100",
     "lint": "eslint --ignore-path .gitignore .",
     "fix": "eslint --ignore-path .gitignore . --fix",
-    "test": "c8 mocha '/opt/app-root/src/server/test' --recursive --exit"
+    "test": "c8 mocha --exit '/opt/app-root/src/server/test' --recursive "
   },
   "type": "module",
   "husky": {
@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "c8": "^7.12.0",
+    "cookie-parser": "^1.4.6",
     "chai": "^4.3.7",
     "chai-http": "^2.0.1",
     "eslint": "^8.28.0",
