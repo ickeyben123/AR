@@ -23,11 +23,11 @@ once more all 3 libraries have been loaded in.
   });
 
   const getLatitude = () => {
-    return "52.930851"
+    return "52.9529364"
   }
 
   const getLongitude = () => {
-    return "-1.209076"
+    return "-1.1878827"
   }
 
   const options = {
