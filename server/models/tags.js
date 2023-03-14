@@ -4,14 +4,21 @@ import mongoose from 'mongoose';
 
 const tagSchema = new mongoose.Schema({
 
+    required :["coords"],
     tagName: {
         type: String,
         required: true
     },
-
-    coords: {
+    description: {
+        type: String,
+    },
+    icon: {
         type: Number,
-        required: true
+    },
+    coords: {
+         latitude: "number",
+         longitude: "number",
+         elevation: "number",
     },
 
     placed: {

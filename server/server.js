@@ -77,14 +77,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //registering cors
-app.use(cors());
-
-//configure response header
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4000');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  next();
-})
+app.use(cors({origin:true,credentials: true}));
 
 // routes and api calls
 app.use('/health', healthRoutes);
