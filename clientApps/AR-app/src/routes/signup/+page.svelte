@@ -38,8 +38,6 @@
                 "password" : pass
              })
         })
-
-        console.log(await res.json());
     }
 
     </script>
