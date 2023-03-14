@@ -1,23 +1,29 @@
 <script>
     let name = '';
     let pass = '';
+    let email = '';
         
-    function signUp()
+    function validateInput()
         {
             if (name == '')
                 {
                     alert("NAME IS EMPTY");
                 }
-            else if (pass = '')
+            else if (pass == '')
                 {
                     alert("PASSWORD IS EMPTY");
+                }
+            else if (pass == '')
+                {
+                    alert("EMAIL IS EMPTY");
                 }
             else
                 {
                     alert("Signing Up");
+                    
                 }
         }
-        
+
     </script>
     
     <body>
@@ -29,11 +35,12 @@
     
             <div class ="input">
                 <input bind:value={name} placeholder = Name><br>
+                <input bind:value={email} placeholder = Email><br>
                 <input type="password" bind:value={pass} placeholder = Password><br>
             </div>
             
             <div class = "buttons">
-                <button on:click={signUp}>
+                <button on:click={validateInput}>
                     Sign Up
                 </button>
             </div>
