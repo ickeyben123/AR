@@ -46,6 +46,8 @@ export const addTag = async (req,res) => {
             tagName: req.body.tagName,
             coords: req.body.coords,
             placed: req.body.placed,
+            description: req.body.description,
+            icon: req.body.icon,
             owner: id
         });
 
