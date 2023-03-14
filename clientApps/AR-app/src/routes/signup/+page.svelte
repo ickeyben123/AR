@@ -20,9 +20,27 @@
             else
                 {
                     alert("Signing Up");
-                    
+                    signUp();
                 }
         }
+
+    async function signUp() {
+        const res = await fetch("http://localhost:3000/user", 
+        {
+            method:'POST',
+            credentials:'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                "userName": name,
+                "email": email,
+                "password" : pass
+             })
+        })
+
+        console.log(await res.json());
+    }
 
     </script>
     
