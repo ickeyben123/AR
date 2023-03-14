@@ -92,7 +92,7 @@ export const updateUser = async (req, res) => {
 // Deletes a user by its object id
 export const deleteUser = async (req, res) => {
   try {
-    const id = req.userId;
+    const id = req.body.userId;
     let result = await User.remove({ _id: id });
     res.status(200).json(result);
   } catch (err) {

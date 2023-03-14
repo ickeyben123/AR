@@ -13,7 +13,7 @@ var user_id;
 
 let defaultUser = {
   userName: "admin",
-  email: "admin@gmail.com",
+  email: "admin@admin.com",
   password: "password1",
   roles: ["admin"]
 };
