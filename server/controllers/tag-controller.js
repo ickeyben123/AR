@@ -25,9 +25,11 @@ export const getTag = async(req,res) => {
         const id = req.userId;
         const tag_id = req.params.tagId;
 
-        //get the tags associated with the user
-        let tag = await Tag.findOne({ "_id" : tag_id, owner : user_id});
 
+        //get the tags associated with the user
+        let tag = await Tag.findOne(
+            {_id: tag_id, owner: id}
+        );
 
         res.status(200).json(tag);
     } catch (err) {
@@ -70,7 +72,7 @@ export const deleteTag = async (req, res) => {
         const tag_id = req.params.tagId;
 
         let result = await Tag.deleteOne(
-            { "_id" : tag_id, owner : user_id}
+            {_id: tag_id, owner: id}
         );
         res.status(200).json(result);
     } catch (err) {
