@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 
 const tagSchema = new mongoose.Schema({
 
+    required :["coords"],
     tagName: {
         type: String,
         required: true
@@ -17,7 +18,7 @@ const tagSchema = new mongoose.Schema({
     coords: {
          latitude: "number",
          longitude: "number",
-         elevation: "number"
+         elevation: "number",
     },
 
     placed: {

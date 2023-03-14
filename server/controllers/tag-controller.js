@@ -72,7 +72,7 @@ export const deleteTag = async (req, res) => {
         const tag_id = req.params.tagId;
 
         let result = await Tag.deleteOne(
-            {_id: tag_id, owner: id}
+            {_id: tag_id, owner: user_id}
         );
         res.status(200).json(result);
     } catch (err) {

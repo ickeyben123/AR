@@ -3,14 +3,21 @@
     import {slide} from 'svelte/transition';
     import { onMount } from 'svelte';
     import Modal from './Modal.svelte';
+    import { invalidate, invalidateAll } from '$app/navigation';
 
-    let loaded = false;
-    let showModal = false;
-    let tagName = '';
+    let showAddTags = false, showEditTags = false, reCreate=false;
+    var tagData = {tagName:"Default"}, coords={};
 
     // Get data from page.js
     /** @type {import('./$types').PageData} */  
     export let data;
+
+    function rerunLoadFunction() {
+        // reload data
+        invalidate('app:tags');
+        reCreate=!reCreate;
+    }
+
     let tags = data.tags;
 
     function expand(section) {
@@ -26,9 +33,8 @@
 
     async function newTag()
     {
-
         var req = {
-            "tagName": tagName,
+            "tagName": tagData.tagName,
             "coords": {"longitude" : 0.2547005, "latitude" : 745.210, "elevation": 0},
             "placed" : true
         }
@@ -40,8 +46,7 @@
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify
-            (req) 
+            body: JSON.stringify(req) 
         });
 
         window.location.reload();
@@ -49,26 +54,44 @@
 
     function createNewTag() {
         console.log("You made a new tag!");
-        showModal = true;
+        showAddTags = true;
     }
 
-    function placeTag(id) {
-        console.log("You placed tag " + id + "!");
+    function placeTag(tag) {
+        console.log("You placed tag " + tag.id + "!");
     }
 
-    function editTag(id) {
-        console.log("You edited tag " + id + "!");
+    function editTag(tag) {
+        console.log("You edited tag " + tag.id + "!");
+        tagData=tag
+        coords=tag.coords
+        showEditTags = true;
     }
 
-    function viewTag(id) {
-        console.log("You viewed tag " + id + "!");
+    async function submitEdit(){
+        const response = await fetch("http://localhost:3000/tag/"+tagData._id,
+        {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tagData)
+        });
+
+        rerunLoadFunction();
+
     }
 
-    function deleteTag(id) {
-        console.log("You deleted tag " + id + "!");
+    function viewTag(tag) {
+        console.log("You viewed tag " + tag.id + "!");
+    }
+
+    function deleteTag(tag) {
+        console.log("You deleted tag " + tag.id + "!");
     }
     function submitInfo() {
-        console.log(tagName);
+        console.log(tagData.tagName);
         newTag();
     }
 
@@ -79,36 +102,52 @@
     <h1>Your Tags</h1>
 </div>
 
-{#if !data.failed}
-    {#each tags as tag}
-        <div class="accordionPanel">
-            <button on:click={() => expand(tag)} class="accordionButton">
-                <div class="accordionIcon">&#128273</div> {tag.tagName} 
-            </button>
-            
-            {#if tag.active}
-                <div transition:slide class="accordionContent" >
-                    <p>
-                        (Description)
-                    </p>
-                    <button on:click={() => viewTag(tag._id)}>Find</button>
-                    <button on:click={() => placeTag(tag._id)}>Place</button>
-                    <button on:click={() => editTag(tag._id)}>Edit</button>
-                    <button on:click={() => deleteTag(tag._id)}>Delete</button>
+    {#if !data.failed}
+        {#each tags as tag}
+            <div class="accordionPanel">
+                {#key reCreate}
+                <button on:click={() => expand(tag)} class="accordionButton">
+                    <div class="accordionIcon">&#128273</div> {tag.tagName} 
+                </button>
+                {/key}
+                {#if tag.active}
+                    <div transition:slide class="accordionContent" >
+                        <p>
+                            (Description)
+                        </p>
+                        <button on:click={() => viewTag(tag)}>Find</button>
+                        <button on:click={() => placeTag(tag)}>Place</button>
+                        <button on:click={() => editTag(tag)}>Edit</button>
+                        <button on:click={() => deleteTag(tag)}>Delete</button>
 
-                </div>
-            {/if}
-        </div>
-    {/each}
-{/if}
+                    </div>
+                {/if}
+            </div>
+        {/each}
+    {/if}
 
 <button class="menuButton" on:click={() =>createNewTag()}>Create Tag +</button>
 
-<Modal bind:showModal>
+{#if tagData}
+<Modal bind:showModal={showAddTags}>
     <h2>Enter Tag Name</h2>
-    <input bind:value={tagName} placeholder = Name><br>
+    <input bind:value={tagData.tagName} placeholder = Name><br>
     <button class="menuButton" on:click ={() =>submitInfo()}>Sumbit</button>
 </Modal>
+
+<Modal bind:showModal={showEditTags}>
+    <h2>Edit Tag Name</h2>
+    <input bind:value={tagData.tagName} placeholder = Name><br>
+    <h2>Edit Tag Description</h2>
+    <input bind:value={tagData.description} placeholder = Empty><br>
+    <h2>Edit Tag Coordinates</h2>
+    <h5>Latitude</h5>
+    <input bind:value={coords.latitude} placeholder = Name><br>
+    <h5>Longitude</h5>
+    <input bind:value={coords.longitude} placeholder = Name><br>
+    <button class="menuButton" on:click ={() =>submitEdit()}>Sumbit</button>
+</Modal>
+{/if}
 
 
 </body>
