@@ -1,9 +1,20 @@
+
 <script>
+
+    /*
+    Emoji Reference
+    Medicine - &#128138
+    Key - &#128273
+    Wallet - &#128091
+    Other - &#11088
+    */
 
     import {slide} from 'svelte/transition';
     import { onMount } from 'svelte';
     import Modal from './Modal.svelte';
     import { invalidate, invalidateAll } from '$app/navigation';
+	import { HtmlTag } from 'svelte/internal';
+
 
     let showAddTags = false, showEditTags = false, reCreate=false;
     var tagData = {tagName:"Default"}, coords={};
@@ -38,6 +49,7 @@
             "tagName": tagData.tagName,
             "coords": {"longitude" : tagData.longitude, "latitude" : tagData.latitude, "elevation": 0},
             "description": tagData.description,
+            "icon": tagData.icon,
             "placed" : true
         }
 
@@ -109,7 +121,17 @@
             <div class="accordionPanel">
                 {#key reCreate}
                 <button on:click={() => expand(tag)} class="accordionButton">
-                    <div class="accordionIcon">&#128273</div> {tag.tagName} 
+                    <div class="accordionIcon">
+                        {#if tag.icon == "1"}
+                            &#128138
+                        {:else if tag.icon == "2"}
+                            &#128273
+                        {:else if tag.icon == "3"}
+                            &#128091
+                        {:else}
+                            &#11088
+                        {/if}
+                    </div> {tag.tagName} 
                 </button>
                 {/key}
                 {#if tag.active}
@@ -141,6 +163,13 @@
     <input bind:value={coords.latitude} placeholder = 00.0000><br>
     <h5>Longitude</h5>
     <input bind:value={coords.longitude} placeholder = 00.0000><br>
+    <h2>Select Tag Type</h2>
+    <div id="iconBtns">
+        <button class="menuButton" on:click={() => (tagData.icon = "1")}>&#128138</button>
+        <button class="menuButton" on:click={() => (tagData.icon = "2")}>&#128273</button>
+        <button class="menuButton" on:click={() => (tagData.icon = "3")}>&#128091</button>
+        <button class="menuButton active" on:click={() => (tagData.icon = "4")}>&#11088</button>
+    </div><br>
     <button class="menuButton" on:click ={() =>submitInfo()}>Sumbit</button>
 </Modal>
 
@@ -157,6 +186,28 @@
     <button class="menuButton" on:click ={() =>submitEdit()}>Sumbit</button>
 </Modal>
 {/if}
+
+<script> //Secondary script tag for button selection
+    //Make button active
+    
+    var header = document.getElementById("iconBtns");
+    var btns = header.getElementsByClassName("menuButton");
+    
+    for (var i = 0; i < btns.length; i++)
+    {
+        btns[i].addEventListener("click", function() {
+            var current = document.getElementsByClassName("active");
+
+            // If there's no active class
+            if (current.length > 0) {
+            current[0].className = current[0].className.replace(" active", "");
+            }
+
+            // Add the active class to the current/clicked button
+            this.className += " active";
+        });
+    }
+</script>
 
 
 </body>
@@ -177,6 +228,11 @@
     }
     .menuButton:hover {
         background-color: rgb(103, 132, 156);
+        color:white;
+        transition-duration: 0.4s;
+    }
+    .active {
+        background-color: rgb(61, 114, 158);
         color:white;
         transition-duration: 0.4s;
     }
