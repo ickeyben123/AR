@@ -13,7 +13,7 @@ const tagSchema = new mongoose.Schema({
         type: String,
     },
     icon: {
-        type: Number,
+        type: String,
     },
     coords: {
          latitude: "number",
