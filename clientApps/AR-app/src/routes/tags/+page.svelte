@@ -16,6 +16,7 @@
         // reload data
         invalidate('app:tags');
         reCreate=!reCreate;
+        window.location.reload();
     }
 
     let tags = data.tags;
@@ -35,7 +36,8 @@
     {
         var req = {
             "tagName": tagData.tagName,
-            "coords": {"longitude" : 0.2547005, "latitude" : 745.210, "elevation": 0},
+            "coords": {"longitude" : tagData.longitude, "latitude" : tagData.latitude, "elevation": 0},
+            "description": tagData.description,
             "placed" : true
         }
 
@@ -49,7 +51,7 @@
             body: JSON.stringify(req) 
         });
 
-        window.location.reload();
+        rerunLoadFunction();
     }
 
     function createNewTag() {
@@ -113,7 +115,7 @@
                 {#if tag.active}
                     <div transition:slide class="accordionContent" >
                         <p>
-                            (Description)
+                            {tag.description}
                         </p>
                         <button on:click={() => viewTag(tag)}>Find</button>
                         <button on:click={() => placeTag(tag)}>Place</button>
@@ -132,6 +134,13 @@
 <Modal bind:showModal={showAddTags}>
     <h2>Enter Tag Name</h2>
     <input bind:value={tagData.tagName} placeholder = Name><br>
+    <h2>Enter Tag Description</h2>
+    <input bind:value={tagData.description} placeholder = Empty><br>
+    <h2>Enter Tag Coordinates</h2>
+    <h5>Latitude</h5>
+    <input bind:value={coords.latitude} placeholder = 00.0000><br>
+    <h5>Longitude</h5>
+    <input bind:value={coords.longitude} placeholder = 00.0000><br>
     <button class="menuButton" on:click ={() =>submitInfo()}>Sumbit</button>
 </Modal>
 
