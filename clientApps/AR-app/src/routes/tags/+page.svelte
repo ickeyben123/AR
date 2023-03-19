@@ -111,14 +111,29 @@
 
 </script>
 
+
+
+
 <body>
+
+
+    <!-- Title for Tags page -->
 <div class="topbar">
     <h1>Your Tags</h1>
 </div>
 
+<!-- /////////// -->
+<!-- TAG DISPLAY -->
+<!-- /////////// -->
+
+<!-- Conditional that it only shows tags if the data has loaded -->
     {#if !data.failed}
+    <!-- Goes through each tag in the fetched tags of the user to create
+        tag items for manipulation  -->
         {#each tags as tag}
             <div class="accordionPanel">
+                <!-- Key specifies a part of the html that can be made to 'reload' when
+                    the tag data has been updated. -->
                 {#key reCreate}
                 <button on:click={() => expand(tag)} class="accordionButton">
                     <div class="accordionIcon">
@@ -134,6 +149,7 @@
                     </div> {tag.tagName} 
                 </button>
                 {/key}
+                <!-- When the tag.active variable is set to true, expand the tag -->
                 {#if tag.active}
                     <div transition:slide class="accordionContent" >
                         <p>
@@ -150,9 +166,17 @@
         {/each}
     {/if}
 
+    <!-- Button to create a tag at the bottom of the page -->
 <button class="menuButton" on:click={() =>createNewTag()}>Create Tag +</button>
 
+<!-- ////// -->
+<!-- MODALS -->
+<!-- ////// -->
+
+<!-- Stops modals from being loaded in page if there is no tag data. Prevents errors. -->
 {#if tagData}
+
+<!-- Add Tag Model. Shows when 'showAddTags' variable is set to true -->
 <Modal bind:showModal={showAddTags}>
     <h2>Enter Tag Name</h2>
     <input bind:value={tagData.tagName} placeholder = Name><br>
@@ -173,6 +197,7 @@
     <button class="menuButton" on:click ={() =>submitInfo()}>Sumbit</button>
 </Modal>
 
+<!-- Edit Tag Model. Shows when 'showEditTags' variable is set to true -->
 <Modal bind:showModal={showEditTags}>
     <h2>Edit Tag Name</h2>
     <input bind:value={tagData.tagName} placeholder = Name><br>
@@ -187,6 +212,8 @@
 </Modal>
 {/if}
 
+
+<!-- In Progress Code for Placing -->
 <script> //Secondary script tag for button selection
     //Make button active
     
@@ -208,7 +235,6 @@
         });
     }
 </script>
-
 
 </body>
 
