@@ -19,10 +19,12 @@
     let showAddTags = false, showEditTags = false, reCreate=false;
     var tagData = {tagName:"Default"}, coords={};
 
-    // Get data from page.js
+    // Get data from page.js. Handled via Svelte.
     /** @type {import('./$types').PageData} */  
     export let data;
 
+    // This function should be called when the Tag array is changed.
+    // Reloads the html displaying the tags without a hard page reload.
     function rerunLoadFunction() {
         // reload data
         invalidate('app:tags');
@@ -30,8 +32,11 @@
         window.location.reload();
     }
 
+    // Global tags variable storing all the user's tags.
     let tags = data.tags;
 
+    // Expands the specified tag (in html) whilst also setting every other tag to closed.
+    // Ensures two tags cannot be open at the same time.
     function expand(section) {
         for (let i = 0; i < tags.length; i++) {
             if (tags[i]._id == section._id && tags[i].active == false) {
@@ -43,6 +48,7 @@
         }
     }
 
+    // Called to create a new tag, specified from the tagData that should be set beforehand.
     async function newTag()
     {
         var req = {
@@ -66,6 +72,22 @@
         rerunLoadFunction();
     }
 
+    // Called to create a edit a tag, specified from the tagData that should be set beforehand.
+    async function submitEdit(){
+        const response = await fetch("http://localhost:3000/tag/"+tagData._id,
+        {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tagData)
+        });
+
+        rerunLoadFunction();
+
+    }
+
     function createNewTag() {
         console.log("You made a new tag!");
         showAddTags = true;
@@ -82,20 +104,7 @@
         showEditTags = true;
     }
 
-    async function submitEdit(){
-        const response = await fetch("http://localhost:3000/tag/"+tagData._id,
-        {
-            method: 'PUT',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(tagData)
-        });
 
-        rerunLoadFunction();
-
-    }
 
     function viewTag(tag) {
         console.log("You viewed tag " + tag.id + "!");
