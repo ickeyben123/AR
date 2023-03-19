@@ -110,8 +110,36 @@
         console.log("You viewed tag " + tag.id + "!");
     }
 
-    function deleteTag(tag) {
-        console.log("You deleted tag " + tag.id + "!");
+    async function deleteTag(tag) {
+
+        /*var req = {
+            //url: 'http://localhost:3000/tag/',
+            method: 'DELETE'
+        }
+        */
+        var tagId = tag._id;
+
+        //new URLSearchParams(tag._id)
+        const response = await fetch('http://localhost:3000/tag/' + tagId,
+        {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+
+        window.location.reload();
+        /*
+        {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify
+            (req) 
+        });
+        window.location.reload();
+        */
+        
     }
     function submitInfo() {
         console.log(tagData.tagName);
