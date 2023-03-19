@@ -105,7 +105,7 @@ export const updateTag = async (req, res) => {
 
         // Set data
         for(var key in data) {
-            if(data.hasOwnProperty(key)){
+            if(data.hasOwnProperty(key)&&key!='_id'){
             tag[key] = data[key];
             }
         }
