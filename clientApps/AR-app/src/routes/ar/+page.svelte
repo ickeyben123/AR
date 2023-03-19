@@ -5,6 +5,8 @@ Svelte Calls onMount -> Libraries loaded -> a-scene created
 a counter is kept of the libraries loaded so a-scene is only created
 once more all 3 libraries have been loaded in.
 -->
+
+
 <script>
   import { onMount } from "svelte";
   let mounted;
@@ -12,7 +14,7 @@ once more all 3 libraries have been loaded in.
   let altitude = 3; 
   $: ready = componentLoaded == 3;
 
-
+  
   const loadComponent = () => {
     componentLoaded = componentLoaded + 1;
   };
@@ -49,6 +51,10 @@ once more all 3 libraries have been loaded in.
 
     navigator.geolocation.watchPosition(handlePositionCallback,console.log,options);
   }
+  
+  function pickUp(){
+    console.log("hello world");
+  }
 
 
   </script>
@@ -82,9 +88,16 @@ TODO : remove simulateLatitude and simulateLongitude once finished, as they're
 for testing
 -->
 {#if ready}
-<a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
-  <a-camera gps-new-camera='gpsMinDistance: 1; simulateAltitude: {altitude}'></a-camera>
-  <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: {getLatitude()}; longitude: {getLongitude()}" scale="10 10 10"></a-entity>
-</a-scene>
+<button style="position: fixed;
+  z-index: 100;
+  margin-top: 0px;
+  margin-left: 0px;" on:click={pickUp}>
+  Click Me
+</button>
+<body>
+  <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
+    <a-camera gps-new-camera='gpsMinDistance: 1; simulateAltitude: {altitude}'></a-camera>
+    <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: {getLatitude()}; longitude: {getLongitude()}" scale="10 10 10"></a-entity>
+  </a-scene>
+</body>
 {/if}
-
