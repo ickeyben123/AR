@@ -16,8 +16,8 @@
 	import { HtmlTag } from 'svelte/internal';
 
 
-    let showAddTags = false, showEditTags = false, reCreate=false;
-    var tagData = {tagName:"Default"}, coords={};
+    let showAddTags = false, showEditTags = false, showDeleteTags = false, reCreate=false;
+    var tagData = {tagName:"Default"}, coords={}, tagDelete = {tagId:null};
 
     // Get data from page.js. Handled via Svelte.
     /** @type {import('./$types').PageData} */  
@@ -87,6 +87,20 @@
         rerunLoadFunction();
 
     }
+    // called to delete a tag after confirmation that the user wants it deleted
+    async function submitDelete(){
+        var tagId = tagDelete.tagId;//get the tag ID
+
+        console.log("You deleted tag " + tagId + "!");
+
+        const response = await fetch('http://localhost:3000/tag/' + tagId,
+        {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+
+        rerunLoadFunction();
+    }
 
     function createNewTag() {
         console.log("You made a new tag!");
@@ -110,41 +124,18 @@
         console.log("You viewed tag " + tag.id + "!");
     }
 
+    //Called to show the confirmation screen, then the user can confirm they want 
+    //delete the tag
     async function deleteTag(tag) {
-
-        /*var req = {
-            //url: 'http://localhost:3000/tag/',
-            method: 'DELETE'
-        }
-        */
-        var tagId = tag._id;
-
-        //new URLSearchParams(tag._id)
-        const response = await fetch('http://localhost:3000/tag/' + tagId,
-        {
-            method: 'DELETE',
-            credentials: 'include'
-        });
-
-        window.location.reload();
-        /*
-        {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify
-            (req) 
-        });
-        window.location.reload();
-        */
-        
+        tagDelete.tagId = tag._id; //set the tag ID for the tag we want to delete
+        showDeleteTags = true;
     }
+
     function submitInfo() {
         console.log(tagData.tagName);
         newTag();
     }
+
 
 </script>
 
@@ -247,6 +238,16 @@
     <input bind:value={coords.longitude} placeholder = Name><br>
     <button class="menuButton" on:click ={() =>submitEdit()}>Sumbit</button>
 </Modal>
+
+
+
+<!-- Delete Tag Modal. Shows when 'showDeleteTags' is set to true -->
+<Modal bind:showModal={showDeleteTags}>
+    <h2>Delete Tag</h2>
+    <h3>Are You Sure You Want To Delete This Tag?</h3>
+    <button class="button" on:click ={() =>submitDelete()}>Yes</button>
+</Modal>
+
 {/if}
 
 
