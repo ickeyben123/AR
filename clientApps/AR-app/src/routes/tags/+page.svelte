@@ -16,8 +16,16 @@
 	import { HtmlTag } from 'svelte/internal';
 
 
-    let showAddTags = false, showEditTags = false, showDeleteTags = false, reCreate=false;
+    let showAddTags = false, showEditTags = false, showDeleteTags = false, reCreate=false, showError=true;
     var tagData = {tagName:"Default"}, coords={}, tagDelete = {tagId:null};
+
+
+
+
+    let errors = [
+        {mode: 'error', message: 'Your Browser does not support geolocation services'},
+        {mode: 'error', message: ''},
+    ]
 
     // Get data from page.js. Handled via Svelte.
     /** @type {import('./$types').PageData} */  
@@ -107,8 +115,61 @@
         showAddTags = true;
     }
 
-    function placeTag(tag) {
-        console.log("You placed tag " + tag.id + "!");
+    function getTagGeoLocation(tag) {
+        console.log("You placed tag " + tag._id + "!");
+        //need to check if the tag is picked up, if not then make some error popup
+        tagData=tag
+        coords = tag.coords;
+
+
+        //need to get the tag coords from geolocation, then save tag data in database
+        
+        if(navigator.geolocation){
+            tagData = tag;
+            navigator.geolocation.getCurrentPosition(placeTag,errorGeoLocation);//send the geolocation data to another function
+        } else{
+            //this is if the browser doesnt support geolocation, do pop up message or something
+            console.log("BROWSER DOES NOT SUPPORT GEO");
+        }
+
+
+        //also need to place the tag as not picked up anymore
+    }
+
+    async function placeTag(position){
+        coords.latitude = position.coords.latitude;
+        coords.longitude = position.coords.longitude;
+
+        const response = await fetch("http://localhost:3000/tag/"+tagData._id,
+        {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tagData)
+        });
+
+        rerunLoadFunction();
+    }
+
+    //this is called if the 'getCurrentPosition' function fails to get the geo data. May want to display pop up error messsages instead
+    function errorGeoLocation(error){
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                console.log("User denied the request for Geolocation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                console.log("Location information is unavailable.");
+                break;
+            case error.TIMEOUT:
+                console.log("The request to get user location timed out.");
+                break;
+            case error.UNKNOWN_ERROR:
+                console.log("An unknown error occurred.");
+                break;
+        }
+        tagData = {tagName:"Default"};//resetting the tagData without having to reload page
     }
 
     function editTag(tag) {
@@ -184,7 +245,7 @@
                             {tag.description}
                         </p>
                         <button on:click={() => viewTag(tag)}>Find</button>
-                        <button on:click={() => placeTag(tag)}>Place</button>
+                        <button on:click={() => getTagGeoLocation(tag)}>Place</button>
                         <button on:click={() => editTag(tag)}>Edit</button>
                         <button on:click={() => deleteTag(tag)}>Delete</button>
 
