@@ -16,16 +16,10 @@
 	import { HtmlTag } from 'svelte/internal';
 
 
-    let showAddTags = false, showEditTags = false, showDeleteTags = false, reCreate=false, showError=true;
+    let showAddTags = false, showEditTags = false, showDeleteTags = false, reCreate=false, showError=false;
     var tagData = {tagName:"Default"}, coords={}, tagDelete = {tagId:null};
 
-
-
-
-    let errors = [
-        {mode: 'error', message: 'Your Browser does not support geolocation services'},
-        {mode: 'error', message: ''},
-    ]
+    let errorMessage = "";
 
     // Get data from page.js. Handled via Svelte.
     /** @type {import('./$types').PageData} */  
@@ -121,7 +115,6 @@
         tagData=tag
         coords = tag.coords;
 
-
         //need to get the tag coords from geolocation, then save tag data in database
         
         if(navigator.geolocation){
@@ -129,7 +122,8 @@
             navigator.geolocation.getCurrentPosition(placeTag,errorGeoLocation);//send the geolocation data to another function
         } else{
             //this is if the browser doesnt support geolocation, do pop up message or something
-            console.log("BROWSER DOES NOT SUPPORT GEO");
+            errorMessage = "Your browser does not support geo";
+            showError = true;
         }
 
 
@@ -157,19 +151,20 @@
     function errorGeoLocation(error){
         switch(error.code) {
             case error.PERMISSION_DENIED:
-                console.log("User denied the request for Geolocation.");
+                error = "User denied the request for Geolocation";
                 break;
             case error.POSITION_UNAVAILABLE:
-                console.log("Location information is unavailable.");
+                error = "Location information is unavailable";
                 break;
             case error.TIMEOUT:
-                console.log("The request to get user location timed out.");
+                error = "The request to get user location timed out";
                 break;
             case error.UNKNOWN_ERROR:
-                console.log("An unknown error occurred.");
+                error = "An unknown error occurred";
                 break;
         }
         tagData = {tagName:"Default"};//resetting the tagData without having to reload page
+        showError = true;
     }
 
     function editTag(tag) {
@@ -300,6 +295,10 @@
     <button class="menuButton" on:click ={() =>submitEdit()}>Sumbit</button>
 </Modal>
 
+
+<Modal bind:showModal={showError}>
+    <h2 style="color: red;">{errorMessage}</h2>
+</Modal>
 
 
 <!-- Delete Tag Modal. Shows when 'showDeleteTags' is set to true -->
