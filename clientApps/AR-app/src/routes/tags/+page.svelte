@@ -115,6 +115,7 @@
         tagData=tag
         coords = tag.coords;
 
+
         //need to get the tag coords from geolocation, then save tag data in database
         
         if(navigator.geolocation){
