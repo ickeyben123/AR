@@ -9,6 +9,9 @@ once more all 3 libraries have been loaded in.
 
 <script>
   import { onMount } from "svelte";
+  let tagId;
+  let latitude;
+  let longitude;
   let mounted;
   let componentLoaded = 0;
   let altitude = 3; 
@@ -19,18 +22,31 @@ once more all 3 libraries have been loaded in.
     componentLoaded = componentLoaded + 1;
   };
 
-  onMount(() => {
-    console.log("mounted");
+  async function updateLatLong(){
+    const res = await fetch('http://localhost:3000/tag/' + tagId,{
+                method: 'GET',
+                credentials: 'include'
+            });
+    let item =  await res.json();
+
+    console.log(item);
+    console.log(item.coords);
+    console.log(item.coords.latitude);
+    console.log(item.coords.longitude);
+
+    latitude = item.coords.latitude.toString();
+    longitude = item.coords.longitude.toString();
+
     mounted = true;
+  }
+
+  onMount(() => {
+    console.log("mounted")
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    tagId = urlParams.get('tagId')
+    updateLatLong();
   });
-
-  const getLatitude = () => {
-    return "52.9529364"
-  }
-
-  const getLongitude = () => {
-    return "-1.1878827"
-  }
 
   const options = {
     enableHighAccuracy: true,
@@ -51,9 +67,25 @@ once more all 3 libraries have been loaded in.
 
     navigator.geolocation.watchPosition(handlePositionCallback,console.log,options);
   }
-  
+
+  async function setNotPlaced(){
+    const response = await fetch("http://localhost:3000/tag/"+tagId,{
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(
+        {
+          "placed":false,
+        }
+      )
+      });
+    }
+
   function pickUp(){
-    console.log("hello world");
+    setNotPlaced()
+    window.location.href = "/tags"
   }
 
 
@@ -97,7 +129,7 @@ for testing
 <body>
   <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
     <a-camera gps-new-camera='gpsMinDistance: 1; simulateAltitude: {altitude}'></a-camera>
-    <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: {getLatitude()}; longitude: {getLongitude()}" scale="10 10 10"></a-entity>
+    <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: {latitude}; longitude: {longitude}" scale="10 10 10"></a-entity>
   </a-scene>
 </body>
 {/if}

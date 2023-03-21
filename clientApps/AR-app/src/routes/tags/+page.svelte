@@ -177,7 +177,9 @@
 
 
     function viewTag(tag) {
-        console.log("You viewed tag " + tag.id + "!");
+        window.location.href = "ar?tagId=" + tag._id;
+
+        console.log("You viewed tag " + tag._id + "!");
     }
 
     //Called to show the confirmation screen, then the user can confirm they want 
@@ -219,19 +221,19 @@
                 <!-- Key specifies a part of the html that can be made to 'reload' when
                     the tag data has been updated. -->
                 {#key reCreate}
-                <button on:click={() => expand(tag)} class="accordionButton">
-                    <div class="accordionIcon">
-                        {#if tag.icon == "1"}
-                            &#128138
-                        {:else if tag.icon == "2"}
-                            &#128273
-                        {:else if tag.icon == "3"}
-                            &#128091
-                        {:else}
-                            &#11088
-                        {/if}
-                    </div> {tag.tagName} 
-                </button>
+                    <button on:click={() => expand(tag)} class="accordionButton">
+                        <div class="accordionIcon">
+                            {#if tag.icon == "1"}
+                                &#128138
+                            {:else if tag.icon == "2"}
+                                &#128273
+                            {:else if tag.icon == "3"}
+                                &#128091
+                            {:else}
+                                &#11088
+                            {/if}
+                        </div> {tag.tagName} 
+                    </button>
                 {/key}
                 <!-- When the tag.active variable is set to true, expand the tag -->
                 {#if tag.active}
