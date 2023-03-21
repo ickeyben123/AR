@@ -7,7 +7,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import Role from './models/roles.js'
 import cookieSession from 'cookie-session';
-
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 import { fileURLToPath } from 'url';
 
@@ -77,7 +77,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //registering cors
-app.use(cors({origin:true,credentials: true}));
 
 // routes and api calls
 app.use('/health', healthRoutes);
@@ -86,16 +85,21 @@ app.use('/swagger', swaggerRoutes);
 // configure debugging
 app.use(morgan("dev"))
 
+app.set('trust proxy', 1)
 //Setup cookie session
 app.use(
   cookieSession({
     name: "ar-session",
     secret: "COOKIE_SECRET", // should use as secret environment variable
-    httpOnly: true
+    httpOnly: false,
+//    sameSite: 'none', ////FOR NGROK!
+//    secure: true,     ////FOR NGROK!
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
   })
 );
 
 
+app.use(cors({origin:true,credentials: true}));
 // define first route
 app.get("/", (req, res) => {
   res.json("Hello lol?.");

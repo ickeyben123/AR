@@ -23,7 +23,7 @@ once more all 3 libraries have been loaded in.
   };
 
   async function updateLatLong(){
-    const res = await fetch('http://localhost:3000/tag/' + tagId,{
+    const res = await fetch(window.location.origin + '/api/tag/' + tagId,{
                 method: 'GET',
                 credentials: 'include'
             });
