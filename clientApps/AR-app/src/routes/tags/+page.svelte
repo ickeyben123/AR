@@ -118,22 +118,28 @@
 
         //need to get the tag coords from geolocation, then save tag data in database
         
-        if(navigator.geolocation){
-            tagData = tag;
-            navigator.geolocation.getCurrentPosition(placeTag,errorGeoLocation);//send the geolocation data to another function
-        } else{
-            //this is if the browser doesnt support geolocation, do pop up message or something
-            errorMessage = "Your browser does not support geo";
+        if(tag.placed){
+            errorMessage = "The tag is not picked up, pick the tag up first before being able to place it";
             showError = true;
         }
-
-
-        //also need to place the tag as not picked up anymore
+        else{
+            //need to get the tag coords from geolocation, then save tag data in database
+            
+            if(navigator.geolocation){
+                tagData = tag;
+                navigator.geolocation.getCurrentPosition(placeTag,errorGeoLocation);//send the geolocation data to another function
+            } else{
+                //this is if the browser doesnt support geolocation, do pop up message or something
+                errorMessage = "Your browser does not support geo";
+                showError = true;
+            }
+        }
     }
 
     async function placeTag(position){
         coords.latitude = position.coords.latitude;
         coords.longitude = position.coords.longitude;
+        tagData.placed = true;
 
         const response = await fetch("http://localhost:3000/tag/"+tagData._id,
         {
