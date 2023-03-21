@@ -202,7 +202,7 @@
 
 
     <!-- Title for Tags page -->
-<div class="topbar">
+<div class="topBar">
     <h1>Your Tags</h1>
 </div>
 
@@ -337,18 +337,20 @@
 </body>
 
 <style>
-    /*
-    .topBar {
+   .topBar {
         position:sticky;
+        width:100%;
+        text-align:center;
     }
-    */
     .menuButton {
+        margin-top:5%;
         text-align: center;
         font-size: large;
-        background-color: aliceblue;
+        background-color: rgb(219, 238, 255);
         border-radius: 4px;
         outline: none;
-
+        font-size: larger;
+        width:100%;
     }
     .menuButton:hover {
         background-color: rgb(103, 132, 156);
@@ -363,7 +365,7 @@
     .accordionPanel {
         display: table;
         border-radius: 4px;
-        width:60%;
+        width:100%;
     }
     .accordionButton {
         width: 100%;
@@ -372,6 +374,7 @@
         border-radius: 4px;
         text-align: center;
         outline:none;
+        font-size: large;
     }
     .accordionButton:hover {
         background-color: rgb(103, 132, 156);
