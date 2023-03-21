@@ -26,6 +26,7 @@ export function validatePassword(req, res, next) {
 }
 
 export function checkDuplicateUsernameOrEmail(req, res, next) {
+  try{
     // Username
     User.findOne({
       userName: req.body.userName
@@ -71,6 +72,7 @@ export function checkDuplicateUsernameOrEmail(req, res, next) {
           next();
         });
       });
+    });
     } catch (err) {
       res.status(500).json({ error: err });
       return;
