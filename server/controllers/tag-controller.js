@@ -19,6 +19,23 @@ export const getTags = async(req,res) => {
     }
 };
 
+export const getTag = async(req,res) => {
+    try {
+        //get the user from the request as the user is already verified
+        const id = req.userId;
+        const tag_id = req.params.tagId;
+
+
+        //get the tags associated with the user
+        let tag = await Tag.findOne(
+            {_id: tag_id, owner: id}
+        );
+
+        res.status(200).json(tag);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
 
 // add a tag => need to first verify the user
 
@@ -31,6 +48,8 @@ export const addTag = async (req,res) => {
             tagName: req.body.tagName,
             coords: req.body.coords,
             placed: req.body.placed,
+            description: req.body.description,
+            icon: req.body.icon,
             owner: id
         });
 
@@ -53,7 +72,7 @@ export const deleteTag = async (req, res) => {
         const tag_id = req.params.tagId;
 
         let result = await Tag.deleteOne(
-            { "_id" : tag_id, owner : user_id}
+            {_id: tag_id, owner: user_id}
         );
         res.status(200).json(result);
     } catch (err) {
@@ -86,7 +105,7 @@ export const updateTag = async (req, res) => {
 
         // Set data
         for(var key in data) {
-            if(data.hasOwnProperty(key)){
+            if(data.hasOwnProperty(key) && key!="_id"){
             tag[key] = data[key];
             }
         }
