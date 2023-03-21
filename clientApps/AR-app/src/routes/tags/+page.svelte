@@ -55,7 +55,7 @@
     {
         var req = {
             "tagName": tagData.tagName,
-            "coords": {"longitude" : tagData.longitude, "latitude" : tagData.latitude, "elevation": 0},
+            "coords": {"longitude" : coords.longitude, "latitude" : coords.latitude, "elevation": 0},
             "description": tagData.description,
             "icon": tagData.icon,
             "placed" : true
