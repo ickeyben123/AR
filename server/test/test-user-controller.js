@@ -1,76 +1,80 @@
-/*
-// Node environment variable is set to 'test'.
 process.env.NODE_ENV = 'test';
 
-// Importing (?)
-import Tag from '../models/tags.js'
-import User from '../models/users.js'
-// ------------------------------------ //
+import Tag from '../models/tags.js';
+import User from '../models/users.js';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../server.js';
 
-// Variable declaration/definition (?)
-let should = chai.should();
-let expect = chai.expect();
-var user_id;
-var Cookies;
+const non_admin_1 = {
+  userName: "non_admin_1",
+  email: "na1@testing.com",
+  password: "ghG3hoP@e"
+}
 
-// Adds http request/response assertions to chai
-chai.use(chaiHttp);
+const non_admin_2 = {
+  userName: "non_admin_2",
+  email: "na2@testing.com",
+  password: "bnhg2loP"
+}
 
-// Defining a default user for testing of session specific routes
-let defaultUser = {
+const admin = {
   userName: "admin",
-  email: "admin@gmail.com",
+  email: "admin@admin.com",
   password: "password1",
   roles: ["admin"]
 };
 
-// Parent block
-describe('Users', () => {
+var should = chai.should();
+var expect = chai.expect();
+var user_id;
+var Cookies;
 
+chai.use(chaiHttp);
+
+describe("Users", () => {
+  
   const agent = chai.request.agent(server);
 
-  let tag = {
-    tagName: "testertag",
-    coords: 123,
-    placed: true,
-}
-
-  it("Doesn't post a tag", async () => {
-    const res = await agent.post("/tag").send(tag);
-    res.should.have.status(403);
-    res.body.should.be.a('object');
-    res.body.should.have.property('error');
-    res.body.error.should.be.eql('No user for this tag!');
-});
-
-// MUST LOGIN BEFORE USING ANY SESSION SPECIFIC ROUTES
-
-  it("Run login", async () => {
-    const res = await agent.post("/user/login").send(defaultUser);
-    res.should.have.cookie('ar-session')
+  it("Adds non_admin_1", async () => {
+    const res = await agent.post("/user").send(non_admin_1);
+    res.should.have.status(200);
+    res.body.should.be.a("object");
+    res.body.should.have.property("data");
+    res.body.data.should.have.property("userName");
+    res.body.data.should.have.property("email");
+    res.body.data.should.have.property("password");
+    res.body.data.should.have.property("roles");
+    res.body.data.userName.should.be.eql("non_admin_1");
+    res.body.data.email.should.be.eql("na1@testing.com");
   });
 
-  // SESSION SPECIFIC ROUTES
-
-  it("Posts a tag", async () => {
-    const res = await agent.post("/tag").send(tag);
+  it("Login non_admin_1", async () => {
+    const res = await agent.post("/user/login").send(
+    {
+      "userName": non_admin_1.userName,
+      "password": non_admin_1.password
+    });
     res.should.have.status(200);
-    res.body.should.be.a('object');
-    res.body.data.should.have.property('tagName');
-    res.body.data.should.have.property('coords');
-    res.body.data.should.have.property('placed');
-    res.body.data.should.have.property('owner');
+    res.body.should.be.a("object");
+    res.body.should.have.property("roles");
+    res.body.roles.should.be.eql(["USER"]);
+    res.should.have.cookie("ar-session");
   });
 
-  
-  it("Gets a tag", async () => {
-    const res = await agent.get("/tag");
+  /*
+  it("Signout non_admin_1", async () => {
+    const res = await agent.post("/user/login").send(
+    {
+      "userName": non_admin_1.userName,
+      "password": non_admin_1.password
+    });
     res.should.have.status(200);
-    res.body.should.be.a('array');
-});
+    res.body.should.be.a("object");
+    res.body.should.have.property("roles");
+    res.body.roles.should.be.eql(["USER"]);
+    res.session.should.have.property("token");
+  });
+  */
 
 });
-*/
