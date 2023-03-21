@@ -98,7 +98,9 @@
     }
 
     function viewTag(tag) {
-        console.log("You viewed tag " + tag.id + "!");
+        window.location.href = "ar?tagId=" + tag._id;
+
+        console.log("You viewed tag " + tag._id + "!");
     }
 
     function deleteTag(tag) {
@@ -120,19 +122,19 @@
         {#each tags as tag}
             <div class="accordionPanel">
                 {#key reCreate}
-                <button on:click={() => expand(tag)} class="accordionButton">
-                    <div class="accordionIcon">
-                        {#if tag.icon == "1"}
-                            &#128138
-                        {:else if tag.icon == "2"}
-                            &#128273
-                        {:else if tag.icon == "3"}
-                            &#128091
-                        {:else}
-                            &#11088
-                        {/if}
-                    </div> {tag.tagName} 
-                </button>
+                    <button on:click={() => expand(tag)} class="accordionButton">
+                        <div class="accordionIcon">
+                            {#if tag.icon == "1"}
+                                &#128138
+                            {:else if tag.icon == "2"}
+                                &#128273
+                            {:else if tag.icon == "3"}
+                                &#128091
+                            {:else}
+                                &#11088
+                            {/if}
+                        </div> {tag.tagName} 
+                    </button>
                 {/key}
                 {#if tag.active}
                     <div transition:slide class="accordionContent" >
