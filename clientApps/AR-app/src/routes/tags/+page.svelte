@@ -15,7 +15,6 @@
     import { invalidate, invalidateAll } from '$app/navigation';
 	import { HtmlTag } from 'svelte/internal';
 
-
     let showAddTags = false, showEditTags = false, showDeleteTags = false, reCreate=false, showError=false;
     var tagData = {tagName:"Default"}, coords={}, tagDelete = {tagId:null};
 
@@ -31,7 +30,6 @@
         // reload data
         invalidate('app:tags');
         reCreate=!reCreate;
-        window.location.reload();
     }
 
     // Global tags variable storing all the user's tags.
@@ -61,7 +59,7 @@
             "placed" : true
         }
 
-        const response = await fetch("http://localhost:3000/tag",
+        const response = await fetch(ngrokURL + "/tag",
         {
             method: 'POST',
             credentials: 'include',
@@ -71,12 +69,12 @@
             body: JSON.stringify(req) 
         });
 
-        rerunLoadFunction();
+        window.location.reload();
     }
 
     // Called to create a edit a tag, specified from the tagData that should be set beforehand.
     async function submitEdit(){
-        const response = await fetch("http://localhost:3000/tag/"+tagData._id,
+        const response = await fetch(window.location.origin + "/api/tag/"+tagData._id,
         {
             method: 'PUT',
             credentials: 'include',
@@ -95,13 +93,13 @@
 
         console.log("You deleted tag " + tagId + "!");
 
-        const response = await fetch('http://localhost:3000/tag/' + tagId,
+        const response = await fetch(window.location.origin + "/api/tag/" + tagId,
         {
             method: 'DELETE',
             credentials: 'include'
         });
 
-        rerunLoadFunction();
+        window.location.reload();
     }
 
     function createNewTag() {
@@ -141,7 +139,7 @@
         coords.longitude = position.coords.longitude;
         tagData.placed = true;
 
-        const response = await fetch("http://localhost:3000/tag/"+tagData._id,
+        const response = await fetch(window.location.origin + "/api/tag/"+tagData._id,
         {
             method: 'PUT',
             credentials: 'include',
@@ -245,11 +243,15 @@
                 <!-- When the tag.active variable is set to true, expand the tag -->
                 {#if tag.active}
                     <div transition:slide class="accordionContent" >
-                        <p>
-                            {tag.description}
-                        </p>
+                        {#key reCreate}
+                            <p>
+                                {tag.description}
+                            </p>
+                        {/key}
                         <button on:click={() => viewTag(tag)}>Find</button>
-                        <button on:click={() => getTagGeoLocation(tag)}>Place</button>
+                        {#if !tag.placed}
+                         <button on:click={() => getTagGeoLocation(tag)}>Place</button>
+                        {/if}
                         <button on:click={() => editTag(tag)}>Edit</button>
                         <button on:click={() => deleteTag(tag)}>Delete</button>
 
@@ -287,7 +289,7 @@
         <button class="menuButton" on:click={() => (tagData.icon = "3")}>&#128091</button>
         <button class="menuButton active" on:click={() => (tagData.icon = "4")}>&#11088</button>
     </div><br>
-    <button class="menuButton" on:click ={() =>submitInfo()}>Sumbit</button>
+    <button class="menuButton" on:click ={() =>submitInfo()}>Submit</button>
 </Modal>
 
 <!-- Edit Tag Model. Shows when 'showEditTags' variable is set to true -->
@@ -298,10 +300,10 @@
     <input bind:value={tagData.description} placeholder = Empty><br>
     <h2>Edit Tag Coordinates</h2>
     <h5>Latitude</h5>
-    <input bind:value={coords.latitude} placeholder = Name><br>
+    <input bind:value={coords.latitude} placeholder = Empty ><br>
     <h5>Longitude</h5>
-    <input bind:value={coords.longitude} placeholder = Name><br>
-    <button class="menuButton" on:click ={() =>submitEdit()}>Sumbit</button>
+    <input bind:value={coords.longitude} placeholder = Empty><br>
+    <button class="menuButton" on:click ={() =>submitEdit()}>Submit</button>
 </Modal>
 
 
