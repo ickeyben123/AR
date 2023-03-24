@@ -25,7 +25,7 @@
         }
 
     async function signUp() {
-        const res = await fetch("http://localhost:3000/user", 
+        const res = await fetch(window.location.origin + "/api/user", 
         {
             method:'POST',
             credentials:'include',

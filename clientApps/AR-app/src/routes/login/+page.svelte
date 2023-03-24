@@ -44,14 +44,14 @@
         console.log(JSON.stringify(req));
    
 
-        const response = await fetch("http://localhost:3000/user/login",
+        const response = await fetch(window.location.origin + "/api/user/login",
         {
             method: 'POST',
             mode: 'cors',
             credentials: 'include',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
                 
             },
             body: JSON.stringify(req) 
@@ -67,7 +67,7 @@
             else
             {
                 alert("CORRECT");
-                window.location.href = "http://localhost:4000/tags";
+                goto('/tags')
             }
             
         });

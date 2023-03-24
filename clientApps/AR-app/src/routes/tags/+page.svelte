@@ -1,4 +1,4 @@
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>
 
     /*
@@ -15,7 +15,6 @@
     import { invalidate, invalidateAll } from '$app/navigation';
 	import { HtmlTag } from 'svelte/internal';
 
-
     let showAddTags = false, showEditTags = false, showDeleteTags = false, reCreate=false, showError=false;
     var tagData = {tagName:"Default"}, coords={}, tagDelete = {tagId:null};
 
@@ -31,7 +30,6 @@
         // reload data
         invalidate('app:tags');
         reCreate=!reCreate;
-        window.location.reload();
     }
 
     // Global tags variable storing all the user's tags.
@@ -61,7 +59,7 @@
             "placed" : true
         }
 
-        const response = await fetch("http://localhost:3000/tag",
+        const response = await fetch(ngrokURL + "/tag",
         {
             method: 'POST',
             credentials: 'include',
@@ -71,12 +69,12 @@
             body: JSON.stringify(req) 
         });
 
-        rerunLoadFunction();
+        window.location.reload();
     }
 
     // Called to create a edit a tag, specified from the tagData that should be set beforehand.
     async function submitEdit(){
-        const response = await fetch("http://localhost:3000/tag/"+tagData._id,
+        const response = await fetch(window.location.origin + "/api/tag/"+tagData._id,
         {
             method: 'PUT',
             credentials: 'include',
@@ -95,13 +93,13 @@
 
         console.log("You deleted tag " + tagId + "!");
 
-        const response = await fetch('http://localhost:3000/tag/' + tagId,
+        const response = await fetch(window.location.origin + "/api/tag/" + tagId,
         {
             method: 'DELETE',
             credentials: 'include'
         });
 
-        rerunLoadFunction();
+        window.location.reload();
     }
 
     function createNewTag() {
@@ -134,7 +132,7 @@
         coords.latitude = position.coords.latitude;
         coords.longitude = position.coords.longitude;
 
-        const response = await fetch("http://localhost:3000/tag/"+tagData._id,
+        const response = await fetch(window.location.origin + "/api/tag/"+tagData._id,
         {
             method: 'PUT',
             credentials: 'include',
@@ -204,7 +202,7 @@
 
 
     <!-- Title for Tags page -->
-<div class="topbar">
+<div class="topBar">
     <h1>Your Tags</h1>
 </div>
 
@@ -238,11 +236,15 @@
                 <!-- When the tag.active variable is set to true, expand the tag -->
                 {#if tag.active}
                     <div transition:slide class="accordionContent" >
-                        <p>
-                            {tag.description}
-                        </p>
+                        {#key reCreate}
+                            <p>
+                                {tag.description}
+                            </p>
+                        {/key}
                         <button on:click={() => viewTag(tag)}>Find</button>
-                        <button on:click={() => getTagGeoLocation(tag)}>Place</button>
+                        {#if !tag.placed}
+                         <button on:click={() => getTagGeoLocation(tag)}>Place</button>
+                        {/if}
                         <button on:click={() => editTag(tag)}>Edit</button>
                         <button on:click={() => deleteTag(tag)}>Delete</button>
 
@@ -280,7 +282,7 @@
         <button class="menuButton" on:click={() => (tagData.icon = "3")}>&#128091</button>
         <button class="menuButton active" on:click={() => (tagData.icon = "4")}>&#11088</button>
     </div><br>
-    <button class="menuButton" on:click ={() =>submitInfo()}>Sumbit</button>
+    <button class="menuButton" on:click ={() =>submitInfo()}>Submit</button>
 </Modal>
 
 <!-- Edit Tag Model. Shows when 'showEditTags' variable is set to true -->
@@ -291,10 +293,10 @@
     <input bind:value={tagData.description} placeholder = Empty><br>
     <h2>Edit Tag Coordinates</h2>
     <h5>Latitude</h5>
-    <input bind:value={coords.latitude} placeholder = Name><br>
+    <input bind:value={coords.latitude} placeholder = Empty ><br>
     <h5>Longitude</h5>
-    <input bind:value={coords.longitude} placeholder = Name><br>
-    <button class="menuButton" on:click ={() =>submitEdit()}>Sumbit</button>
+    <input bind:value={coords.longitude} placeholder = Empty><br>
+    <button class="menuButton" on:click ={() =>submitEdit()}>Submit</button>
 </Modal>
 
 
@@ -339,18 +341,20 @@
 </body>
 
 <style>
-    /*
-    .topBar {
+   .topBar {
         position:sticky;
+        width:100%;
+        text-align:center;
     }
-    */
     .menuButton {
+        margin-top:5%;
         text-align: center;
         font-size: large;
-        background-color: aliceblue;
+        background-color: rgb(219, 238, 255);
         border-radius: 4px;
         outline: none;
-
+        font-size: larger;
+        width:100%;
     }
     .menuButton:hover {
         background-color: rgb(103, 132, 156);
@@ -365,7 +369,7 @@
     .accordionPanel {
         display: table;
         border-radius: 4px;
-        width:60%;
+        width:100%;
     }
     .accordionButton {
         width: 100%;
@@ -374,6 +378,7 @@
         border-radius: 4px;
         text-align: center;
         outline:none;
+        font-size: large;
     }
     .accordionButton:hover {
         background-color: rgb(103, 132, 156);
