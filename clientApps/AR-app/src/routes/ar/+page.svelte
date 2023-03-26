@@ -69,7 +69,7 @@ once more all 3 libraries have been loaded in.
   }
 
   async function setNotPlaced(){
-    const response = await fetch("http://localhost:3000/tag/"+tagId,{
+    const response = await fetch(window.location.origin + "/api/tag/"+tagId,{
       method: 'PUT',
       credentials: 'include',
       headers: {
