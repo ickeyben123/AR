@@ -10,4 +10,5 @@ router.post("/",[validationJWT.verifyToken], tagController.addTag);
 router.delete("/:tagId",[validationJWT.verifyToken], tagController.deleteTag);
 router.put("/:tagId",[validationJWT.verifyToken], tagController.updateTag);
 
+
 export default router
