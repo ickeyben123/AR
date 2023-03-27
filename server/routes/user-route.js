@@ -9,7 +9,7 @@ router.get("/all",[validationJWT.verifyToken,validationJWT.isAdmin], userControl
 router.get("/",[validationJWT.verifyToken], userController.getUser);
 router.put("/email",[validationJWT.verifyToken,validation.checkDuplicateEmail], userController.updateEmail);
 router.put("/pass",[validationJWT.verifyToken,validation.validatePassword], userController.updatePassword);
-router.delete("/", [validationJWT.verifyToken,validationJWT.isAdmin], userController.deleteUser);
+router.delete("/:userId", [validationJWT.verifyToken,validationJWT.isAdmin], userController.deleteUser)
 router.post("/login", userController.loginUser);
 
 export default router
