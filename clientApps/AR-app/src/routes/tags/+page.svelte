@@ -11,7 +11,7 @@
 
     import {slide} from 'svelte/transition';
     import { onMount } from 'svelte';
-    import Modal from './Modal.svelte';
+    import Modal from '../Modal.svelte';
     import { invalidate, invalidateAll } from '$app/navigation';
 	import { HtmlTag } from 'svelte/internal';
 
