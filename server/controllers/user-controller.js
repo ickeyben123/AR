@@ -104,7 +104,7 @@ export const updatePassword = async (req, res) => {
 // Deletes a user by its object id
 export const deleteUser = async (req, res) => {
   try {
-    const id = req.body.userId;
+    const id = req.params.userId;
     
     // remove() is deprecated ...
     let result = await User.remove({ _id: id });
