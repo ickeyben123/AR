@@ -85,7 +85,7 @@
     
             <div class ="input">
                 <input bind:value={name} placeholder = Name><br>
-                <input bind:value={pass} placeholder = Password><br>
+                <input type="password" bind:value={pass} placeholder = Password><br>
             </div>
             
             <div class = "buttons">
