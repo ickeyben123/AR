@@ -79,7 +79,7 @@
     <body>
         <div class = "content">
             
-            <div class="topBar">
+            <div class="title">
                 <h1>Please Log In</h1>
             </div>
     
@@ -94,7 +94,7 @@
                 </button>
             </div>
             
-            <div class="topBar">
+            <div class="title">
                 <h1>----- OR -----</h1>
             </div>
             
@@ -122,7 +122,7 @@
             background: white;
             padding: 10px;
         }
-        .topBar {
+        .title {
             position:sticky;
             margin: auto;
             width: 50%;

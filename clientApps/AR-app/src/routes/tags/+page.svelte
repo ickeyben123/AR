@@ -209,7 +209,7 @@
 
 
     <!-- Title for Tags page -->
-<div class="topBar">
+<div class="title">
     <h1>Your Tags</h1>
 </div>
 
@@ -348,7 +348,7 @@
 </body>
 
 <style>
-   .topBar {
+   .title {
         position:sticky;
         width:100%;
         text-align:center;

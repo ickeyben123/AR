@@ -45,7 +45,7 @@
     <body>
         <div class = "content">
             
-            <div class="topBar">
+            <div class="title">
                 <h1>Please Sign Up</h1>
             </div>
     
@@ -72,7 +72,7 @@
             background: white;
             padding: 10px;
         }
-        .topBar {
+        .title {
             position:sticky;
             margin: auto;
             width: 53%;

@@ -5,7 +5,7 @@
    <body>
        <div class = "content">
            
-           <div class="topBar">
+           <div class="title">
                <h1>Welcome To Find AR!</h1>
                            <br>
            </div>
@@ -38,7 +38,7 @@
            background: white;
            padding: 10px;
        }
-       .topBar {
+       .title {
            position:sticky;
            margin: auto;
              display: inline-block;
