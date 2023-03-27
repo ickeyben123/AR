@@ -59,7 +59,7 @@
             "placed" : true
         }
 
-        const response = await fetch(ngrokURL + "/tag",
+        const response = await fetch(window.location.origin + "/api/tag",
         {
             method: 'POST',
             credentials: 'include',
