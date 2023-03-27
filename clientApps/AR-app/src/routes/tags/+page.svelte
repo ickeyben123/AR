@@ -330,48 +330,6 @@
 {/if}
 
 
-<!-- In Progress Code for Placing -->
-<!--
-<script> //Secondary script tag for button selection
-    //Make button active
-    var header = document.getElementById("iconBtns");
-    var btns = header.getElementsByClassName("menuButton");
-    var headerEdit = document.getElementById("iconBtnsEdit");
-    var btnsEdit = header.getElementsByClassName("menuButtonV2");
-    
-    for (var i = 0; i < btns.length; i++)
-    {
-        btns[i].addEventListener("click", function() {
-            var current = document.getElementsByClassName("active");
-
-            // If there's no active class
-            if (current.length > 0) {
-            current[0].className = current[0].className.replace(" active", "");
-            }
-
-            // Add the active class to the current/clicked button
-            this.className += " active";
-        });
-    }
-
-    for (var i = 0; i < btnsEdit.length; i++)
-    {
-        btnsEdit[i].addEventListener("click", function() {
-            var current = document.getElementsByClassName("active");
-
-            // If there's no active class
-            if (current.length > 0) {
-            current[0].className = current[0].className.replace(" active", "");
-            }
-
-            // Add the active class to the current/clicked button
-            this.className += " active";
-        });
-    }
-
-</script>
--->
-
 </body>
 
 <style>
