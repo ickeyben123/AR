@@ -83,6 +83,7 @@
             body: JSON.stringify(tagData)
         });
 
+        window.location.reload();
         rerunLoadFunction();
 
     }
@@ -283,10 +284,10 @@
     <input bind:value={coords.longitude} placeholder = 00.0000><br>
     <h2>Select Tag Type</h2>
     <div id="iconBtns">
-        <button class="menuButton" on:click={() => (tagData.icon = "1")}>&#128138</button>
-        <button class="menuButton" on:click={() => (tagData.icon = "2")}>&#128273</button>
-        <button class="menuButton" on:click={() => (tagData.icon = "3")}>&#128091</button>
-        <button class="menuButton active" on:click={() => (tagData.icon = "4")}>&#11088</button>
+        <button class="menuButtonV2 {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
+        <button class="menuButtonV2 {tagData.icon === "2" ? 'active' : ''}" on:click={() => (tagData.icon = "2")}>&#128273</button>
+        <button class="menuButtonV2 {tagData.icon === "3" ? 'active' : ''}" on:click={() => (tagData.icon = "3")}>&#128091</button>
+        <button class="menuButtonV2 {tagData.icon === "4" ? 'active' : ''}" on:click={() => (tagData.icon = "4")}>&#11088</button>
     </div><br>
     <button class="menuButton" on:click ={() =>submitInfo()}>Submit</button>
 </Modal>
@@ -302,6 +303,13 @@
     <input bind:value={coords.latitude} placeholder = Empty ><br>
     <h5>Longitude</h5>
     <input bind:value={coords.longitude} placeholder = Empty><br>
+    <h2>Change Tag Type</h2>
+    <div id="iconBtnsEdit">
+        <button class="menuButtonV2 {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
+        <button class="menuButtonV2 {tagData.icon === "2" ? 'active' : ''}" on:click={() => (tagData.icon = "2")}>&#128273</button>
+        <button class="menuButtonV2 {tagData.icon === "3" ? 'active' : ''}" on:click={() => (tagData.icon = "3")}>&#128091</button>
+        <button class="menuButtonV2 {tagData.icon === "4" ? 'active' : ''}" on:click={() => (tagData.icon = "4")}>&#11088</button>
+    </div><br>
     <button class="menuButton" on:click ={() =>submitEdit()}>Submit</button>
 </Modal>
 
@@ -321,29 +329,6 @@
 {/if}
 
 
-<!-- In Progress Code for Placing -->
-<script> //Secondary script tag for button selection
-    //Make button active
-    
-    var header = document.getElementById("iconBtns");
-    var btns = header.getElementsByClassName("menuButton");
-    
-    for (var i = 0; i < btns.length; i++)
-    {
-        btns[i].addEventListener("click", function() {
-            var current = document.getElementsByClassName("active");
-
-            // If there's no active class
-            if (current.length > 0) {
-            current[0].className = current[0].className.replace(" active", "");
-            }
-
-            // Add the active class to the current/clicked button
-            this.className += " active";
-        });
-    }
-</script>
-
 </body>
 
 <style>
@@ -353,6 +338,16 @@
         text-align:center;
     }
     .menuButton {
+        margin-top:5%;
+        text-align: center;
+        font-size: large;
+        background-color: rgb(219, 238, 255);
+        border-radius: 4px;
+        outline: none;
+        font-size: larger;
+        width:100%;
+    }
+    .menuButtonV2 {
         margin-top:5%;
         text-align: center;
         font-size: large;
