@@ -1,6 +1,6 @@
 /** @type {import('./$types').PageLoad} */
-export async function load({ fetch, depends }) {
-    const res = await fetch(window.location.origin + "/api/tag",{
+export async function load({ fetch, depends, url }) {
+    const res = await fetch(  url.origin + "/api/tag",{
                 method: 'GET',
                 credentials: 'include',
                 headers: {

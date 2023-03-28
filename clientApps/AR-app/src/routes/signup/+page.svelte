@@ -2,29 +2,19 @@
     let name = '';
     let pass = '';
     let email = '';
-        
-    function validateInput()
-        {
-            if (name == '')
-                {
-                    alert("NAME IS EMPTY");
-                }
-            else if (pass == '')
-                {
-                    alert("PASSWORD IS EMPTY");
-                }
-            else if (pass == '')
-                {
-                    alert("EMAIL IS EMPTY");
-                }
-            else
-                {
-                    alert("Signing Up");
-                    signUp();
-                }
-        }
+	let n;
+    import * as validation from '$lib/validation.js';
+
+    // For notifications
+    import { toast } from '@zerodevx/svelte-toast';
 
     async function signUp() {
+        var errors = validation.validatePassword(pass);
+        if(errors != ""){
+            toast.push(errors);
+            return;
+        }  
+        
         const res = await fetch(window.location.origin + "/api/user", 
         {
             method:'POST',
@@ -38,14 +28,20 @@
                 "password" : pass
              })
         })
+
+        if(res.status != 200){
+            toast.push(errors);
+        }
     }
 
-    </script>
+</script>
     
-    <body>
+
+
+<body>
         <div class = "content">
             
-            <div class="topBar">
+            <div class="title">
                 <h1>Please Sign Up</h1>
             </div>
     
@@ -56,32 +52,34 @@
             </div>
             
             <div class = "buttons">
-                <button on:click={validateInput}>
+                <button on:click={signUp}>
                     Sign Up
                 </button>
             </div>
     
         </div>	
         
-    </body>
+</body>
     
-    <style>
+
+<style>
         .content {
             max-width: 500px;
             margin: auto;
             background: white;
+            text-align: center;
             padding: 10px;
         }
-        .topBar {
-            position:sticky;
-            margin: auto;
-            width: 53%;
-            text-align: centre;
+        .title {
+        text-align: center;
+        vertical-align: middle;
+        line-height: 90px;   
         }
         .input {
             position:sticky;
             margin: auto;
-            width: 50%;
+            width: 100%;
+            vertical-align: middle;
             text-align: centre;
             padding: 10px;
         }

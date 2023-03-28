@@ -25,7 +25,7 @@ export function validatePassword(req, res, next) {
   }
 }
 
-export function checkDuplicateUsernameOrEmail(req, res, next) {
+export function checkDuplicateUsername(req, res, next) {
   try{
     // Username
     User.findOne({
@@ -40,23 +40,18 @@ export function checkDuplicateUsernameOrEmail(req, res, next) {
         res.status(400).send({ message: "Username is already in use!" });
         return;
       }
-  
-      // Email
-      User.findOne({
-        userName: req.body.userName
-      }).exec((err, user) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-    
-        if (user) {
-          res.status(400).send({ message: "Username is already in use!" });
-          return;
-        }
-    
-        // Email
-        User.findOne({
+      next();
+    });
+    } catch (err) {
+      res.status(500).json({ error: err });
+      return;
+   }
+};
+
+  export function checkDuplicateEmail(req, res, next) {
+    try{
+         // Email
+         User.findOne({
           email: req.body.email
         }).exec((err, email) => {
           if (err) {
@@ -68,17 +63,16 @@ export function checkDuplicateUsernameOrEmail(req, res, next) {
             res.status(400).send({ message: "Email is already in use!" });
             return;
           }
-    
           next();
-        });
-      });
     });
-    } catch (err) {
-      res.status(500).json({ error: err });
-      return;
-   }
+      } catch (err) {
+        res.status(500).json({ error: err });
+        return;
+     }
+  
+};
 
-  };
+
 
 // This function seems to be unused...
 export function checkRolesExists (req, res, next) {

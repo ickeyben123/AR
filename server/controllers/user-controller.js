@@ -8,6 +8,7 @@ import * as Validation from '../middleware/validation.js'
 // Adds a user with specified username and password entries in body
 export const addUser = async (req, res) => {
   try {
+
     const user = new User({
         userName: req.body.userName,
         email: req.body.email,
@@ -62,24 +63,35 @@ export const getUser = async (req, res) => {
   }
 };
 
-// Updates user password. Cannot edit username
-export const updateUser = async (req, res) => {
+// Updates user email. Cannot edit username
+export const updateEmail = async (req, res) => {
   try {
-    if(req.body.userName!=null){
-      res.status(400).json({ error: "Cannot edit username!" });
-      return;
-    }
     const id = req.userId;
     let user = await User.findById(id);
 
     var data = req.body;
 
     // Set data
-    for(var key in data) {
-      if(data.hasOwnProperty(key)){
-        user[key] = data[key];
-      }
-    }
+    user['email'] = data['email'];
+    // Save data
+    let savedUser = await user.save();
+    res.status(200).json({ data: savedUser });
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+};
+
+
+// Updates user password. Cannot edit username
+export const updatePassword = async (req, res) => {
+  try {
+    const id = req.userId;
+    let user = await User.findById(id);
+
+    var data = req.body;
+
+    // Set data
+    user['password'] = data['password'];
 
     // Save data
     let savedUser = await user.save();
@@ -92,7 +104,7 @@ export const updateUser = async (req, res) => {
 // Deletes a user by its object id
 export const deleteUser = async (req, res) => {
   try {
-    const id = req.body.userId;
+    const id = req.params.userId;
     
     // remove() is deprecated ...
     let result = await User.remove({ _id: id });
