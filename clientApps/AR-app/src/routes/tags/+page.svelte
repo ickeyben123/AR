@@ -14,6 +14,9 @@
     import { invalidate, invalidateAll } from '$app/navigation';
 	import { HtmlTag } from 'svelte/internal';
 
+    // For notifications
+    import { toast } from '@zerodevx/svelte-toast';
+
     let showAddTags = false, showEditTags = false, showDeleteTags = false, reCreate=false, showError=false;
     var tagData = {tagName:"Default"}, coords={}, tagDelete = {tagId:null};
 
@@ -50,25 +53,43 @@
     // Called to create a new tag, specified from the tagData that should be set beforehand.
     async function newTag()
     {
-        var req = {
-            "tagName": tagData.tagName,
-            "coords": {"longitude" : coords.longitude, "latitude" : coords.latitude, "elevation": 0},
-            "description": tagData.description,
-            "icon": tagData.icon,
-            "placed" : true
-        }
 
-        const response = await fetch(window.location.origin + "/api/tag",
-        {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(req) 
-        });
+        const id = toast.push('Adding tag, please wait...', {
+            theme: {
+            '--toastContainerTop': 'auto',
+            '--toastContainerRight': 'auto',
+            '--toastContainerBottom': 'auto',
+        },
+        duration: 50, // Each progress change takes 300ms
+        initial: 0,
+        next: 0.2,
+        dismissable: false
+        })
+        // Set geolocation
+        getGeoLocation(async (position) =>{
+            setTagLocation(position);
+            var req = {
+                "tagName": tagData.tagName,
+                "coords": {"longitude" : coords.longitude || 0, "latitude" : coords.latitude || 0, "elevation": 0},
+                "description": tagData.description || "A Default Tag.",
+                "icon": tagData.icon || 0,
+                "placed" : true
+            }
+            toast.set(id, { next: .5 })
 
-        window.location.reload();
+            const response = await fetch(window.location.origin + "/api/tag",
+            {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(req) 
+            });
+            toast.set(id, { next: 1 })
+
+           window.location.reload();
+         }); 
     }
 
     // Called to create a edit a tag, specified from the tagData that should be set beforehand.
@@ -107,7 +128,18 @@
         showAddTags = true;
     }
 
-    function getTagGeoLocation(tag) {
+
+    function getGeoLocation(func){
+             if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(func,errorGeoLocation);//send the geolocation data to another function
+            } else{
+                //this is if the browser doesnt support geolocation, do pop up message or something
+                errorMessage = "Your browser does not support geo";
+                showError = true;
+            }
+    }
+
+    async function getTagGeoLocation(tag) {
         console.log("You placed tag " + tag._id + "!");
         //need to check if the tag is picked up, if not then make some error popup
         tagData=tag
@@ -122,34 +154,32 @@
         }
         else{
             //need to get the tag coords from geolocation, then save tag data in database
-            
-            if(navigator.geolocation){
-                tagData = tag;
-                navigator.geolocation.getCurrentPosition(placeTag,errorGeoLocation);//send the geolocation data to another function
-            } else{
-                //this is if the browser doesnt support geolocation, do pop up message or something
-                errorMessage = "Your browser does not support geo";
-                showError = true;
-            }
+            // Set geolocation
+            getGeoLocation(async (position)=> {
+                setTagLocation(position);
+
+                // Save new tag data
+                const response = await fetch(window.location.origin + "/api/tag/"+tagData._id,
+                {
+                    method: 'PUT',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(tagData)
+                });
+
+                rerunLoadFunction();
+
+            });
         }
     }
 
-    async function placeTag(position){
+    // Sets the tag data to the coords from the geolocator.
+     function setTagLocation(position){
         coords.latitude = position.coords.latitude;
         coords.longitude = position.coords.longitude;
         tagData.placed = true;
-
-        const response = await fetch(window.location.origin + "/api/tag/"+tagData._id,
-        {
-            method: 'PUT',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(tagData)
-        });
-
-        rerunLoadFunction();
     }
 
     //this is called if the 'getCurrentPosition' function fails to get the geo data. May want to display pop up error messsages instead
@@ -196,6 +226,7 @@
 
     function submitInfo() {
         console.log(tagData.tagName);
+        showAddTags = false;
         newTag();
     }
 
@@ -218,10 +249,9 @@
 <!-- /////////// -->
 
 <!-- Conditional that it only shows tags if the data has loaded -->
-    {#if !data.failed}
     <!-- Goes through each tag in the fetched tags of the user to create
         tag items for manipulation  -->
-        {#each tags as tag}
+        {#each tags || [] as tag }
             <div class="accordionPanel">
                 <!-- Key specifies a part of the html that can be made to 'reload' when
                     the tag data has been updated. -->
@@ -259,10 +289,11 @@
                 {/if}
             </div>
         {/each}
-    {/if}
 
+<div class="bottom">
     <!-- Button to create a tag at the bottom of the page -->
 <button class="menuButton" on:click={() =>createNewTag()}>Create Tag +</button>
+</div>
 
 <!-- ////// -->
 <!-- MODALS -->
@@ -277,11 +308,6 @@
     <input bind:value={tagData.tagName} placeholder = Name><br>
     <h2>Enter Tag Description</h2>
     <input bind:value={tagData.description} placeholder = Empty><br>
-    <h2>Enter Tag Coordinates</h2>
-    <h5>Latitude</h5>
-    <input bind:value={coords.latitude} placeholder = 00.0000><br>
-    <h5>Longitude</h5>
-    <input bind:value={coords.longitude} placeholder = 00.0000><br>
     <h2>Select Tag Type</h2>
     <div id="iconBtns">
         <button class="menuButtonV2 {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
@@ -313,7 +339,6 @@
     <button class="menuButton" on:click ={() =>submitEdit()}>Submit</button>
 </Modal>
 
-
 <Modal bind:showModal={showError}>
     <h2 style="color: red;">{errorMessage}</h2>
 </Modal>
@@ -337,26 +362,27 @@
         width:100%;
         text-align:center;
     }
+
+    .bottom{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    text-align: center;
+    }
+
     .menuButton {
         margin-top:5%;
-        text-align: center;
         font-size: large;
         background-color: rgb(219, 238, 255);
         border-radius: 4px;
         outline: none;
         font-size: larger;
-        width:100%;
+        width:90%;
+        max-width: 800px;
     }
-    .menuButtonV2 {
-        margin-top:5%;
-        text-align: center;
-        font-size: large;
-        background-color: rgb(219, 238, 255);
-        border-radius: 4px;
-        outline: none;
-        font-size: larger;
-        width:100%;
-    }
+
     .menuButton:hover {
         background-color: rgb(103, 132, 156);
         color:white;
@@ -371,6 +397,9 @@
         display: table;
         border-radius: 4px;
         width:100%;
+        max-width: 800px;
+        margin: auto;
+        text-align: centre;
     }
     .accordionButton {
         width: 100%;
@@ -393,6 +422,7 @@
     .accordionContent {
         border: 1px solid #eee;
 		padding: 4px 20px;
+        text-align: center;
         background-color:rgb(232, 232, 232);
         border-radius: 4px;
     }

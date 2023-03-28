@@ -2,7 +2,10 @@
     import {goto} from '$app/navigation';
     let name = '';
     let pass = '';
-    
+
+     // For notifications
+    import { toast } from '@zerodevx/svelte-toast';
+
     /*  Function to display all names in db, used during testing
     async function loadNames() {
         await fetch("http://localhost:3000/user")
@@ -23,7 +26,7 @@
 
         if(name == '' || pass == '')
         {
-            alert("Invalid Entry");
+            toast.push("Invalid Entry");
             return;
         }
         console.log(name);
@@ -62,11 +65,11 @@
             console.log(JSON.stringify(data));
             const resp = JSON.stringify(data);
             if(resp == '{"message":"User Not found."}'){
-                alert("INCORRECT");
+                toast.push("Incorrect Login Entered.");
             }
             else
             {
-                alert("CORRECT");
+                toast.push("Signed in.");
                 goto('/tags')
             }
             

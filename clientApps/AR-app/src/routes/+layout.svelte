@@ -22,12 +22,25 @@
 	import '../global.css'
 	import {slide} from 'svelte/transition';
 
+	//Notifications
+	import { SvelteToast } from '@zerodevx/svelte-toast'
+
 	let navMenuActive = false
 </script>
 
 <slot></slot>
 
+
+<SvelteToast options={{ reversed: true, intro: { y: 192 } }} />
+
 <style>
+	:root {
+      --toastContainerTop: auto;
+      --toastContainerRight: auto;
+      --toastContainerBottom: 2rem;
+      --toastContainerLeft: calc(50vw - 8rem);
+    }
+
 	header {
 		position: -webkit-sticky;
 		position: sticky;
@@ -38,7 +51,7 @@
 		width: 100%;
 		background-color: rgb(219, 238, 255);
 		padding: 0;
-		height:7vh;
+		height:50px;
 		
 	}
 	table {
