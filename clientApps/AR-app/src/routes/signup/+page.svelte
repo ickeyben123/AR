@@ -34,7 +34,7 @@
             toast.push(res.body);
         }
 
-        goto('/tags');
+        goto('/login');
     }
 
 </script>
