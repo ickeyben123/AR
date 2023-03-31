@@ -123,18 +123,19 @@
             max-width: 500px;
             margin: auto;
             background: white;
+            text-align: center;
             padding: 10px;
         }
         .title {
-            position:sticky;
-            margin: auto;
-            width: 50%;
-            text-align: centre;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 90px;   
         }
         .input {
             position:sticky;
             margin: auto;
-            width: 50%;
+            width: 100%;
+            vertical-align: middle;
             text-align: centre;
             padding: 10px;
         }
