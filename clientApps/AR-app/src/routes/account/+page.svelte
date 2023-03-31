@@ -73,7 +73,7 @@
 
         toast.set(id, { next: .5 })
         const response = await fetch(window.location.origin + "/api/user/cookie",{
-            method: 'DELETE',
+            method: 'POST',
             credentials: 'include'
         });
         toast.set(id, { next: 1 })

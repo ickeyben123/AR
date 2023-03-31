@@ -208,8 +208,8 @@ export const deleteCookie = async (req,res) => {
   try{
     res
       .clearCookie("ar-session")
-      .clearCookie("ar-session.sig")
-      .end();
+      .clearCookie("ar-session.sig");
+      return res.status(200).send({ message: "You've been signed out!" });
   } catch(err){
     res.status(500).json({ error: err });
   }
