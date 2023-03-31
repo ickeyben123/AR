@@ -31,7 +31,7 @@
         })
 
         if(res.status != 200){
-            toast.push(errors);
+            toast.push(res.body);
         }
 
         goto('/tags');
