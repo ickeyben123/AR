@@ -58,25 +58,10 @@
         //delete a cookie, then go back to home pagetoken
 
         //document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-        const id = toast.push('Signing Out', {
-            theme: {
-            '--toastContainerTop': 'auto',
-            '--toastContainerRight': 'auto',
-            '--toastContainerBottom': 'auto',
-        },
-        duration: 50, // Each progress change takes 300ms
-        initial: 0,
-        next: 0.2,
-        dismissable: false
-        })
-
-        toast.set(id, { next: .5 })
         const response = await fetch(window.location.origin + "/api/user/cookie",{
             method: 'POST',
             credentials: 'include'
         });
-        toast.set(id, { next: 1 })
         //go back to home page
         goto("/"); 
     }
