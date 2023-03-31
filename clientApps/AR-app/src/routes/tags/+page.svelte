@@ -154,9 +154,24 @@
         else{
             //need to get the tag coords from geolocation, then save tag data in database
             // Set geolocation
+
+            const id = toast.push('Signing Out', {
+                theme: {
+                '--toastContainerTop': 'auto',
+                '--toastContainerRight': 'auto',
+                '--toastContainerBottom': 'auto',
+            },
+            duration: 50, // Each progress change takes 300ms
+            initial: 0,
+            next: 0.2,
+            dismissable: false
+            })
+
+
             getGeoLocation(async (position)=> {
                 setTagLocation(position);
 
+                toast.set(id, { next: .5 })
                 // Save new tag data
                 const response = await fetch(window.location.origin + "/api/tag/"+tagData._id,
                 {
@@ -167,6 +182,7 @@
                     },
                     body: JSON.stringify(tagData)
                 });
+                toast.set(id, { next: 1 })
 
                 rerunLoadFunction();
 
