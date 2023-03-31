@@ -19,6 +19,19 @@ export const getTags = async(req,res) => {
     }
 };
 
+
+export const getAllTags = async(req,res) => {
+    try {
+
+        //get all the tags in the database
+        let tags = await Tag.find();
+
+        res.status(200).json(tags);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
 export const getTag = async(req,res) => {
     try {
         //get the user from the request as the user is already verified

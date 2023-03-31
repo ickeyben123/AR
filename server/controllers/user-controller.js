@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import User from '../models/users.js'
+import Tag from '../models/tags.js'
 import Role from '../models/roles.js'
 import jwt from 'jsonwebtoken'
 import jwtconfig from '../config/jwt.js'
@@ -101,18 +102,47 @@ export const updatePassword = async (req, res) => {
   }
 };
 
-// Deletes a user by its object id
-export const deleteUser = async (req, res) => {
+// Deletes any user by its object id,used by admin
+export const deleteAnyUser = async (req, res) => {
   try {
     const id = req.params.userId;
     
+    //remove all the tags associated with the user first
+    
+    
+    let result = await Tag.deleteMany({
+      owner: id 
+    });
+
     // remove() is deprecated ...
-    let result = await User.remove({ _id: id });
+    result = await User.deleteOne({ _id: id });
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json(err);
   }
 };
+
+//deletes the user account that called this i.e. user deletes itself,not other users
+export const deleteUser = async (req, res) => {
+  try {
+    const id = req.userId;
+
+    //remove all the tags associated with the user first
+
+    //deleting user on its own works, but not the tag
+    let result = await Tag.deleteMany({
+      owner: id 
+    });
+
+    
+    // remove() is deprecated ...
+    result = await User.deleteOne({ _id: id });
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
 
 // Logs in a user via the supplied username and password
 export const loginUser = async (req,res) => {
