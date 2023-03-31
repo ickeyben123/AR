@@ -204,6 +204,17 @@ export const loginUser = async (req,res) => {
   }
 }
 
+export const deleteCookie = async (req,res) => {
+  try{
+    res
+      .clearCookie("ar-session")
+      .clearCookie("ar-session.sig");
+      return res.status(200).send({ message: "You've been signed out!" });
+  } catch(err){
+    res.status(500).json({ error: err });
+  }
+};
+
 export const signout = async (req, res) => {
   try {
     req.session = null;
