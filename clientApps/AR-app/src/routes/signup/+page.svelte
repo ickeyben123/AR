@@ -4,6 +4,7 @@
     let email = '';
 	let n;
     import * as validation from '$lib/validation.js';
+    import {goto} from '$app/navigation';
 
     // For notifications
     import { toast } from '@zerodevx/svelte-toast';
@@ -30,8 +31,10 @@
         })
 
         if(res.status != 200){
-            toast.push(errors);
+            toast.push(res.body);
         }
+
+        goto('/tags');
     }
 
 </script>

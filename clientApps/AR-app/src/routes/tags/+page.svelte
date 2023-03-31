@@ -103,8 +103,7 @@
             },
             body: JSON.stringify(tagData)
         });
-
-        window.location.reload();
+        showEditTags = false;
         rerunLoadFunction();
 
     }
