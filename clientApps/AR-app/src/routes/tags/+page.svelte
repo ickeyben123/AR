@@ -155,7 +155,7 @@
             //need to get the tag coords from geolocation, then save tag data in database
             // Set geolocation
 
-            const id = toast.push('Signing Out', {
+            const id = toast.push('Placing Tag', {
                 theme: {
                 '--toastContainerTop': 'auto',
                 '--toastContainerRight': 'auto',
