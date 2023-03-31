@@ -277,7 +277,9 @@
                                 {tag.description}
                             </p>
                         {/key}
+                        {#if tag.placed}
                         <button on:click={() => viewTag(tag)}>Find</button>
+                        {/if}
                         {#if !tag.placed}
                          <button on:click={() => getTagGeoLocation(tag)}>Place</button>
                         {/if}

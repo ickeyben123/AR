@@ -83,8 +83,8 @@ once more all 3 libraries have been loaded in.
       });
     }
 
-  function pickUp(){
-    setNotPlaced()
+  async function pickUp(){
+    await setNotPlaced()
     window.location.href = "/tags"
   }
 
