@@ -17,7 +17,7 @@
     // For notifications
     import { toast } from '@zerodevx/svelte-toast';
 
-    let showAddTags = false, showEditTags = false, showDeleteTags = false, reCreate=false, showError=false;
+    let showAddTags = false, showEditTags = false, showDeleteTags = false, reCreate=false, showError=false, showPlaced=false;
     var tagData = {tagName:"Default"}, coords={}, tagDelete = {tagId:null};
 
     let errorMessage = "";
@@ -103,8 +103,7 @@
             },
             body: JSON.stringify(tagData)
         });
-
-        window.location.reload();
+        showEditTags = false;
         rerunLoadFunction();
 
     }
@@ -128,7 +127,7 @@
         showAddTags = true;
     }
 
-
+    // Gets the location of the user via geolocation and then executes the function func, parsing the location as the first parameter.
     function getGeoLocation(func){
              if(navigator.geolocation){
                 navigator.geolocation.getCurrentPosition(func,errorGeoLocation);//send the geolocation data to another function
@@ -139,25 +138,38 @@
             }
     }
 
-    async function getTagGeoLocation(tag) {
-        console.log("You placed tag " + tag._id + "!");
-        //need to check if the tag is picked up, if not then make some error popup
-        tagData=tag
-        coords = tag.coords;
+    async function placeTagViaGeoLocation() {
+        console.log("You placed tag " + tagData._id + "!");
+        showPlaced = false;
 
 
         //need to get the tag coords from geolocation, then save tag data in database
         
-        if(tag.placed){
+        if(tagData.placed){
             errorMessage = "The tag is not picked up, pick the tag up first before being able to place it";
             showError = true;
         }
         else{
             //need to get the tag coords from geolocation, then save tag data in database
             // Set geolocation
+
+            const id = toast.push('Placing Tag', {
+                theme: {
+                '--toastContainerTop': 'auto',
+                '--toastContainerRight': 'auto',
+                '--toastContainerBottom': 'auto',
+            },
+            duration: 50, // Each progress change takes 300ms
+            initial: 0,
+            next: 0.2,
+            dismissable: false
+            })
+
+
             getGeoLocation(async (position)=> {
                 setTagLocation(position);
 
+                toast.set(id, { next: .5 })
                 // Save new tag data
                 const response = await fetch(window.location.origin + "/api/tag/"+tagData._id,
                 {
@@ -168,11 +180,18 @@
                     },
                     body: JSON.stringify(tagData)
                 });
+                toast.set(id, { next: 1 })
 
                 rerunLoadFunction();
 
             });
         }
+    }
+    
+    function placeTag(tag){
+        tagData = tag;
+        coords = tagData.coords;
+        showPlaced = true;
     }
 
     // Sets the tag data to the coords from the geolocator.
@@ -278,9 +297,11 @@
                                 {tag.description}
                             </p>
                         {/key}
+                        {#if tag.placed}
                         <button on:click={() => viewTag(tag)}>Find</button>
+                        {/if}
                         {#if !tag.placed}
-                         <button on:click={() => getTagGeoLocation(tag)}>Place</button>
+                         <button on:click={() => placeTag(tag)}>Place</button>
                         {/if}
                         <button on:click={() => editTag(tag)}>Edit</button>
                         <button on:click={() => deleteTag(tag)}>Delete</button>
@@ -292,7 +313,7 @@
 
 <div class="bottom">
     <!-- Button to create a tag at the bottom of the page -->
-<button class="menuButton" on:click={() =>createNewTag()}>Create Tag +</button>
+<button class="bottomButton" on:click={() =>createNewTag()}>Create Tag +</button>
 </div>
 
 <!-- ////// -->
@@ -304,39 +325,43 @@
 
 <!-- Add Tag Model. Shows when 'showAddTags' variable is set to true -->
 <Modal bind:showModal={showAddTags}>
-    <h2>Enter Tag Name</h2>
-    <input bind:value={tagData.tagName} placeholder = Name><br>
-    <h2>Enter Tag Description</h2>
-    <input bind:value={tagData.description} placeholder = Empty><br>
-    <h2>Select Tag Type</h2>
-    <div id="iconBtns">
-        <button class="menuButtonV2 {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
-        <button class="menuButtonV2 {tagData.icon === "2" ? 'active' : ''}" on:click={() => (tagData.icon = "2")}>&#128273</button>
-        <button class="menuButtonV2 {tagData.icon === "3" ? 'active' : ''}" on:click={() => (tagData.icon = "3")}>&#128091</button>
-        <button class="menuButtonV2 {tagData.icon === "4" ? 'active' : ''}" on:click={() => (tagData.icon = "4")}>&#11088</button>
-    </div><br>
-    <button class="menuButton" on:click ={() =>submitInfo()}>Submit</button>
+    <div class="title">
+        <h2>Enter Tag Name</h2>
+        <input bind:value={tagData.tagName} placeholder = Name><br>
+        <h2>Enter Tag Description</h2>
+        <input bind:value={tagData.description} placeholder = Empty><br>
+        <h2>Select Tag Type</h2>
+        <div id="iconBtns">
+            <button class="menuButtonV2 {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
+            <button class="menuButtonV2 {tagData.icon === "2" ? 'active' : ''}" on:click={() => (tagData.icon = "2")}>&#128273</button>
+            <button class="menuButtonV2 {tagData.icon === "3" ? 'active' : ''}" on:click={() => (tagData.icon = "3")}>&#128091</button>
+            <button class="menuButtonV2 {tagData.icon === "4" ? 'active' : ''}" on:click={() => (tagData.icon = "4")}>&#11088</button>
+        </div><br>
+        <button class="menuButton" on:click ={() =>submitInfo()}>Submit</button>
+    </div>
 </Modal>
 
 <!-- Edit Tag Model. Shows when 'showEditTags' variable is set to true -->
 <Modal bind:showModal={showEditTags}>
-    <h2>Edit Tag Name</h2>
-    <input bind:value={tagData.tagName} placeholder = Name><br>
-    <h2>Edit Tag Description</h2>
-    <input bind:value={tagData.description} placeholder = Empty><br>
-    <h2>Edit Tag Coordinates</h2>
-    <h5>Latitude</h5>
-    <input bind:value={coords.latitude} placeholder = Empty ><br>
-    <h5>Longitude</h5>
-    <input bind:value={coords.longitude} placeholder = Empty><br>
-    <h2>Change Tag Type</h2>
-    <div id="iconBtnsEdit">
-        <button class="menuButtonV2 {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
-        <button class="menuButtonV2 {tagData.icon === "2" ? 'active' : ''}" on:click={() => (tagData.icon = "2")}>&#128273</button>
-        <button class="menuButtonV2 {tagData.icon === "3" ? 'active' : ''}" on:click={() => (tagData.icon = "3")}>&#128091</button>
-        <button class="menuButtonV2 {tagData.icon === "4" ? 'active' : ''}" on:click={() => (tagData.icon = "4")}>&#11088</button>
-    </div><br>
-    <button class="menuButton" on:click ={() =>submitEdit()}>Submit</button>
+    <div class="title">
+        <h2>Edit Tag Name</h2>
+        <input bind:value={tagData.tagName} placeholder = Name><br>
+        <h2>Edit Tag Description</h2>
+        <input bind:value={tagData.description} placeholder = Empty><br>
+        <h2>Edit Tag Coordinates</h2>
+        <h5>Latitude</h5>
+        <input bind:value={coords.latitude} placeholder = Empty ><br>
+        <h5>Longitude</h5>
+        <input bind:value={coords.longitude} placeholder = Empty><br>
+        <h2>Change Tag Type</h2>
+        <div id="iconBtnsEdit">
+            <button class="menuButtonV2 {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
+            <button class="menuButtonV2 {tagData.icon === "2" ? 'active' : ''}" on:click={() => (tagData.icon = "2")}>&#128273</button>
+            <button class="menuButtonV2 {tagData.icon === "3" ? 'active' : ''}" on:click={() => (tagData.icon = "3")}>&#128091</button>
+            <button class="menuButtonV2 {tagData.icon === "4" ? 'active' : ''}" on:click={() => (tagData.icon = "4")}>&#11088</button>
+        </div><br>
+        <button class="menuButton" on:click ={() =>submitEdit()}>Submit</button>
+    </div>
 </Modal>
 
 <Modal bind:showModal={showError}>
@@ -346,10 +371,22 @@
 
 <!-- Delete Tag Modal. Shows when 'showDeleteTags' is set to true -->
 <Modal bind:showModal={showDeleteTags}>
-    <h2>Delete Tag</h2>
-    <h3>Are You Sure You Want To Delete This Tag?</h3>
-    <button class="button" on:click ={() =>submitDelete()}>Yes</button>
+    <div class="title">
+        <h2>Delete Tag</h2>
+        <h3>Are You Sure You Want To Delete This Tag?</h3>
+        <button class="menuButton" on:click ={() =>submitDelete()}>Yes</button>
+    </div>
 </Modal>
+
+<!-- Place Tag Modal. Shows when 'showPlaced' is set to true -->
+<Modal bind:showModal={showPlaced}>
+    <div class="title">
+        <h2>Place Tag</h2>
+        <h3>Please put your phone in the location of the tag before placing.</h3>
+        <button class="menuButton" on:click ={() =>placeTagViaGeoLocation()}>Place Tag</button>
+    </div>
+</Modal>
+
 
 {/if}
 
@@ -372,6 +409,18 @@
     text-align: center;
     }
 
+
+    .bottomButton {
+        margin-top:5%;
+        font-size: large;
+        background-color: rgb(219, 238, 255);
+        border-radius: 4px;
+        outline: none;
+        font-size: larger;
+        width: 90%;
+        max-width: 800px;
+    }
+
     .menuButton {
         margin-top:5%;
         font-size: large;
@@ -379,7 +428,7 @@
         border-radius: 4px;
         outline: none;
         font-size: larger;
-        width:90%;
+        width: 100%;
         max-width: 800px;
     }
 

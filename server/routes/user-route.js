@@ -9,7 +9,9 @@ router.get("/all",[validationJWT.verifyToken,validationJWT.isAdmin], userControl
 router.get("/",[validationJWT.verifyToken], userController.getUser);
 router.put("/email",[validationJWT.verifyToken,validation.checkDuplicateEmail], userController.updateEmail);
 router.put("/pass",[validationJWT.verifyToken,validation.validatePassword], userController.updatePassword);
-router.delete("/:userId", [validationJWT.verifyToken,validationJWT.isAdmin], userController.deleteUser)
+router.delete("/:userId", [validationJWT.verifyToken,validationJWT.isAdmin], userController.deleteAnyUser);
+router.delete("/",[validationJWT.verifyToken],userController.deleteUser);
 router.post("/login", userController.loginUser);
+router.post("/cookie",[validationJWT.verifyToken],userController.deleteCookie);
 
 export default router

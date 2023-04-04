@@ -63,6 +63,7 @@
         font-size: large;
         background-color: aliceblue;
         border-radius: 4px;
+		width: 100%;
         outline: none;
 
     }
