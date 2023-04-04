@@ -21,11 +21,48 @@
 <script>
 	import '../global.css'
 	import {slide} from 'svelte/transition';
+	import { onMount } from "svelte";
 
 	//Notifications
-	import { SvelteToast } from '@zerodevx/svelte-toast'
+	import { SvelteToast, toast } from '@zerodevx/svelte-toast'
 
 	let navMenuActive = false
+	var sub;
+
+	
+	onMount(async () => {
+		const status = await Notification.requestPermission();
+		if (status !== "granted")
+			toast.push("Please make sure to enable Push Notifications for Tag Reminders.");
+
+		if ("serviceWorker" in navigator) {
+			navigator.serviceWorker.register("/serviceWorker.js");
+			console.log("Done registering!")
+			const reg = await navigator.serviceWorker.ready;
+			sub = await reg.pushManager.getSubscription();
+			if (!sub) {
+				// Fetch VAPID public key
+				const res = await fetch("/api/user/vapid");
+				const data = await res.text();
+				sub = await reg.pushManager.subscribe({
+					userVisibleOnly: true,
+					applicationServerKey: data,
+			});
+			}
+			console.log(sub);
+		}
+	});
+
+	$: if (sub && localStorage.getItem("loggedIn")) {
+		fetch("/api/user/subscribe", {
+			body: JSON.stringify({ vapidSubscription: sub.toJSON() }),
+			credentials: 'include',
+			headers: {
+			"Content-Type": "application/json",
+			},
+			method: "POST",
+		});
+	}
 </script>
 
 <slot></slot>

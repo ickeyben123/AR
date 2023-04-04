@@ -5,7 +5,6 @@
 
      // For notifications
     import { toast } from '@zerodevx/svelte-toast';
-
     /*  Function to display all names in db, used during testing
     async function loadNames() {
         await fetch("http://localhost:3000/user")
@@ -70,6 +69,7 @@
             else
             {
                 toast.push("Signed in.");
+                localStorage.setItem("loggedIn",true);
                 goto('/tags')
             }
             

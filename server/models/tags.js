@@ -25,6 +25,13 @@ const tagSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
+    
+    dateModified: {
+        type: Date
+    },
+    notified: {
+        type: Boolean
+    },
 
     owner: {
         type: mongoose.Schema.Types.ObjectId,

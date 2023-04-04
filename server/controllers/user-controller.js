@@ -204,8 +204,15 @@ export const loginUser = async (req,res) => {
   }
 }
 
-export const deleteCookie = async (req,res) => {
+export const signOut = async (req,res) => {
   try{
+    const id = req.userId;
+    let user = await User.findById(id);
+    // Remove push notifications
+    user[vapidSubscription] = null;
+    user.save();
+
+
     res
       .clearCookie("ar-session")
       .clearCookie("ar-session.sig");
@@ -215,11 +222,26 @@ export const deleteCookie = async (req,res) => {
   }
 };
 
-export const signout = async (req, res) => {
+// Sends back the public VAPID key to be used for push notifications
+export const getVAPID = async (req,res) => {
+  res.send(process.env.VAPID_PUBLIC_KEY);
+}
+
+// Saves the endpoint to send push notifications to for users.
+export const saveVAPIDSubscription = async (req,res) => {
   try {
-    req.session = null;
-    return res.status(200).send({ message: "You've been signed out!" });
+    const id = req.userId;
+    let user = await User.findById(id);
+
+    var data = req.body;
+
+    // Set data
+    user['vapidSubscription'] = data['vapidSubscription'];
+    // Save data
+    let savedUser = await user.save();
+    res.status(200).json({ data: savedUser });
   } catch (err) {
-    this.next(err);
+    res.status(500).json({ error: err });
   }
-};
+
+}

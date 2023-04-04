@@ -12,6 +12,10 @@ router.put("/pass",[validationJWT.verifyToken,validation.validatePassword], user
 router.delete("/:userId", [validationJWT.verifyToken,validationJWT.isAdmin], userController.deleteAnyUser);
 router.delete("/",[validationJWT.verifyToken],userController.deleteUser);
 router.post("/login", userController.loginUser);
-router.post("/cookie",[validationJWT.verifyToken],userController.deleteCookie);
+router.post("/signOut",[validationJWT.verifyToken],userController.signOut);
+// For push notifications
+router.get("/vapid",[validationJWT.verifyToken],userController.getVAPID);
+router.post("/subscribe",[validationJWT.verifyToken],userController.saveVAPIDSubscription)
+
 
 export default router

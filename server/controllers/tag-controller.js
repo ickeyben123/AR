@@ -122,7 +122,9 @@ export const updateTag = async (req, res) => {
             tag[key] = data[key];
             }
         }
-    
+        // Sets date modified.
+        tag.dateModified = new Date();
+        tag.notified = false;
         // Save data
         let savedTag = await tag.save();
         res.status(200).json({ data: savedTag });

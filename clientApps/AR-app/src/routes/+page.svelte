@@ -1,7 +1,4 @@
-<script>
 
-</script>
-   
    <body>
        <div class = "content">
            

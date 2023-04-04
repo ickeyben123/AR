@@ -58,7 +58,7 @@
         //delete a cookie, then go back to home pagetoken
 
         //document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        const response = await fetch(window.location.origin + "/api/user/cookie",{
+        const response = await fetch(window.location.origin + "/api/user/signOut",{
             method: 'POST',
             credentials: 'include'
         });
