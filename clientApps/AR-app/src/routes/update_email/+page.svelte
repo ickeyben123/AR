@@ -4,6 +4,7 @@
 
     async function submitEmailChange(){
         if(checkIfSame()){
+            // if emails are same then send request to change emails.
             let response = await fetch(window.location.origin + "/api/user/email", {
                 method: 'PUT',
                 credentials: 'include',
@@ -17,6 +18,8 @@
                 )
             })
         } else {
+            // todo: maybe change this to notification
+            // alert user that emails dont match.
             console.log("emails don't match");
             let matchingEmailsDiv = document.getElementById("matchingEmails"); 
             matchingEmailsDiv.textContent = "Emails need to be matching!";

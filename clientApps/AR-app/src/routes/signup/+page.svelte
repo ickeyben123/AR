@@ -11,11 +11,13 @@
 
     async function signUp() {
         var errors = validation.validatePassword(pass);
+
         if(errors != ""){
             toast.push(errors);
             return;
-        }  
-        
+        } 
+
+        // send request to add new user to database.
         const res = await fetch(window.location.origin + "/api/user", 
         {
             method:'POST',
@@ -29,7 +31,8 @@
                 "password" : pass
              })
         })
-
+        
+        // send notification about the details of the response.
         if(res.status != 200){
             toast.push(res.body);
         }

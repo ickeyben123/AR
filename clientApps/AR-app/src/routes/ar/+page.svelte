@@ -15,6 +15,9 @@ once more all 3 libraries have been loaded in.
   let mounted;
   let componentLoaded = 0;
   let altitude = 3; 
+
+  // Once the 3 components of our program are loaded ready is set to True
+  // which will lead to AR being loaded
   $: ready = componentLoaded == 3;
 
   
@@ -23,17 +26,21 @@ once more all 3 libraries have been loaded in.
   };
 
   async function updateLatLong(){
+
+    // fetch lat and long from database use tagId
     const res = await fetch(window.location.origin + '/api/tag/' + tagId,{
                 method: 'GET',
                 credentials: 'include'
             });
     let item =  await res.json();
 
+    // for debugging.
     console.log(item);
     console.log(item.coords);
     console.log(item.coords.latitude);
     console.log(item.coords.longitude);
 
+    // parse lat and long into a usable string format.
     latitude = item.coords.latitude.toString();
     longitude = item.coords.longitude.toString();
 
@@ -41,12 +48,16 @@ once more all 3 libraries have been loaded in.
   }
 
   onMount(() => {
+
     console.log("mounted")
+
+    // url params contain our tagId which we will use to get lat and long.
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     tagId = urlParams.get('tagId')
     updateLatLong();
   });
+
 
   const options = {
     enableHighAccuracy: true,
@@ -69,6 +80,8 @@ once more all 3 libraries have been loaded in.
   }
 
   async function setNotPlaced(){
+    
+    // change "placed" in database to false to repersent item being picked up.
     const response = await fetch(window.location.origin + "/api/tag/"+tagId,{
       method: 'PUT',
       credentials: 'include',
@@ -85,6 +98,8 @@ once more all 3 libraries have been loaded in.
 
   async function pickUp(){
     await setNotPlaced()
+
+    // move page back to tags.
     window.location.href = "/tags"
   }
 
@@ -115,9 +130,6 @@ once svelte has mounted this page.
 <!--
 once svelte has mounted and libraries have been loaded ready boolean will be
 true and a-scene will be loaded in.
-
-TODO : remove simulateLatitude and simulateLongitude once finished, as they're 
-for testing
 -->
 {#if ready}
 <button style="position: fixed;
@@ -128,7 +140,15 @@ for testing
 </button>
 <body>
   <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
+    <!-- 
+      a-camera with gps-new-camera parameter specified creates an ar.js version of a-camera which is 
+      tracked by gps
+    -->
     <a-camera gps-new-camera='gpsMinDistance: 1; simulateAltitude: {altitude}'></a-camera>
+
+    <!--
+      place an entity repersenting the tag on the screen with appropriate lat and long
+    -->
     <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: {latitude}; longitude: {longitude}" scale="10 10 10"></a-entity>
   </a-scene>
 </body>
