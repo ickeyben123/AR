@@ -66,8 +66,8 @@
         response.json().then(data => {
             console.log(JSON.stringify(data));
             const resp = JSON.stringify(data);
-            if(resp == '{"message":"User Not found."}'){
-                toast.push("Incorrect Login Entered.");
+            if(response.status!=200){
+                toast.push(data['message']);
             }
             else
             {

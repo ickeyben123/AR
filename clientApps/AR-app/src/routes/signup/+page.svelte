@@ -31,6 +31,20 @@
                 "password" : pass
              })
         })
+
+        res.json().then(data => {
+            console.log(JSON.stringify(data));
+            const resp = JSON.stringify(data);
+            if(res.status!=200){
+                toast.push(data['message']);
+            }
+            else
+            {
+                toast.push("Signed in.");
+                goto('/tags')
+            }
+            
+        });
         
         // send notification about the details of the response.
         if(res.status != 200){
