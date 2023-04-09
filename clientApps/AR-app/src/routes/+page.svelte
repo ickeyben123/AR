@@ -4,54 +4,75 @@
    
    <body>
        <div class = "content">
-           
-           <div class="title">
-               <h1>Welcome To Find AR!</h1>
-                           <br>
-           </div>
-                   
+        <img src="src/lib/assets/Find AR-logos_transparent.png" >
            <div class="buttons">
                <table>
                    <tr>
                        <td>
-                           <a class="btn" href="/login">Login</a>
+                           <a class="login-btn" href="/login">LOG IN</a>
                            <p></p>
-                           <a class="btn" href="/signup">Signup</a>
+                           <a class="signup-btn" href="/signup">REGISTER</a>
                            <p></p>
-                           <a class="btn" href="/tags">Tags</a>
-                           <p></p>
-                           <a class="btn" href="/ar">AR Camera</a>
                         </td>
                    </tr>
-               </table>
+                   </table>
            </div>
 
    
        </div>	
        
    </body>
-   
+
    <style>
        .content {
-           max-width: 500px;
-           margin: auto;
-           background: white;
-           padding: 10px;
+        position: relative;
+        width: 390px;
+        height: 844px;
+        background: #C4E0E7;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
        }
-       .title {
-           position:sticky;
-           margin: auto;
-             display: inline-block;
-           text-align: centre;
-       }
-               .btn {
-                       display: inline-block;
-                       margin:auto;
-                       text-align: centre;
-                       background: #69c;
-                       color: #fff;
-                       width: 100%;
-                       padding: 20px 50px;
+               .login-btn {
+                box-sizing: border-box;
+                position: absolute;
+                padding: 60px 100px;
+                left: 1px;
+                top: 343px;
+                background: #5CE47A;
+                border: 1px solid #000000;
+                box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+                text-align: center;
+                text-decoration: none;
+                outline: none;
+                color: #000000;
+                font-size: 30px;
+                text-align: center;
+                vertical-align: middle;
+               }
+
+               .signup-btn {
+                box-sizing: border-box;
+                position: absolute;
+                padding: 60px 84px;
+                left: 76px;
+                top: 538px;
+                background: #E25454;
+                border: 1px solid #000000;
+                box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+                text-align: center;
+                text-decoration: none;
+                outline: none;
+                color: #000000;
+                font-size: 30px;
+                text-align: center;
+                vertical-align: middle;
+               }
+        
+               img{
+                position: absolute;
+                width: 256px;
+                height: 269px;
+                left: 67px;
+                top: 39px;
                }
    
    </style>
