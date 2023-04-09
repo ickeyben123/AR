@@ -114,7 +114,7 @@ once svelte has mounted this page.
 <svelte:head>
   {#if mounted}
     <script 
-      src="https://aframe.io/releases/1.0.4/aframe.min.js"
+      src="https://aframe.io/releases/1.4.0/aframe.min.js"
       on:load={loadComponent}></script>
     <script 
       type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'
@@ -144,7 +144,7 @@ true and a-scene will be loaded in.
       a-camera with gps-new-camera parameter specified creates an ar.js version of a-camera which is 
       tracked by gps
     -->
-    <a-camera gps-new-camera='gpsMinDistance: 1; simulateAltitude: {altitude}'></a-camera>
+    <a-camera gps-new-camera='gpsMinDistance: 1'></a-camera>
 
     <!--
       place an entity repersenting the tag on the screen with appropriate lat and long
