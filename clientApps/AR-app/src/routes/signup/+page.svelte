@@ -11,11 +11,13 @@
 
     async function signUp() {
         var errors = validation.validatePassword(pass);
+
         if(errors != ""){
             toast.push(errors);
             return;
-        }  
-        
+        } 
+
+        // send request to add new user to database.
         const res = await fetch(window.location.origin + "/api/user", 
         {
             method:'POST',
@@ -30,6 +32,21 @@
              })
         })
 
+        res.json().then(data => {
+            console.log(JSON.stringify(data));
+            const resp = JSON.stringify(data);
+            if(res.status!=200){
+                toast.push(data['message']);
+            }
+            else
+            {
+                toast.push("Signed in.");
+                goto('/tags')
+            }
+            
+        });
+        
+        // send notification about the details of the response.
         if(res.status != 200){
             toast.push(res.body);
         }

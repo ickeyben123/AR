@@ -22,6 +22,7 @@
         }
     */
 
+    // basic sanitation of name and pass.
     function logIn() {
 
         if(name == '' || pass == '')
@@ -46,7 +47,7 @@
         console.log(JSON.stringify({userName: "xxx", password: "yyy"}));
         console.log(JSON.stringify(req));
    
-
+        // query database for username and password.
         const response = await fetch(window.location.origin + "/api/user/login",
         {
             method: 'POST',
@@ -61,11 +62,12 @@
             
         });
 
+        // response to response, check if username and password have been validated by backend.
         response.json().then(data => {
             console.log(JSON.stringify(data));
             const resp = JSON.stringify(data);
-            if(resp == '{"message":"User Not found."}'){
-                toast.push("Incorrect Login Entered.");
+            if(response.status!=200){
+                toast.push(data['message']);
             }
             else
             {

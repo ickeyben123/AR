@@ -4,6 +4,9 @@ import bcrypt, { hash } from 'bcrypt'
 var hashTest
 var passwordTest
 
+
+
+
 // to do: add exception handling to both functions
 
 

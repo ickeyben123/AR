@@ -2,6 +2,19 @@ import mongoose from 'mongoose'
 import Tag from '../models/tags.js'
 import User from '../models/users.js'
 
+
+/**
+ * @typedef {Express.Request} req
+ * @typedef {Express.Response} res
+*/
+
+
+/**
+ * Get all the tags associated with this user
+ * 
+ * @param {req} req request contains the userID of the user
+ * @param {res} res server responds with the tag JSON data associated with this user
+ */
 export const getTags = async(req,res) => {
     try {
         //get the user from the request as the user is already verified
@@ -19,7 +32,11 @@ export const getTags = async(req,res) => {
     }
 };
 
-
+/**
+ * Gets all the tags taht exist in the database
+ * @param {req} req request specifies a GET request to the server
+ * @param {res} res returns JSON data of all the tags in the database
+ */
 export const getAllTags = async(req,res) => {
     try {
 
@@ -32,6 +49,11 @@ export const getAllTags = async(req,res) => {
     }
 };
 
+/**
+ * Get a specific tag associated with this user
+ * @param {req} req request contains the user and tag IDs
+ * @param {res} res returns JSON data associated with this specific tag
+ */
 export const getTag = async(req,res) => {
     try {
         //get the user from the request as the user is already verified
@@ -39,7 +61,7 @@ export const getTag = async(req,res) => {
         const tag_id = req.params.tagId;
 
 
-        //get the tags associated with the user
+        //get the tag associated with the user with this tag ID
         let tag = await Tag.findOne(
             {_id: tag_id, owner: id}
         );
@@ -50,8 +72,12 @@ export const getTag = async(req,res) => {
     }
 };
 
-// add a tag => need to first verify the user
 
+/**
+ * add a new tag for this user
+ * @param {req} req contains the user ID
+ * @param {res} res returns the JSON data of this new tag
+ */
 export const addTag = async (req,res) => {
     try{
         //get the user from the request as the user is already verified
@@ -75,8 +101,11 @@ export const addTag = async (req,res) => {
 
 
 
-//delete a tag => verify user
-
+/**
+ * delete a specific tag associated with this user
+ * @param {req} req contains the user and tag IDs
+ * @param {res} res returns the status of the result as JSON response
+ */
 export const deleteTag = async (req, res) => {
     try {
          //get the user from the request as the user is already verified
@@ -96,8 +125,11 @@ export const deleteTag = async (req, res) => {
 
 
 
-// modify tag
-
+/**
+ * Updates the data of a specific tag
+ * @param {req} req contains the data associated with the tag including its ID
+ * @param {res} res returns the JSON data associated with this tag after it is modified
+ */
 export const updateTag = async (req, res) => {
     try {
 
@@ -106,7 +138,7 @@ export const updateTag = async (req, res) => {
         //get tag id to delete
         const tag_id = req.params.tagId;
         let tag = await Tag.findById(tag_id);
-
+        //check that the user owns this tag
         if(tag.owner !=user_id){
             res.status(403).json({ error: "You don't own this tag!" })
             return;
@@ -116,7 +148,7 @@ export const updateTag = async (req, res) => {
 
 
 
-        // Set data
+        // Set data to modify the tag
         for(var key in data) {
             if(data.hasOwnProperty(key) && key!="_id"){
             tag[key] = data[key];
