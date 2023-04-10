@@ -58,11 +58,18 @@ describe('Tags', () => {
     res.body.data.should.have.property('owner');
   });
 
-  
   it("Gets a tag", async () => {
     const res = await agent.get("/tag");
     res.should.have.status(200);
     res.body.should.be.a('array');
-});
+  });
+
+  it("Deletes a tag", async () => {
+    const res = await agent.delete("/tag/" + tag);
+    res.should.have.status(200);
+    res.body.should.be.a('object');
+    res.body.data.should.have.property('acknowledged');
+    res.body.data.should.have.property('deletedCount');
+  });
 
 });
