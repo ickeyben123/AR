@@ -81,7 +81,7 @@
 
     </script>
     
-    <body>
+
         <div class = "content">
             
             <div class="title">
@@ -118,7 +118,7 @@
         -->
         
         
-    </body>
+  
     
     <style>
         .content {

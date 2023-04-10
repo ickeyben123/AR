@@ -2,7 +2,7 @@
 
 </script>
    
-   <body>
+ 
        <div class = "content">
         <img src="src/lib/assets/Find AR-logos_transparent.png" >
            <div class="buttons">
@@ -21,7 +21,6 @@
    
        </div>	
        
-   </body>
 
    <style>
        .content {

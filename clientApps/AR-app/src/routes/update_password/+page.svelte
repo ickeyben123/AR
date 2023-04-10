@@ -30,7 +30,7 @@
     }
 </script>
 
-<body>
+
     <div class ="input">
         <input bind:value={pass} placeholder = "password"><br>
         <input bind:value={confirmPass} placeholder = "confirm password"><br>
@@ -43,5 +43,5 @@
     </div>
 
     <label id="matchingPasswords"></label>
-</body>
+
 

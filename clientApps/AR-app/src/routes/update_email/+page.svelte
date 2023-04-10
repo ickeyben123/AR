@@ -31,7 +31,7 @@
     }
 </script>
 
-<body>
+
     <div class ="input">
         <input bind:value={email} placeholder = "email"><br>
         <input bind:value={confirmEmail} placeholder="confirm email">
@@ -43,4 +43,4 @@
     </div>
 
    <label id="matchingEmails"></label> 
-</body>
+

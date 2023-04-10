@@ -58,7 +58,6 @@
     
 
 
-<body>
         <div class = "content">
             
             <div class="title">
@@ -79,7 +78,7 @@
     
         </div>	
         
-</body>
+
     
 
 <style>

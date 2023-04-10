@@ -255,7 +255,6 @@
 
 
 
-<body>
 
 
     <!-- Title for Tags page -->
@@ -391,7 +390,6 @@
 {/if}
 
 
-</body>
 
 <style>
    .title {
