@@ -25,6 +25,7 @@
    <style>
        .content {
         position: relative;
+        margin: auto;
         width: 390px;
         height: 844px;
         background: #C4E0E7;
