@@ -36,6 +36,7 @@
 	import { get_root_for_style } from 'svelte/internal';
     import {goto} from '$app/navigation';
     import { toast } from '@zerodevx/svelte-toast';
+    import { currentUserStore } from '../stores.js';
 
     let showDelete = false;
     
@@ -62,6 +63,7 @@
             method: 'POST',
             credentials: 'include'
         });
+        currentUserStore.set("Not Logged In!");
         //go back to home page
         goto("/"); 
     }

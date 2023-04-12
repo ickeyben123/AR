@@ -5,6 +5,7 @@
 
      // For notifications
     import { toast } from '@zerodevx/svelte-toast';
+    import { currentUserStore } from '../stores.js';
 
     /*  Function to display all names in db, used during testing
     async function loadNames() {
@@ -70,6 +71,7 @@
             else
             {
                 toast.push("Signed in.");
+                currentUserStore.set(name);
                 goto('/tags')
             }
             
