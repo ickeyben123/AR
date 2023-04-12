@@ -10,8 +10,15 @@
 		<div transition:slide style="background-color: white">
 				<table>
 					<tr><a class="navButton" href='/' on:click={() => navMenuActive = false}>Home</a></tr>
-					<tr><a class="navButton" href='/tags' on:click={() => navMenuActive = false}>Tags</a></tr>
+					{#if currentUser == "Not Logged In!"}
 					<tr><a class="navButton" href='/login' on:click={() => navMenuActive = false}>Log In</a></tr>
+					<tr><a class="navButton" href='/signup' on:click={() => navMenuActive = false}>Sign Up</a></tr>
+					{:else}
+					<tr><a class="navButton" href='/tags' on:click={() => navMenuActive = false}>Tags</a></tr>
+					<tr><a class="navButton" href='/account' on:click={() => navMenuActive = false}>Account</a></tr>
+					{/if}
+
+					<tr>Logged in as: {currentUser}</tr>
 				</table>
 			</div>
 		{/if}
@@ -23,9 +30,18 @@
 	import {slide} from 'svelte/transition';
 
 	//Notifications
-	import { SvelteToast } from '@zerodevx/svelte-toast'
+	import { SvelteToast } from '@zerodevx/svelte-toast';
+	import { onMount } from 'svelte';
+	import { load } from './tags/+page';
+	import { currentUserStore } from './stores.js';
+	import { writable } from 'svelte/store';
 
 	let navMenuActive = false
+
+
+	let currentUser = "";
+
+	currentUserStore.subscribe(value => {currentUser = value;});
 </script>
 
 <slot></slot>
