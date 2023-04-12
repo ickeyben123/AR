@@ -41,6 +41,7 @@
 
 	let currentUser = "";
 
+	// update currentUser automatically when currentUserStore is changed
 	currentUserStore.subscribe(value => {currentUser = value;});
 </script>
 
