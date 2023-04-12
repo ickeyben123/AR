@@ -40,8 +40,8 @@
             }
             else
             {
-                toast.push("Signed in.");
-                goto('/tags')
+                toast.push("Signed up.");
+                goto('/login')
             }
             
         });
