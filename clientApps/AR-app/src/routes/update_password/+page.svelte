@@ -30,10 +30,10 @@
     }
 </script>
 
-
     <div class ="input">
-        <input bind:value={pass} placeholder = "password"><br>
-        <input bind:value={confirmPass} placeholder = "confirm password"><br>
+        <h2 style="text-align: center;">Enter your new password</h2>
+        <input  bind:value={pass} placeholder = "Password"><br>
+        <input bind:value={confirmPass} placeholder = "Confirm Password"><br>
     </div>
 
     <div class ="buttons">
@@ -43,5 +43,13 @@
     </div>
 
     <label id="matchingPasswords"></label>
+
+<style>
+    .input {
+        padding-top: 10px;
+        display: grid;
+        grid-auto-rows: 1;
+    }
+</style>
 
 
