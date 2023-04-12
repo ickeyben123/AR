@@ -401,21 +401,21 @@
     }
 
     .bottom{
-    position: fixed;
-    left: 0;
-    bottom: 0;
+    position:relative;
+    top: 20%;
+transform: translateY(-100%);
     width: 100%;
     color: white;
     text-align: center;
     }
 
     .margin{
-        margin-bottom: 60px;
+        margin-bottom: 0px;
     }
 
 
     .bottomButton {
-        margin-top:5%;
+
         font-size: large;
         
         border-radius: 4px;

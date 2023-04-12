@@ -9,8 +9,8 @@
 		{#if navMenuActive}
 		<div transition:slide style="background-color: white">
 				<table>
-					<tr><a class="navButton" href='/' on:click={() => navMenuActive = false}>Home</a></tr>
 					{#if currentUser == "Not Logged In!"}
+					<tr><a class="navButton" href='/' on:click={() => navMenuActive = false}>Home</a></tr>
 					<tr><a class="navButton" href='/login' on:click={() => navMenuActive = false}>Log In</a></tr>
 					<tr><a class="navButton" href='/signup' on:click={() => navMenuActive = false}>Sign Up</a></tr>
 					{:else}

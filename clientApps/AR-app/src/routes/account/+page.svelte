@@ -47,12 +47,12 @@
 
     // set location to the page for updating email
     function sendToUpdateEmail(){
-        window.location.href = "/update_email";
+        goto("/update_email");
     }
 
     // set location to the page for password email
     function sendToUpdatePassword(){
-        window.location.href = "/update_password";
+        goto("/update_password");
     }
 
 
