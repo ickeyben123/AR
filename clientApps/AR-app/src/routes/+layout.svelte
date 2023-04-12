@@ -18,7 +18,7 @@
 					<tr><a class="navButton" href='/account' on:click={() => navMenuActive = false}>Account</a></tr>
 					{/if}
 
-					<tr>Logged in as: {currentUser}</tr>
+					<tr><span style="color:grey">Logged in as:  </span><span style="color:#011828; font-weight:bold">{currentUser}</span></tr>
 				</table>
 			</div>
 		{/if}
