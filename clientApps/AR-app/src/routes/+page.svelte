@@ -13,12 +13,6 @@
                            <a class="btn" href="/login">LOG IN</a>
                            <p></p>
                            <a class="btn" href="/signup">REGISTER</a>
-                    
-                  
-                  
-           
-
-   
        </div>	
        
 
