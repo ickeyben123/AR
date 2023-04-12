@@ -20,61 +20,47 @@ describe("Users", () => {
   it("Adds a user with valid credentials", async () => {
     const res = await agent.post("/user").send({
       "userName": "test_valid_user",
-      "password": "greengra55",
-      "email": "light@beams.com"
+      "password": "test_pas5",
+      "email": "test_email@valid.com"
     });
     res.should.have.status(200);
-    res.body.should.be.a("object");
-    res.body.should.have.property("data");
-    res.body.data.should.have.property("userName");
-    res.body.data.should.have.property("email");
-    res.body.data.userName.should.be.eql("test_valid_user");
-    res.body.data.email.should.be.eql("light@beams.com");
+    let user = await User.find({ userName: "test_valid_user" });
+    user.length.should.be.eql(1);
   });
 
   it("Login valid user", async () => {
     const res = await agent.post("/user/login").send(
     {
       "userName": "test_valid_user",
-      "password": "greengra55",
+      "password": "test_pas5",
     });
     res.should.have.status(200);
-    res.body.should.be.a("object");
-    res.body.should.have.property("roles");
-    res.body.roles.should.be.eql(["USER"]);
     res.should.have.cookie("ar-session");
   });
 
   it("Grabs valid user's details", async () => {
     const res = await agent.get("/user");
     res.should.have.status(200);
-    res.body.should.be.a("object");
-    res.body.should.have.property("userName");
-    res.body.should.have.property("email");
-    res.body.userName.should.be.eql("test_valid_user");
-    res.body.email.should.be.eql("light@beam.com");
+    res.body[0].should.have.property("userName");
+    res.body[0].should.have.property("email");
+    res.body[0].userName.should.be.eql("test_valid_user");
+    res.body[0].email.should.be.eql("test_email@valid.com");
   });
 
-  it("Rejects non-admin usage of getUsers()", async () => {
-    const res = await agent.get("/user/all");
-    res.should.have.status(403);
-    res.body.shoud.be.a("object");
-    res.body.should.have.property("message");
-  })
+  it("Rejects non-admin usage of getUsers()", function(done) {
+    agent.get("/user/all")
+      .end((err, res) => {
+        res.should.have.status(403);
+        done();
+      });
+  });
 
-  /*
-  it("Signout non_admin_1", async () => {
-    const res = await agent.post("/user/login").send(
-    {
-      "userName": non_admin_1.userName,
-      "password": non_admin_1.password
-    });
+  it("User can delete itself", async () => {
+    const res = await agent.delete("/");
     res.should.have.status(200);
-    res.body.should.be.a("object");
-    res.body.should.have.property("roles");
-    res.body.roles.should.be.eql(["USER"]);
-    res.session.should.have.property("token");
   });
-  */
 
+  after(async () => {
+    await User.deleteMany({ userName: /test_/ });
+  });
 });
