@@ -401,14 +401,15 @@
     }
 
     .bottom{
-    position:relative;
-    top: 20%;
-transform: translateY(-100%);
     width: 100%;
+    flex: 0 0 50px;/*or just height:50px;*/
+  margin-top: auto;
     color: white;
     text-align: center;
     }
 
+
+    
     .margin{
         margin-bottom: 0px;
     }
