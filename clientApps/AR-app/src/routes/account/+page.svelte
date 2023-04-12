@@ -12,6 +12,7 @@
             Update Email
         </button>
     </div>
+
     <div class = "buttons">
         <button on:click={sendToUpdatePassword}>
             Update password
@@ -24,7 +25,9 @@
         </button>
     </div> 
 
-
+    <!--
+        Brings up a model, to confirm User wnats to delete user
+    -->
     <Modal bind:showModal={showDelete}>
         <h2>Delete User</h2>
         <h3>Are You Sure You Want To Delete This User?</h3>
@@ -42,9 +45,12 @@
     
     import Modal from '../Modal.svelte';
 
+    // set location to the page for updating email
     function sendToUpdateEmail(){
         window.location.href = "/update_email";
     }
+
+    // set location to the page for password email
     function sendToUpdatePassword(){
         window.location.href = "/update_password";
     }
@@ -78,7 +84,6 @@
         });
         sendToSignOut();
         //window.location.reload();
-    
     }
     
 </script>

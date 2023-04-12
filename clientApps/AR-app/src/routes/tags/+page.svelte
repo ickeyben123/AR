@@ -255,7 +255,6 @@
 
 
 
-<body>
 
 
     <!-- Title for Tags page -->
@@ -270,6 +269,7 @@
 <!-- Conditional that it only shows tags if the data has loaded -->
     <!-- Goes through each tag in the fetched tags of the user to create
         tag items for manipulation  -->
+        <div class="margin">
         {#each tags || [] as tag }
             <div class="accordionPanel">
                 <!-- Key specifies a part of the html that can be made to 'reload' when
@@ -298,18 +298,19 @@
                             </p>
                         {/key}
                         {#if tag.placed}
-                        <button on:click={() => viewTag(tag)}>Find</button>
+                        <button class="menuButton" on:click={() => viewTag(tag)}>Find</button>
                         {/if}
                         {#if !tag.placed}
-                         <button on:click={() => placeTag(tag)}>Place</button>
+                         <button class="menuButton" on:click={() => placeTag(tag)}>Place</button>
                         {/if}
-                        <button on:click={() => editTag(tag)}>Edit</button>
-                        <button on:click={() => deleteTag(tag)}>Delete</button>
+                        <button class="menuButton" on:click={() => editTag(tag)}>Edit</button>
+                        <button class="menuButton" on:click={() => deleteTag(tag)}>Delete</button>
 
                     </div>
                 {/if}
             </div>
         {/each}
+    </div>
 
 <div class="bottom">
     <!-- Button to create a tag at the bottom of the page -->
@@ -332,10 +333,10 @@
         <input bind:value={tagData.description} placeholder = Empty><br>
         <h2>Select Tag Type</h2>
         <div id="iconBtns">
-            <button class="menuButtonV2 {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
-            <button class="menuButtonV2 {tagData.icon === "2" ? 'active' : ''}" on:click={() => (tagData.icon = "2")}>&#128273</button>
-            <button class="menuButtonV2 {tagData.icon === "3" ? 'active' : ''}" on:click={() => (tagData.icon = "3")}>&#128091</button>
-            <button class="menuButtonV2 {tagData.icon === "4" ? 'active' : ''}" on:click={() => (tagData.icon = "4")}>&#11088</button>
+            <button class="selectButton {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
+            <button class="selectButton {tagData.icon === "2" ? 'active' : ''}" on:click={() => (tagData.icon = "2")}>&#128273</button>
+            <button class="selectButton {tagData.icon === "3" ? 'active' : ''}" on:click={() => (tagData.icon = "3")}>&#128091</button>
+            <button class="selectButton {tagData.icon === "4" ? 'active' : ''}" on:click={() => (tagData.icon = "4")}>&#11088</button>
         </div><br>
         <button class="menuButton" on:click ={() =>submitInfo()}>Submit</button>
     </div>
@@ -355,10 +356,10 @@
         <input bind:value={coords.longitude} placeholder = Empty><br>
         <h2>Change Tag Type</h2>
         <div id="iconBtnsEdit">
-            <button class="menuButtonV2 {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
-            <button class="menuButtonV2 {tagData.icon === "2" ? 'active' : ''}" on:click={() => (tagData.icon = "2")}>&#128273</button>
-            <button class="menuButtonV2 {tagData.icon === "3" ? 'active' : ''}" on:click={() => (tagData.icon = "3")}>&#128091</button>
-            <button class="menuButtonV2 {tagData.icon === "4" ? 'active' : ''}" on:click={() => (tagData.icon = "4")}>&#11088</button>
+            <button class="selectButton {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
+            <button class="selectButton {tagData.icon === "2" ? 'active' : ''}" on:click={() => (tagData.icon = "2")}>&#128273</button>
+            <button class="selectButton {tagData.icon === "3" ? 'active' : ''}" on:click={() => (tagData.icon = "3")}>&#128091</button>
+            <button class="selectButton {tagData.icon === "4" ? 'active' : ''}" on:click={() => (tagData.icon = "4")}>&#11088</button>
         </div><br>
         <button class="menuButton" on:click ={() =>submitEdit()}>Submit</button>
     </div>
@@ -391,7 +392,6 @@
 {/if}
 
 
-</body>
 
 <style>
    .title {
@@ -409,11 +409,15 @@
     text-align: center;
     }
 
+    .margin{
+        margin-bottom: 60px;
+    }
+
 
     .bottomButton {
         margin-top:5%;
         font-size: large;
-        background-color: rgb(219, 238, 255);
+        
         border-radius: 4px;
         outline: none;
         font-size: larger;
@@ -422,21 +426,33 @@
     }
 
     .menuButton {
-        margin-top:5%;
+       
         font-size: large;
-        background-color: rgb(219, 238, 255);
         border-radius: 4px;
         outline: none;
         font-size: larger;
         width: 100%;
+        max-width: 200px;
+    }
+    button:hover {
+	background-color: #79b9e7;
+	color:white;
+	transition-duration: 0.4s;
+}
+
+    .selectButton {
+     
+        font-size: large;
+        background-color: rgb(219, 238, 255);
+        color: black;
+        border-radius: 4px;
+        outline: none;
+        font-size: larger;
+        width: 40%;
         max-width: 800px;
     }
 
-    .menuButton:hover {
-        background-color: rgb(103, 132, 156);
-        color:white;
-        transition-duration: 0.4s;
-    }
+
     .active {
         background-color: rgb(61, 114, 158);
         color:white;
@@ -449,11 +465,13 @@
         max-width: 800px;
         margin: auto;
         text-align: centre;
+        margin-bottom: 0px;
     }
     .accordionButton {
         width: 100%;
         display:block;
         background-color: aliceblue;
+        color:black;
         border-radius: 4px;
         text-align: center;
         outline:none;
@@ -474,5 +492,6 @@
         text-align: center;
         background-color:rgb(232, 232, 232);
         border-radius: 4px;
+        margin-bottom: 10px;
     }
 </style>
