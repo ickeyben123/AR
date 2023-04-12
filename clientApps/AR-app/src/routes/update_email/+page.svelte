@@ -33,8 +33,9 @@
 
 
     <div class ="input">
-        <input bind:value={email} placeholder = "email"><br>
-        <input bind:value={confirmEmail} placeholder="confirm email">
+        <h2 style="text-align:center ">Enter the new Email</h2>
+        <input bind:value={email} placeholder = "Email"><br>
+        <input bind:value={confirmEmail} placeholder="Confirm Email">
     </div>
     <div class ="buttons">
         <button on:click={submitEmailChange}>
@@ -44,3 +45,10 @@
 
    <label id="matchingEmails"></label> 
 
+<style>
+    .input {
+        padding-top: 10px;
+        display: grid;
+        grid-auto-rows: 1;
+    }
+</style>
