@@ -149,11 +149,12 @@ true and a-scene will be loaded in.
   </div>
 {/if}
 
-
-<button style="position: fixed;
+<div class="content">
+<button style="position: relative;
   z-index: 100;
   margin-top: 0px;
   margin-left: 0px;" on:click={pickUp}>
-  Click Me
+  Pickup Tag
 </button>
+</div>
 

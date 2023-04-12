@@ -61,10 +61,13 @@
 		height:100%;
 		outline: none;
 		border:none;
-		background-color: transparent;
+		vertical-align: middle;
 	}
 	.navButton {
-		background-color: rgb(219, 238, 255);
+		background-color: #c8dcea;
+		border-radius: 5px;
+		margin-bottom: 2px;
+		color: #011828;
 		padding: 14px 16px;
 		text-decoration: none;
 		font-size: 17px;
@@ -72,15 +75,15 @@
 		cursor: pointer;
 	}
 	.navButton:hover {
-		background-color: aliceblue;
+		background-color: #9fcff1;
 		text-decoration: none;
 		transition-duration: 0.4s;
 	}
 	.iconBar {
 		width: 35px;
 		height: 5px;
-		background-color: rgb(59, 116, 169);
-		margin: 6px 0;
+		background-color: #FFFDFA;
+		margin-bottom: 7px;
 		border-radius: 2px;
 	}
 </style>

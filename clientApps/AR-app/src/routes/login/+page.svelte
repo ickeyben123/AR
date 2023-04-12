@@ -92,10 +92,10 @@
                 <input bind:value={name} placeholder = Name><br>
                 <input type="password" bind:value={pass} placeholder = Password><br>
             </div>
-            
+            <br>
             <div class = "buttons">
                 <button on:click={logIn}>
-                    Log In
+                    LOG IN
                 </button>
             </div>
             
@@ -105,7 +105,7 @@
             
             <div class = "buttons">
                 <button on:click={() => goto('/signup')}>
-                    Sign Up
+                    SIGN UP
                 </button>
             </div>
     
@@ -131,12 +131,11 @@
         .title {
         text-align: center;
         vertical-align: middle;
-        line-height: 90px;   
+        line-height: 50px;   
         }
         .input {
             position:sticky;
             margin: auto;
-            width: 100%;
             vertical-align: middle;
             text-align: centre;
             padding: 10px;
@@ -144,8 +143,8 @@
         .buttons {
             position: sticky;
             margin: auto;
-            width: 25%;
-    
+            width: 40%;
+           
         }
     
     </style>
