@@ -4,6 +4,7 @@
 
     async function submitPasswordChange(){
         if(checkIfSame()){
+            // if passwords are the same then send put request to change password.
             let response = await fetch(window.location.origin + "/api/user/pass", {
                 method: 'PUT',
                 credentials: 'include',
@@ -18,6 +19,7 @@
             })
         } else {
             console.log("passwords don't match");
+            // alert user passwords do not match.
             let matchingPasswordsDiv = document.getElementById("matchingPasswords"); 
             matchingPasswordsDiv.textContent = "Passwords need to be matching!";
         }
@@ -28,7 +30,7 @@
     }
 </script>
 
-<body>
+
     <div class ="input">
         <input bind:value={pass} placeholder = "password"><br>
         <input bind:value={confirmPass} placeholder = "confirm password"><br>
@@ -41,5 +43,5 @@
     </div>
 
     <label id="matchingPasswords"></label>
-</body>
+
 

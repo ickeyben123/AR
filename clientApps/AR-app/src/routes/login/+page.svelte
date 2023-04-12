@@ -5,6 +5,7 @@
 
      // For notifications
     import { toast } from '@zerodevx/svelte-toast';
+    import { currentUserStore } from '../stores.js';
 
     /*  Function to display all names in db, used during testing
     async function loadNames() {
@@ -22,6 +23,7 @@
         }
     */
 
+    // basic sanitation of name and pass.
     function logIn() {
 
         if(name == '' || pass == '')
@@ -46,7 +48,7 @@
         console.log(JSON.stringify({userName: "xxx", password: "yyy"}));
         console.log(JSON.stringify(req));
    
-
+        // query database for username and password.
         const response = await fetch(window.location.origin + "/api/user/login",
         {
             method: 'POST',
@@ -61,15 +63,17 @@
             
         });
 
+        // response to response, check if username and password have been validated by backend.
         response.json().then(data => {
             console.log(JSON.stringify(data));
             const resp = JSON.stringify(data);
-            if(resp == '{"message":"User Not found."}'){
-                toast.push("Incorrect Login Entered.");
+            if(response.status!=200){
+                toast.push(data['message']);
             }
             else
             {
                 toast.push("Signed in.");
+                currentUserStore.set(name);
                 goto('/tags')
             }
             
@@ -79,7 +83,7 @@
 
     </script>
     
-    <body>
+
         <div class = "content">
             
             <div class="title">
@@ -90,10 +94,10 @@
                 <input bind:value={name} placeholder = Name><br>
                 <input type="password" bind:value={pass} placeholder = Password><br>
             </div>
-            
+            <br>
             <div class = "buttons">
                 <button on:click={logIn}>
-                    Log In
+                    LOG IN
                 </button>
             </div>
             
@@ -103,7 +107,7 @@
             
             <div class = "buttons">
                 <button on:click={() => goto('/signup')}>
-                    Sign Up
+                    SIGN UP
                 </button>
             </div>
     
@@ -116,7 +120,7 @@
         -->
         
         
-    </body>
+  
     
     <style>
         .content {
@@ -129,12 +133,11 @@
         .title {
         text-align: center;
         vertical-align: middle;
-        line-height: 90px;   
+        line-height: 50px;   
         }
         .input {
             position:sticky;
             margin: auto;
-            width: 100%;
             vertical-align: middle;
             text-align: centre;
             padding: 10px;
@@ -142,8 +145,8 @@
         .buttons {
             position: sticky;
             margin: auto;
-            width: 25%;
-    
+            width: 40%;
+           
         }
     
     </style>

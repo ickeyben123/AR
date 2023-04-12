@@ -46,6 +46,7 @@ COPY clientApps/AR-app/vite.config.js ./
 COPY clientApps/AR-app/jsconfig.json ./
 COPY clientApps/AR-app/package.json ./
 COPY clientApps/AR-app/src ./src
+COPY clientApps/AR-app/static ./static
 
 RUN npm run build
 

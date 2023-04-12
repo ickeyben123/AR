@@ -2,56 +2,52 @@
 
 </script>
    
-   <body>
+ 
        <div class = "content">
-           
-           <div class="title">
-               <h1>Welcome To Find AR!</h1>
-                           <br>
-           </div>
-                   
-           <div class="buttons">
-               <table>
-                   <tr>
-                       <td>
-                           <a class="btn" href="/login">Login</a>
+      
+          
+        <img class = "image" src="src/lib/assets/Find AR-logos_transparent.png" >
+        
+        <h3> Your Things. We Find Them. </h3>
+        <br>
+                           <a class="btn" href="/login">LOG IN</a>
                            <p></p>
-                           <a class="btn" href="/signup">Signup</a>
-                           <p></p>
-                           <a class="btn" href="/tags">Tags</a>
-                           <p></p>
-                           <a class="btn" href="/ar">AR Camera</a>
-                        </td>
-                   </tr>
-               </table>
-           </div>
-
-   
+                           <a class="btn" href="/signup">REGISTER</a>
        </div>	
        
-   </body>
+
    
-   <style>
-       .content {
-           max-width: 500px;
-           margin: auto;
-           background: white;
-           padding: 10px;
-       }
-       .title {
-           position:sticky;
-           margin: auto;
-             display: inline-block;
-           text-align: centre;
-       }
-               .btn {
-                       display: inline-block;
-                       margin:auto;
-                       text-align: centre;
-                       background: #69c;
-                       color: #fff;
-                       width: 100%;
-                       padding: 20px 50px;
-               }
-   
-   </style>
+       <style>
+        .image {
+            max-width: 45%;
+            margin: auto;
+            text-align: centre;
+            background: #FFFDFA;
+
+        }
+        .title {
+            position:sticky;
+            margin: auto;
+              display: inline-block;
+            text-align: centre;
+        }
+                .btn {
+                        display: inline-block;
+                        margin:auto;
+                        border-radius: 4px;
+                        background: #369CE5;
+                        color: #FFFDFA;
+                        width: 50%;
+                        min-width: 250px;
+                        font-size: larger;
+                        padding: 20px 0px;
+                }
+                .btn:hover {
+	background-color: #79b9e7;
+	color:white;
+	transition-duration: 0.4s;
+}
+
+    
+    </style>
+ 

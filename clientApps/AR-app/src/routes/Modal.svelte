@@ -59,11 +59,13 @@
 		}
 	}
 	.menuButton {
+		margin-top:10px;
         text-align: center;
         font-size: large;
         background-color: aliceblue;
         border-radius: 4px;
 		width: 100%;
+		color: black;
         outline: none;
 
     }
