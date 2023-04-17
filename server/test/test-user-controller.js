@@ -25,7 +25,18 @@ describe("Users", () => {
     });
     res.should.have.status(200);
     let user = await User.find({ userName: "test_valid_user" });
-    user.length.should.be.eql(1);
+    user.should.be.an("array").that.is.not.empty;
+  });
+
+  it("Adds another user with valid credentials", async () => {
+    const res = await agent.post("/user").send({
+      "userName": "test_another_user",
+      "password": "test_another_pas5",
+      "email": "test_another@valid.com"
+    });
+    res.should.have.status(200);
+    let user = await User.find({ userName: "test_another_user" });
+    user.should.be.an("array").that.is.not.empty;
   });
 
   it("Login valid user", async () => {
@@ -41,10 +52,11 @@ describe("Users", () => {
   it("Grabs valid user's details", async () => {
     const res = await agent.get("/user");
     res.should.have.status(200);
-    res.body[0].should.have.property("userName");
-    res.body[0].should.have.property("email");
-    res.body[0].userName.should.be.eql("test_valid_user");
-    res.body[0].email.should.be.eql("test_email@valid.com");
+    let veruser = res.body[0];
+    veruser.should.have.property("userName");
+    veruser.should.have.property("email");
+    veruser.userName.should.be.eql("test_valid_user");
+    veruser.email.should.be.eql("test_email@valid.com");
   });
 
   it("Rejects non-admin usage of getUsers()", function(done) {
@@ -55,9 +67,23 @@ describe("Users", () => {
       });
   });
 
+  it("Rejects non-admin usage of deleteAnyUser()", function(done) {
+    let user = User.find({ userName: "test_another_user" });
+    agent.delete("/user/" + user._id)
+      .end((err, res) => {
+        res.should.have.status(403);
+        done();
+      });
+  });
+
+  // update tests
+  // admin specific tests
+
   it("User can delete itself", async () => {
     const res = await agent.delete("/");
     res.should.have.status(200);
+    let user = User.find({ userName: "test_valid_user" });
+    user.should.be.an("array").that.is.empty;
   });
 
   after(async () => {
