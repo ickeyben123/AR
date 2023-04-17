@@ -1,8 +1,8 @@
 <script>
     import {goto} from '$app/navigation';
     // supposed to be userName but had to change to username otherwise it will be confusing.
-    let username = '';
-    let pass = '';
+    let userName = '';
+    let password = '';
 
      // For notifications
     import { toast } from '@zerodevx/svelte-toast';
@@ -27,13 +27,13 @@
     // basic sanitation of name and pass.
     function logIn() {
 
-        if(username == '' || pass == '')
+        if(userName == '' || password == '')
         {
             toast.push("Invalid Entry");
             return;
         }
-        console.log(username);
-        console.log(pass);
+        console.log(userName);
+        console.log(password);
         loginReq();
     }
 
@@ -42,12 +42,9 @@
         
 
         var req = {
-            "userName": username,
-            "password": pass
+            "userName": userName,
+            "password": password
         }
-
-        console.log(JSON.stringify({userName: "xxx", password: "yyy"}));
-        console.log(JSON.stringify(req));
    
         // query database for username and password.
         const response = await fetch(window.location.origin + "/api/user/login",
@@ -74,7 +71,7 @@
             else
             {
                 toast.push("Signed in.");
-                currentUserStore.set(username);
+                currentUserStore.set(userName);
                 goto('/tags')
             }
             
@@ -90,8 +87,8 @@
         </div>
 
         <div class ="input">
-            <input bind:value={username} placeholder = Name><br>
-            <input type="password" bind:value={pass} placeholder = Password><br>
+            <input bind:value={userName} placeholder = Name><br>
+            <input type="password" bind:value={password} placeholder = Password><br>
         </div>
         <br>
         <div class = "buttons">
