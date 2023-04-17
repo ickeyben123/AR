@@ -1,6 +1,6 @@
 <script>
-    let name = '';
-    let pass = '';
+    let userName = '';
+    let password = '';
     let email = '';
 	let n;
     import * as validation from '$lib/validation.js';
@@ -10,7 +10,7 @@
     import { toast } from '@zerodevx/svelte-toast';
 
     async function signUp() {
-        var errors = validation.validatePassword(pass);
+        var errors = validation.validatePassword(password);
 
         if(errors != ""){
             toast.push(errors);
@@ -26,9 +26,9 @@
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'},
             body: JSON.stringify({
-                "userName": name,
+                "userName": userName,
                 "email": email,
-                "password" : pass
+                "password" : password
              })
         })
 
@@ -63,9 +63,9 @@
         </div>
 
         <div class ="input">
-            <input bind:value={name} placeholder = Name><br>
+            <input bind:value={userName} placeholder = Name><br>
             <input bind:value={email} placeholder = Email><br>
-            <input type="password" bind:value={pass} placeholder = Password><br>
+            <input type="password" bind:value={password} placeholder = Password><br>
         </div>
         <br>
         <div class = "buttons">
