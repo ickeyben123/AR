@@ -55,57 +55,54 @@
     }
 
 </script>
-    
 
+    <div class = "content">
+        
+        <div class="title">
+            <h1>Please Sign Up</h1>
+        </div>
 
-        <div class = "content">
-            
-            <div class="title">
-                <h1>Please Sign Up</h1>
-            </div>
-    
-            <div class ="input">
-                <input bind:value={name} placeholder = Name><br>
-                <input bind:value={email} placeholder = Email><br>
-                <input type="password" bind:value={pass} placeholder = Password><br>
-            </div>
-            <br>
-            <div class = "buttons">
-                <button on:click={signUp}>
-                    SIGN UP
-                </button>
-            </div>
-    
-        </div>	
+        <div class ="input">
+            <input bind:value={name} placeholder = Name><br>
+            <input bind:value={email} placeholder = Email><br>
+            <input type="password" bind:value={pass} placeholder = Password><br>
+        </div>
+        <br>
+        <div class = "buttons">
+            <button on:click={signUp}>
+                SIGN UP
+            </button>
+        </div>
+
+    </div>	
         
 
     
 
-        <style>
-            .content {
-                max-width: 500px;
-                margin: auto;
-                background: white;
-                text-align: center;
-                padding: 10px;
-            }
-            .title {
-            text-align: center;
-            vertical-align: middle;
-            line-height: 50px;   
-            }
-            .input {
-                position:sticky;
-                margin: auto;
-                vertical-align: middle;
-                text-align: centre;
-                padding: 10px;
-            }
-            .buttons {
-                position: sticky;
-                margin: auto;
-                width: 40%;
-               
-            }
-    
+<style>
+    .content {
+        max-width: 500px;
+        margin: auto;
+        background: white;
+        text-align: center;
+        padding: 10px;
+    }
+    .title {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 50px;   
+    }
+    .input {
+        position:sticky;
+        margin: auto;
+        vertical-align: middle;
+        text-align: centre;
+        padding: 10px;
+    }
+    .buttons {
+        position: sticky;
+        margin: auto;
+        width: 40%;
+        
+    }
 </style>

@@ -37,13 +37,14 @@
         <input bind:value={email} placeholder = "Email"><br>
         <input bind:value={confirmEmail} placeholder="Confirm Email">
     </div>
+
     <div class ="buttons">
         <button on:click={submitEmailChange}>
             Submit
         </button>
     </div>
 
-   <label id="matchingEmails"></label> 
+    <label id="matchingEmails"></label> 
 
 <style>
     .input {

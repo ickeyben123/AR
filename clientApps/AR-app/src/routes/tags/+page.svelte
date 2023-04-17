@@ -1,5 +1,4 @@
 <script>
-
     /*
     Emoji Reference
     Medicine - &#128138
@@ -249,7 +248,6 @@
         newTag();
     }
 
-
 </script>
 
 
@@ -258,9 +256,9 @@
 
 
     <!-- Title for Tags page -->
-<div class="title">
-    <h1>Your Tags</h1>
-</div>
+    <div class="title">
+        <h1>Your Tags</h1>
+    </div>
 
 <!-- /////////// -->
 <!-- TAG DISPLAY -->
@@ -269,7 +267,7 @@
 <!-- Conditional that it only shows tags if the data has loaded -->
     <!-- Goes through each tag in the fetched tags of the user to create
         tag items for manipulation  -->
-        <div class="margin">
+    <div class="margin">
         {#each tags || [] as tag }
             <div class="accordionPanel">
                 <!-- Key specifies a part of the html that can be made to 'reload' when
@@ -301,7 +299,7 @@
                         <button class="menuButton" on:click={() => viewTag(tag)}>Find</button>
                         {/if}
                         {#if !tag.placed}
-                         <button class="menuButton" on:click={() => placeTag(tag)}>Place</button>
+                            <button class="menuButton" on:click={() => placeTag(tag)}>Place</button>
                         {/if}
                         <button class="menuButton" on:click={() => editTag(tag)}>Edit</button>
                         <button class="menuButton" on:click={() => deleteTag(tag)}>Delete</button>
@@ -312,10 +310,10 @@
         {/each}
     </div>
 
-<div class="bottom">
-    <!-- Button to create a tag at the bottom of the page -->
-<button class="bottomButton" on:click={() =>createNewTag()}>Create Tag +</button>
-</div>
+    <div class="bottom">
+        <!-- Button to create a tag at the bottom of the page -->
+        <button class="bottomButton" on:click={() =>createNewTag()}>Create Tag +</button>
+    </div>
 
 <!-- ////// -->
 <!-- MODALS -->
@@ -401,11 +399,11 @@
     }
 
     .bottom{
-    width: 100%;
-    flex: 0 0 50px;/*or just height:50px;*/
-  margin-top: auto;
-    color: white;
-    text-align: center;
+        width: 100%;
+        flex: 0 0 50px;/*or just height:50px;*/
+        margin-top: auto;
+        color: white;
+        text-align: center;
     }
 
 
@@ -436,10 +434,10 @@
         max-width: 200px;
     }
     button:hover {
-	background-color: #79b9e7;
-	color:white;
-	transition-duration: 0.4s;
-}
+        background-color: #79b9e7;
+        color:white;
+        transition-duration: 0.4s;
+    }
 
     .selectButton {
      
