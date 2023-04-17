@@ -1,6 +1,7 @@
 <script>
     import {goto} from '$app/navigation';
-    let name = '';
+    // supposed to be userName but had to change to username otherwise it will be confusing.
+    let username = '';
     let pass = '';
 
      // For notifications
@@ -26,12 +27,12 @@
     // basic sanitation of name and pass.
     function logIn() {
 
-        if(name == '' || pass == '')
+        if(username == '' || pass == '')
         {
             toast.push("Invalid Entry");
             return;
         }
-        console.log(name);
+        console.log(username);
         console.log(pass);
         loginReq();
     }
@@ -41,7 +42,7 @@
         
 
         var req = {
-            "userName": name,
+            "userName": username,
             "password": pass
         }
 
@@ -73,7 +74,7 @@
             else
             {
                 toast.push("Signed in.");
-                currentUserStore.set(name);
+                currentUserStore.set(username);
                 goto('/tags')
             }
             
@@ -89,7 +90,7 @@
         </div>
 
         <div class ="input">
-            <input bind:value={name} placeholder = Name><br>
+            <input bind:value={username} placeholder = Name><br>
             <input type="password" bind:value={pass} placeholder = Password><br>
         </div>
         <br>
