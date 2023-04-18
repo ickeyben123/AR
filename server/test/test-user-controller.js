@@ -76,13 +76,29 @@ describe("Users", () => {
       });
   });
 
-  // update tests
+  it("Updates valid user's email", async () => {
+    const res = await agent.put("/user/email").send({
+      "email": "test_updated_email@valid.com"
+    });
+    res.should.have.status(200);
+    let user = await User.find({ userName: "test_valid_user" });
+    user[0].email.should.be.eql("test_updated_email@valid.com");
+  });
+
+  it("Updates valid user's password", async () => {
+    const res = await agent.put("/user/pass").send({
+      "password": "test_updated_pas5"
+    });
+    res.should.have.status(200);
+  });
+
   // admin specific tests
+  // maybe more tests required
 
   it("User can delete itself", async () => {
     const res = await agent.delete("/");
     res.should.have.status(200);
-    let user = User.find({ userName: "test_valid_user" });
+    let user = await User.find({ userName: "test_valid_user" });
     user.should.be.an("array").that.is.empty;
   });
 
