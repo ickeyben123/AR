@@ -245,6 +245,11 @@
 
     function submitInfo() {
         console.log(tagData.tagName);
+        if(tagData.tagName == "Please enter a tag name"){
+            toast.push('Please include a tag name!');
+            showAddTags = false;
+            return;
+        }
         showAddTags = false;
         newTag();
     }
@@ -328,7 +333,7 @@
 <Modal bind:showModal={showAddTags}>
     <div class="title">
         <h2>Enter Tag Name</h2>
-        <input bind:value={tagData.tagName} placeholder = Name><br>
+        <input bind:value={tagData.tagName} placeholder = "Please enter a tag name"><br>
         <h2>Enter Tag Description</h2>
         <input bind:value={tagData.description} placeholder = Empty><br>
         <h2>Select Tag Type</h2>
