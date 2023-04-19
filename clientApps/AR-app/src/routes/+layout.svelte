@@ -31,10 +31,9 @@
 
 	//Notifications
 	import { SvelteToast } from '@zerodevx/svelte-toast';
-	import { onMount } from 'svelte';
-	import { load } from './tags/+page';
+	import { onMount } from "svelte";
+	import { getCookie } from 'svelte-cookie';
 	import { currentUserStore } from './stores.js';
-	import { writable } from 'svelte/store';
 
 	let navMenuActive = false
 
@@ -43,6 +42,16 @@
 
 	// update currentUser automatically when currentUserStore is changed
 	currentUserStore.subscribe(value => {currentUser = value;});
+
+	onMount(() => {
+		console.log("Checking cookies");
+		if(getCookie('ar-session') == "" ) {
+			console.log("no cookie");
+		currentUserStore.set("Not Logged In!");
+	} 
+	});
+
+
 </script>
 
 <slot></slot>

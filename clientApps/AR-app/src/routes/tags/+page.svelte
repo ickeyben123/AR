@@ -18,9 +18,10 @@
     import { toast } from '@zerodevx/svelte-toast';
 
     let showAddTags = false, showEditTags = false, showDeleteTags = false, reCreate=false, showError=false, showPlaced=false;
-    var tagData = {tagName:"Default"}, coords={}, tagDelete = {tagId:null};
+    var tagData = {tagName:""}, coords={}, tagDelete = {tagId:null};
 
     let errorMessage = "";
+
 
     // Get data from page.js. Handled via Svelte.
     /** @type {import('./$types').PageData} */  
@@ -164,8 +165,7 @@
             next: 0.2,
             dismissable: false
             })
-
-
+            
             getGeoLocation(async (position)=> {
                 setTagLocation(position);
 
@@ -205,7 +205,7 @@
     function errorGeoLocation(error){
         switch(error.code) {
             case error.PERMISSION_DENIED:
-                error = "User denied the request for Geolocation";
+                error = "Unable to add, user denied the request for Geolocation";
                 break;
             case error.POSITION_UNAVAILABLE:
                 error = "Location information is unavailable";
@@ -217,7 +217,9 @@
                 error = "An unknown error occurred";
                 break;
         }
-        tagData = {tagName:"Default"};//resetting the tagData without having to reload page
+        tagData = {tagName:""};//resetting the tagData without having to reload page
+        errorMessage = error;
+        toast.pop(0);
         showError = true;
     }
 
@@ -245,8 +247,8 @@
 
     function submitInfo() {
         console.log(tagData.tagName);
-        if(tagData.tagName == "Please enter a tag name"){
-            toast.push('Please include a tag name!');
+        if(tagData.tagName == ""){
+            toast.push('Please include a tag name!',{ classes: ['error'] });
             showAddTags = false;
             return;
         }
@@ -371,7 +373,7 @@
 </Modal>
 
 <Modal bind:showModal={showError}>
-    <h2 style="color: red;">{errorMessage}</h2>
+    <h2 style="color: #FF3535;">{errorMessage}</h2>
 </Modal>
 
 
