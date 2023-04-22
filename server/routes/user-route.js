@@ -13,6 +13,6 @@ router.delete("/:userId", [validationJWT.verifyToken,validationJWT.isAdmin], use
 router.delete("/",[validationJWT.verifyToken],userController.deleteUser);
 router.post("/login", userController.loginUser);
 router.post("/loggedIn", userController.loggedIn);
-router.post("/cookie",[validationJWT.verifyToken],userController.deleteCookie);
+router.post("/logout",[validationJWT.verifyToken],userController.deleteCookie);
 
 export default router

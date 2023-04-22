@@ -60,7 +60,7 @@ export const addUser = async (req, res) => {
  */
 export const getUsers = async (req, res) => {
   try {
-    let users = await User.find();
+    let users = await User.find().populate("roles");
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);
@@ -77,7 +77,7 @@ export const getUsers = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const id = req.userId;
-    let user = await User.find({ _id: id });
+    let user = await User.find({ _id: id }).populate("roles");
     res.status(200).json(user);
   } catch (err) {
     res.status(500).json(err);
@@ -111,7 +111,7 @@ export const updateEmail = async (req, res) => {
 
 /**
  * Updates user password in the database of the user with supplied ID
- * @param {request} req contains the user ID and new password
+ * @param {request} req contains the new password
  * @param {response} res returns the JSON data of the user
  */
 export const updatePassword = async (req, res) => {
