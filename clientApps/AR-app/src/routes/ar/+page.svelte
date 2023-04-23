@@ -71,13 +71,6 @@ once more all 3 libraries have been loaded in.
     mounted=true;
   });
 
-
-  const options = {
-    enableHighAccuracy: true,
-    timeout: 5000,
-    maximumAge: 0,
-  };
-
   async function setNotPlaced(){
     
     // change "placed" in database to false to repersent item being picked up.
