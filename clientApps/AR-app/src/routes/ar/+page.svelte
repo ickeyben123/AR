@@ -71,13 +71,6 @@ once more all 3 libraries have been loaded in.
     mounted=true;
   });
 
-
-  const options = {
-    enableHighAccuracy: true,
-    timeout: 5000,
-    maximumAge: 0,
-  };
-
   async function setNotPlaced(){
     
     // change "placed" in database to false to repersent item being picked up.
@@ -125,7 +118,7 @@ true and a-scene will be loaded in.
         tracked by gps
         gpsMinDistance is the minumum distance in metres you need to move before ar is updated
       -->
-      <a-camera gps-new-camera='gpsMinDistance: 1'></a-camera>
+      <a-camera gps-new-camera='gpsMinDistance: 1; positionMinAccuracy: 20'></a-camera>
 
       <!--
         place an entity repersenting the tag on the screen with appropriate lat and long

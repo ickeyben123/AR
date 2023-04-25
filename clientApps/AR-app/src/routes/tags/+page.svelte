@@ -129,8 +129,14 @@
 
     // Gets the location of the user via geolocation and then executes the function func, parsing the location as the first parameter.
     function getGeoLocation(func){
+             const options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0,
+             };
+
              if(navigator.geolocation){
-                navigator.geolocation.getCurrentPosition(func,errorGeoLocation);//send the geolocation data to another function
+                navigator.geolocation.getCurrentPosition(func,errorGeoLocation,options);//send the geolocation data to another function
             } else{
                 //this is if the browser doesnt support geolocation, do pop up message or something
                 errorMessage = "Your browser does not support geo";
