@@ -6,25 +6,6 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../server.js';
 
-const non_admin_1 = {
-  userName: "non_admin_1",
-  email: "na1@testing.com",
-  password: "ghG3hoP@e"
-}
-
-const non_admin_2 = {
-  userName: "non_admin_2",
-  email: "na2@testing.com",
-  password: "bnhg2loP"
-}
-
-const admin = {
-  userName: "admin",
-  email: "admin@admin.com",
-  password: "password1",
-  roles: ["admin"]
-};
-
 var should = chai.should();
 var expect = chai.expect();
 var user_id;
@@ -36,45 +17,92 @@ describe("Users", () => {
   
   const agent = chai.request.agent(server);
 
-  it("Adds non_admin_1", async () => {
-    const res = await agent.post("/user").send(non_admin_1);
-    res.should.have.status(200);
-    res.body.should.be.a("object");
-    res.body.should.have.property("data");
-    res.body.data.should.have.property("userName");
-    res.body.data.should.have.property("email");
-    res.body.data.should.have.property("password");
-    res.body.data.should.have.property("roles");
-    res.body.data.userName.should.be.eql("non_admin_1");
-    res.body.data.email.should.be.eql("na1@testing.com");
-  });
-
-  it("Login non_admin_1", async () => {
-    const res = await agent.post("/user/login").send(
-    {
-      "userName": non_admin_1.userName,
-      "password": non_admin_1.password
+  it("Adds a user with valid credentials", async () => {
+    const res = await agent.post("/user").send({
+      "userName": "test_valid_user",
+      "password": "test_pas5",
+      "email": "test_email@valid.com"
     });
     res.should.have.status(200);
-    res.body.should.be.a("object");
-    res.body.should.have.property("roles");
-    res.body.roles.should.be.eql(["USER"]);
+    let user = await User.find({ userName: "test_valid_user" });
+    user.should.be.an("array").that.is.not.empty;
+  });
+
+  it("Adds another user with valid credentials", async () => {
+    const res = await agent.post("/user").send({
+      "userName": "test_another_user",
+      "password": "test_another_pas5",
+      "email": "test_another@valid.com"
+    });
+    res.should.have.status(200);
+    let user = await User.find({ userName: "test_another_user" });
+    user.should.be.an("array").that.is.not.empty;
+  });
+
+  it("Login valid user", async () => {
+    const res = await agent.post("/user/login").send(
+    {
+      "userName": "test_valid_user",
+      "password": "test_pas5",
+    });
+    res.should.have.status(200);
     res.should.have.cookie("ar-session");
   });
 
-  /*
-  it("Signout non_admin_1", async () => {
-    const res = await agent.post("/user/login").send(
-    {
-      "userName": non_admin_1.userName,
-      "password": non_admin_1.password
+  it("Grabs valid user's details", async () => {
+    const res = await agent.get("/user");
+    res.should.have.status(200);
+    let veruser = res.body[0];
+    veruser.should.have.property("userName");
+    veruser.should.have.property("email");
+    veruser.userName.should.be.eql("test_valid_user");
+    veruser.email.should.be.eql("test_email@valid.com");
+  });
+
+  it("Rejects non-admin usage of getUsers()", function(done) {
+    agent.get("/user/all")
+      .end((err, res) => {
+        res.should.have.status(403);
+        done();
+      });
+  });
+
+  it("Rejects non-admin usage of deleteAnyUser()", function(done) {
+    let user = User.find({ userName: "test_another_user" });
+    agent.delete("/user/" + user._id)
+      .end((err, res) => {
+        res.should.have.status(403);
+        done();
+      });
+  });
+
+  it("Updates valid user's email", async () => {
+    const res = await agent.put("/user/email").send({
+      "email": "test_updated_email@valid.com"
     });
     res.should.have.status(200);
-    res.body.should.be.a("object");
-    res.body.should.have.property("roles");
-    res.body.roles.should.be.eql(["USER"]);
-    res.session.should.have.property("token");
+    let user = await User.find({ userName: "test_valid_user" });
+    user[0].email.should.be.eql("test_updated_email@valid.com");
   });
-  */
 
+  it("Updates valid user's password", async () => {
+    const res = await agent.put("/user/pass").send({
+      "password": "test_updated_pas5"
+    });
+    res.should.have.status(200);
+  });
+
+  // admin specific tests
+  // maybe more tests required
+
+  it("User can delete itself", async () => {
+    const res = await agent.delete("/");
+    res.should.have.status(200);
+    let user = await User.find({ userName: "test_valid_user" });
+    user.should.be.an("array").that.is.empty;
+  });
+
+  after(async () => {
+    await User.deleteMany({ userName: /test_/ });
+  });
 });
