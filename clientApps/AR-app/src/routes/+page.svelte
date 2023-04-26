@@ -38,7 +38,17 @@
   <a class="btn" href="/signup">REGISTER</a>
 </div>	
  
+<script>
+  import { onMount } from "svelte";
+  import {goto} from '$app/navigation';
 
+	onMount(() => {
+		console.log("Checking cookies");
+    if(localStorage.getItem("userName") != "Not Logged In!"){
+      goto("/tags")
+    }
+	});
+</script>
 
 <style>
 
