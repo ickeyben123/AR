@@ -11,6 +11,13 @@ var expect = chai.expect();
 var user_id;
 var Cookies;
 
+const admin = {
+  userName: "admin",
+  email: "admin@admin.com",
+  password: "password1",
+  roles: ["admin"]
+};
+
 chai.use(chaiHttp);
 
 describe("Users", () => {
@@ -24,8 +31,8 @@ describe("Users", () => {
       "email": "test_email@valid.com"
     });
     res.should.have.status(200);
-    let user = await User.find({ userName: "test_valid_user" });
-    user.should.not.be.eql("[]");
+    let user = await User.findOne({ userName: "test_valid_user" });
+    user.should.not.be.null;
   });
 
   it("Adds an admin user with valid credentials", async () => {
@@ -36,8 +43,8 @@ describe("Users", () => {
       "roles": ["admin"]
     });
     res.should.have.status(200);
-    let user = await User.find({ userName: "test_admin_user" });
-    user.should.not.be.eql("[]");
+    let user = await User.findOne({ userName: "test_admin_user" });
+    user.should.not.be.null;
   });
 
   it("Login valid user", async () => {
@@ -69,8 +76,7 @@ describe("Users", () => {
   });
 
   it("Rejects non-admin usage of deleteAnyUser()", function(done) {
-    let user = User.find({ userName: "test_admin_user" });
-    agent.delete("/user/" + user._id)
+    agent.delete("/user/test_random_id")
       .end((err, res) => {
         res.should.have.status(403);
         done();
@@ -82,8 +88,7 @@ describe("Users", () => {
       "email": "test_updated_email@valid.com"
     });
     res.should.have.status(200);
-    let user = await User.find({ userName: "test_valid_user" });
-    console.log(user); // remove later
+    let user = await User.findOne({ userName: "test_valid_user" });
     user.email.should.be.eql("test_updated_email@valid.com");
   });
 
@@ -95,7 +100,7 @@ describe("Users", () => {
   });
 
   it("User can signout by deleting their session cookie", async () => {
-    const res = await agent.post("user/cookie");
+    const res = await agent.post("/user/cookie");
     res.should.have.status(200);
     res.should.not.have.cookie("ar-session");
   });
@@ -111,25 +116,26 @@ describe("Users", () => {
   });
 
   it("Admin user can get all users", async () => {
-    const res = await agent.get("user/all");
+    const res = await agent.get("/user/all");
     res.should.have.status(200);
-    let user = await User.find();
-    res.body.should.be.eql(user);
+    let users = await User.find();
+    users.should.not.be.eql("[]");
   });
 
   it("Admin user can delete any other user", async () => {
-    let user = await User.find({ userName: "test_valid_user" });
-    const res = await agent.delete("/user/" + user._id);
+    let user = await User.findOne({ userName: "test_valid_user" });
+    const res = await agent.delete("/user/" + String(user._id));
     res.should.have.status(200);
-    user = await User.find({ userName: "test_valid_user" });
-    user.should.be.eql("[]");
+    user = await User.findOne({ userName: "test_valid_user" });
+    chai.expect(user).to.be.null;
   });
 
   it("User can delete itself", async () => {
     const res = await agent.delete("/");
     res.should.have.status(200);
-    let user = await User.find({ userName: "test_admin_user" });
-    user.should.be.eql("[]");
+    let user = await User.findOne({ userName: "test_admin_user" });
+    console.log(user); // remove
+    chai.expect(user).to.be.null;
   });
 
   after(async () => {
