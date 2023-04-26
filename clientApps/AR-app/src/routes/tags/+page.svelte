@@ -260,6 +260,12 @@
         showAddTags = false;
         newTag();
     }
+    onMount(() => {
+        if(tags[0]){
+            tags[0].active=true;
+        }
+
+	});
 
 </script>
 
