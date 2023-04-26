@@ -25,18 +25,19 @@ describe("Users", () => {
     });
     res.should.have.status(200);
     let user = await User.find({ userName: "test_valid_user" });
-    user.should.be.an("array").that.is.not.empty;
+    user.should.not.be.eql("[]");
   });
 
-  it("Adds another user with valid credentials", async () => {
+  it("Adds an admin user with valid credentials", async () => {
     const res = await agent.post("/user").send({
-      "userName": "test_another_user",
-      "password": "test_another_pas5",
-      "email": "test_another@valid.com"
+      "userName": "test_admin_user",
+      "password": "test_admin_pas5",
+      "email": "test_admin@valid.com",
+      "roles": ["admin"]
     });
     res.should.have.status(200);
-    let user = await User.find({ userName: "test_another_user" });
-    user.should.be.an("array").that.is.not.empty;
+    let user = await User.find({ userName: "test_admin_user" });
+    user.should.not.be.eql("[]");
   });
 
   it("Login valid user", async () => {
@@ -68,7 +69,7 @@ describe("Users", () => {
   });
 
   it("Rejects non-admin usage of deleteAnyUser()", function(done) {
-    let user = User.find({ userName: "test_another_user" });
+    let user = User.find({ userName: "test_admin_user" });
     agent.delete("/user/" + user._id)
       .end((err, res) => {
         res.should.have.status(403);
@@ -82,7 +83,8 @@ describe("Users", () => {
     });
     res.should.have.status(200);
     let user = await User.find({ userName: "test_valid_user" });
-    user[0].email.should.be.eql("test_updated_email@valid.com");
+    console.log(user); // remove later
+    user.email.should.be.eql("test_updated_email@valid.com");
   });
 
   it("Updates valid user's password", async () => {
@@ -92,14 +94,42 @@ describe("Users", () => {
     res.should.have.status(200);
   });
 
-  // admin specific tests
-  // maybe more tests required
+  it("User can signout by deleting their session cookie", async () => {
+    const res = await agent.post("user/cookie");
+    res.should.have.status(200);
+    res.should.not.have.cookie("ar-session");
+  });
+
+  it("Login admin user", async () => {
+    const res = await agent.post("/user/login").send(
+    {
+      "userName": "test_admin_user",
+      "password": "test_admin_pas5"
+    });
+    res.should.have.status(200);
+    res.should.have.cookie("ar-session");
+  });
+
+  it("Admin user can get all users", async () => {
+    const res = await agent.get("user/all");
+    res.should.have.status(200);
+    let user = await User.find();
+    res.body.should.be.eql(user);
+  });
+
+  it("Admin user can delete any other user", async () => {
+    let user = await User.find({ userName: "test_valid_user" });
+    const res = await agent.delete("/user/" + user._id);
+    res.should.have.status(200);
+    user = await User.find({ userName: "test_valid_user" });
+    user.should.be.eql("[]");
+  });
 
   it("User can delete itself", async () => {
     const res = await agent.delete("/");
     res.should.have.status(200);
-    let user = await User.find({ userName: "test_valid_user" });
-    user.should.be.an("array").that.is.empty;
+    let user = await User.find({ userName: "test_admin_user" });
+    user.should.be.eql("[]");
   });
 
   after(async () => {
