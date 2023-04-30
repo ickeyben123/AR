@@ -76,40 +76,50 @@
             }
             
         });
+        
 
     }
 </script>
 
     <div class = "content">
         
-        <div class="title">
-            <h1>Please Log In</h1>
-        </div>
+        <div class="inputbox">
+            <div class="title">
+                <h1>Please Log In</h1>
+            </div>
 
-        <div class ="input">
-            <input bind:value={userName} placeholder = Name><br>
-            <input type="password" bind:value={password} placeholder = Password><br>
-        </div>
-        <br>
-        <div class = "buttons">
-            <button on:click={logIn}>
-                LOG IN
-            </button>
-        </div>
+            <div class ="input" style="text-align:left; ">
+                Username<br>
+                <input bind:value={userName}><br>
+                Password<br>
+                <input type="password" bind:value={password}><br>
+            </div>
+            <br>
+            <div class = "buttons" style="width:85%">
+                <button on:click={logIn}>
+                    Log In
+                </button>
+            </div>
         
-        <div class="title">
-            <h1>----- OR -----</h1>
-        </div>
-        
-        <div class = "buttons">
-            <button on:click={() => goto('/signup')}>
-                SIGN UP
-            </button>
+            <div style="color:lightblue;">
+                &#8212 &#8212 or &#8212 &#8212
+            </div>
+            
+            <div class = "buttons" style="width:85%;">
+                <button on:click={() => goto('/signup')}>
+                    Sign Up
+                </button>
+            </div>
         </div>
 
     </div>
     
 <style>
+    .inputbox {
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        padding: 5px;
+    }
+
     .content {
         max-width: 500px;
         margin: auto;
