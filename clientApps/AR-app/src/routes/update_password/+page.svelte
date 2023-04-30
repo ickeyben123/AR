@@ -1,9 +1,25 @@
 <script>
+    import * as validation from '$lib/validation.js';
+    import { toast } from '@zerodevx/svelte-toast';
+
     let confirmPass;
     let pass;
 
     async function submitPasswordChange(){
-        if(checkIfSame()){
+
+        if(confirmPass == pass){
+
+            if(pass == ""){
+                toast.push("Cannot have empty password!");
+            }
+
+            var errors = validation.validatePassword(pass);
+
+            if(errors != ""){
+                toast.push(errors);
+                return;
+            } 
+
             // if passwords are the same then send put request to change password.
             let response = await fetch(window.location.origin + "/api/user/pass", {
                 method: 'PUT',
@@ -19,15 +35,9 @@
             })
         } else {
             console.log("passwords don't match");
-            // alert user passwords do not match.
-            let matchingPasswordsDiv = document.getElementById("matchingPasswords"); 
-            matchingPasswordsDiv.textContent = "Passwords need to be matching!";
+            toast.push("Passwords do not match!");
         }
     } 
-
-    function checkIfSame(){
-        confirmPass == pass;
-    }
 </script>
 
     <div class ="input">
