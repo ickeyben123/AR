@@ -58,20 +58,25 @@
 
     <div class = "content">
         
-        <div class="title">
-            <h1>Please Sign Up</h1>
-        </div>
+        <div class="inputbox">
+            <div class="title">
+                <h1>Sign Up</h1>
+            </div>
 
-        <div class ="input">
-            <input bind:value={userName} placeholder = Name><br>
-            <input bind:value={email} placeholder = Email><br>
-            <input type="password" bind:value={password} placeholder = Password><br>
-        </div>
-        <br>
-        <div class = "buttons">
-            <button on:click={signUp}>
-                SIGN UP
-            </button>
+            <div class ="input">
+                Username<br>
+                <input bind:value={userName}><br>
+                Email<br>
+                <input bind:value={email}><br>
+                Password<br>
+                <input type="password" bind:value={password}><br>
+            </div>
+            <br>
+            <div class = "buttons" style="width:85%;">
+                <button on:click={signUp}>
+                    Sign Up
+                </button>
+            </div>
         </div>
 
     </div>	
@@ -80,6 +85,10 @@
     
 
 <style>
+    .inputbox {
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        padding: 5px;
+    }
     .content {
         max-width: 500px;
         margin: auto;
