@@ -2,8 +2,15 @@
   <img class = "image" src="src/lib/assets/Find AR-logos_transparent.png" >
   
   <h3> Your Things? We Find Them. </h3>
-  
+
   <br>
+
+  <a class="btn" href="/login">LOG IN</a>
+  <p></p>
+  <a class="btn" href="/signup">REGISTER</a>
+  <p></p>
+  
+
   <div class="wrapper">
       <div class="box">
           <div class="left">
@@ -32,10 +39,6 @@
 
     </div>
     
-
-  <a class="btn" href="/login">LOG IN</a>
-  <p></p>
-  <a class="btn" href="/signup">REGISTER</a>
 </div>	
  
 <script>
