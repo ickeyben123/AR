@@ -14,7 +14,7 @@
           </div>
             <div class="right center">
         
-                <h1 class="long_text">VIEW YOUR TAGS</h1>
+                <h1 class="long_text">View your tags</h1>
             </div>
       </div>
 
@@ -26,16 +26,16 @@
               </video>
         </div>
           <div class="right center">
-              <h1 class="long_text">ADD YOUR TAGS</h1>
+              <h1 class="long_text">Add your tags</h1>
           </div>
     </div>
 
     </div>
     
 
-  <a class="btn" href="/login">LOG IN</a>
+  <a class="btn" href="/login">Log In</a>
   <p></p>
-  <a class="btn" href="/signup">REGISTER</a>
+  <a class="btn" href="/signup">Register</a>
 </div>	
  
 <script>
