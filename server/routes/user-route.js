@@ -12,7 +12,15 @@ router.put("/pass",[validationJWT.verifyToken,validation.validatePassword], user
 router.delete("/:userId", [validationJWT.verifyToken,validationJWT.isAdmin], userController.deleteAnyUser);
 router.delete("/",[validationJWT.verifyToken],userController.deleteUser);
 router.post("/login", userController.loginUser);
+<<<<<<< HEAD
+router.post("/signOut",[validationJWT.verifyToken],userController.signOut);
+// For push notifications
+router.get("/vapid",[validationJWT.verifyToken],userController.getVAPID);
+router.post("/subscribe",[validationJWT.verifyToken],userController.saveVAPIDSubscription)
+
+=======
 router.post("/loggedIn", userController.loggedIn);
 router.post("/logout",[validationJWT.verifyToken],userController.deleteCookie);
+>>>>>>> 26-polish-frontend-backend
 
 export default router

@@ -65,7 +65,11 @@
         //delete a cookie, then go back to home pagetoken
 
         //document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+<<<<<<< HEAD
+        const response = await fetch(window.location.origin + "/api/user/signOut",{
+=======
         const response = await fetch(window.location.origin + "/api/user/logout",{
+>>>>>>> 26-polish-frontend-backend
             method: 'POST',
             credentials: 'include'
         });

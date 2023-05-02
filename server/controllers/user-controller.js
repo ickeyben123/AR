@@ -244,13 +244,24 @@ export const loginUser = async (req,res) => {
   }
 }
 
+<<<<<<< HEAD
+export const signOut = async (req,res) => {
+=======
 /**
  * deletes the cookies associated with the user to sign them out
  * @param {req} req request contains the 2 cookies associated with the user
  * @param {res} res returns the status saying that the user is signed out
  */
 export const deleteCookie = async (req,res) => {
+>>>>>>> 26-polish-frontend-backend
   try{
+    const id = req.userId;
+    let user = await User.findById(id);
+    // Remove push notifications
+    user[vapidSubscription] = null;
+    user.save();
+
+
     res
       .clearCookie("ar-session")
       .clearCookie("ar-session.sig");
@@ -260,6 +271,31 @@ export const deleteCookie = async (req,res) => {
   }
 };
 
+<<<<<<< HEAD
+// Sends back the public VAPID key to be used for push notifications
+export const getVAPID = async (req,res) => {
+  res.send(process.env.VAPID_PUBLIC_KEY);
+}
+
+// Saves the endpoint to send push notifications to for users.
+export const saveVAPIDSubscription = async (req,res) => {
+  try {
+    const id = req.userId;
+    let user = await User.findById(id);
+
+    var data = req.body;
+
+    // Set data
+    user['vapidSubscription'] = data['vapidSubscription'];
+    // Save data
+    let savedUser = await user.save();
+    res.status(200).json({ data: savedUser });
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+
+}
+=======
 /**
  * deletes the cookies associated with the user to sign them out
  * @param {req} req request contains no information
@@ -288,3 +324,4 @@ export const loggedIn = async (req,res) => {
 };
 
 
+>>>>>>> 26-polish-frontend-backend

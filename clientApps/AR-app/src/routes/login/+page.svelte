@@ -6,8 +6,11 @@
 
      // For notifications
     import { toast } from '@zerodevx/svelte-toast';
+<<<<<<< HEAD
+=======
     import { currentUserStore } from '../stores.js';
 
+>>>>>>> 26-polish-frontend-backend
     /*  Function to display all names in db, used during testing
     async function loadNames() {
         await fetch("http://localhost:3000/user")
@@ -71,7 +74,11 @@
             else
             {
                 toast.push("Signed in.");
+<<<<<<< HEAD
+                localStorage.setItem("loggedIn",true);
+=======
                 currentUserStore.set(userName);
+>>>>>>> 26-polish-frontend-backend
                 goto('/tags')
             }
             

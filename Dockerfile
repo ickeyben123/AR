@@ -8,6 +8,11 @@ EXPOSE 3000
 #EXPOSE 8080
 #ENV HOST=0.0.0.0
 ENV PORT 4000
+
+# Keys to be used for push notifications
+ENV VAPID_PRIVATE_KEY N4Vecr8JHqzJ5Kshn_hNiXJOvkl2EemerWDw7ApxtZU
+ENV VAPID_PUBLIC_KEY BKmeVg3aQYH_u3_lNt0S5_HDAyNmxF-BXroga4R2h5-CjeEg0XPIrK53_n_a3mEWUd1Pk3ghi93uk7kbH568TFI
+
 EXPOSE 4000
 
 RUN cd /tmp && mkdir frontend && mkdir backend
