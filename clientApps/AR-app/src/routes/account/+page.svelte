@@ -12,6 +12,7 @@
             Update Email
         </button>
     </div>
+
     <div class = "buttons">
         <button on:click={sendToUpdatePassword}>
             Update password
@@ -24,7 +25,9 @@
         </button>
     </div> 
 
-
+    <!--
+        Brings up a model, to confirm User wnats to delete user
+    -->
     <Modal bind:showModal={showDelete}>
         <h2>Delete User</h2>
         <h3>Are You Sure You Want To Delete This User?</h3>
@@ -36,16 +39,20 @@
 	import { get_root_for_style } from 'svelte/internal';
     import {goto} from '$app/navigation';
     import { toast } from '@zerodevx/svelte-toast';
+    import { currentUserStore } from '../stores.js';
 
     let showDelete = false;
     
     import Modal from '../Modal.svelte';
 
+    // set location to the page for updating email
     function sendToUpdateEmail(){
-        window.location.href = "/update_email";
+        goto("/update_email");
     }
+
+    // set location to the page for password email
     function sendToUpdatePassword(){
-        window.location.href = "/update_password";
+        goto("/update_password");
     }
 
 
@@ -58,10 +65,15 @@
         //delete a cookie, then go back to home pagetoken
 
         //document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+<<<<<<< HEAD
         const response = await fetch(window.location.origin + "/api/user/signOut",{
+=======
+        const response = await fetch(window.location.origin + "/api/user/logout",{
+>>>>>>> 26-polish-frontend-backend
             method: 'POST',
             credentials: 'include'
         });
+        currentUserStore.set("Not Logged In!");
         //go back to home page
         goto("/"); 
     }
@@ -76,7 +88,6 @@
         });
         sendToSignOut();
         //window.location.reload();
-    
     }
     
 </script>

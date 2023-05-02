@@ -1,6 +1,6 @@
 <script>
-    let name = '';
-    let pass = '';
+    let userName = '';
+    let password = '';
     let email = '';
 	let n;
     import * as validation from '$lib/validation.js';
@@ -10,12 +10,14 @@
     import { toast } from '@zerodevx/svelte-toast';
 
     async function signUp() {
-        var errors = validation.validatePassword(pass);
+        var errors = validation.validatePassword(password);
+
         if(errors != ""){
             toast.push(errors);
             return;
-        }  
-        
+        } 
+
+        // send request to add new user to database.
         const res = await fetch(window.location.origin + "/api/user", 
         {
             method:'POST',
@@ -24,12 +26,27 @@
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'},
             body: JSON.stringify({
-                "userName": name,
+                "userName": userName,
                 "email": email,
-                "password" : pass
+                "password" : password
              })
         })
 
+        res.json().then(data => {
+            console.log(JSON.stringify(data));
+            const resp = JSON.stringify(data);
+            if(res.status!=200){
+                toast.push(data['message']);
+            }
+            else
+            {
+                toast.push("Signed up.");
+                goto('/login')
+            }
+            
+        });
+        
+        // send notification about the details of the response.
         if(res.status != 200){
             toast.push(res.body);
         }
@@ -38,59 +55,63 @@
     }
 
 </script>
-    
 
-
-<body>
-        <div class = "content">
-            
+    <div class = "content">
+        
+        <div class="inputbox">
             <div class="title">
-                <h1>Please Sign Up</h1>
+                <h1>Sign Up</h1>
             </div>
-    
+
             <div class ="input">
-                <input bind:value={name} placeholder = Name><br>
-                <input bind:value={email} placeholder = Email><br>
-                <input type="password" bind:value={pass} placeholder = Password><br>
+                Username<br>
+                <input bind:value={userName}><br>
+                Email<br>
+                <input bind:value={email}><br>
+                Password<br>
+                <input type="password" bind:value={password}><br>
             </div>
-            
-            <div class = "buttons">
+            <br>
+            <div class = "buttons" style="width:85%;">
                 <button on:click={signUp}>
                     Sign Up
                 </button>
             </div>
-    
-        </div>	
+        </div>
+
+    </div>	
         
-</body>
+
     
 
 <style>
-        .content {
-            max-width: 500px;
-            margin: auto;
-            background: white;
-            text-align: center;
-            padding: 10px;
-        }
-        .title {
+    .inputbox {
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        padding: 5px;
+    }
+    .content {
+        max-width: 500px;
+        margin: auto;
+        background: white;
         text-align: center;
+        padding: 10px;
+    }
+    .title {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 50px;   
+    }
+    .input {
+        position:sticky;
+        margin: auto;
         vertical-align: middle;
-        line-height: 90px;   
-        }
-        .input {
-            position:sticky;
-            margin: auto;
-            width: 100%;
-            vertical-align: middle;
-            text-align: centre;
-            padding: 10px;
-        }
-        .buttons {
-            position: sticky;
-            margin: auto;
-            width: 25%;
-    
-        }
-    
+        text-align: centre;
+        padding: 10px;
+    }
+    .buttons {
+        position: sticky;
+        margin: auto;
+        width: 40%;
+        
+    }
 </style>

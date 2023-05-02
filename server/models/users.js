@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
 
-    // array of roles
+    // array of roles that the user can have
     roles : [{
         type : mongoose.Schema.Types.ObjectId,
         ref: "Role" // It references a Role object

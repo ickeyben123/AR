@@ -1,9 +1,21 @@
 <script>
+    import { toast } from '@zerodevx/svelte-toast';
     let confirmEmail;
     let email; 
 
     async function submitEmailChange(){
-        if(checkIfSame()){
+        if(confirmEmail = email){
+
+            if(!String(email)
+                .toLowerCase()
+                .match(
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                )){
+                toast.push("Invalid Email!");
+                return;
+            }
+            // if emails are same then send request to change emails.
+            toast.push("Changing Email..");
             let response = await fetch(window.location.origin + "/api/user/email", {
                 method: 'PUT',
                 credentials: 'include',
@@ -15,29 +27,43 @@
                     "email":email,
                 }
                 )
-            })
+            });
+            toast.push("Done!");
         } else {
+            // todo: maybe change this to notification
+            // alert user that emails dont match.
             console.log("emails don't match");
-            let matchingEmailsDiv = document.getElementById("matchingEmails"); 
-            matchingEmailsDiv.textContent = "Emails need to be matching!";
+            toast.push("Emails do not match!");
         }
     } 
-
-    function checkIfSame(){
-        return confirmEmail == email;
-    }
 </script>
 
-<body>
-    <div class ="input">
-        <input bind:value={email} placeholder = "email"><br>
-        <input bind:value={confirmEmail} placeholder="confirm email">
-    </div>
-    <div class ="buttons">
-        <button on:click={submitEmailChange}>
-            Submit
-        </button>
+
+    <div class="inputbox">
+        <div class ="input">
+            <h2 style="text-align:center ">Enter the new Email</h2>
+            <input bind:value={email} placeholder = "Email"><br>
+            <input bind:value={confirmEmail} placeholder="Confirm Email">
+        </div>
+
+        <div class ="buttons">
+            <button on:click={submitEmailChange}>
+                Submit
+            </button>
+        </div>
     </div>
 
-   <label id="matchingEmails"></label> 
-</body>
+    <label id="matchingEmails"></label> 
+
+<style>
+    .inputbox {
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        padding: 5px;
+    }
+
+    .input {
+        padding-top: 10px;
+        display: grid;
+        grid-auto-rows: 1;
+    }
+</style>

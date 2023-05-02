@@ -1,15 +1,14 @@
-//const mongoose = require("mongoose");
 import mongoose from 'mongoose';
 
 
 const tagSchema = new mongoose.Schema({
 
-    required :["coords"],
+    required :["coords"], //coordinates are required
     tagName: {
         type: String,
         required: true
     },
-    description: {
+    description: { //describe what the tag is
         type: String,
     },
     icon: {
@@ -21,7 +20,7 @@ const tagSchema = new mongoose.Schema({
          elevation: "number",
     },
 
-    placed: {
+    placed: { //tag can either be in a placed down state or picked up
         type: Boolean,
         required: true
     },
@@ -33,7 +32,7 @@ const tagSchema = new mongoose.Schema({
         type: Boolean
     },
 
-    owner: {
+    owner: {//specifies the objecId of the user that owns this tag
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: "users"

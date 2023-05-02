@@ -1,10 +1,16 @@
 <script>
     import {goto} from '$app/navigation';
-    let name = '';
-    let pass = '';
+    // supposed to be userName but had to change to username otherwise it will be confusing.
+    let userName = '';
+    let password = '';
 
      // For notifications
     import { toast } from '@zerodevx/svelte-toast';
+<<<<<<< HEAD
+=======
+    import { currentUserStore } from '../stores.js';
+
+>>>>>>> 26-polish-frontend-backend
     /*  Function to display all names in db, used during testing
     async function loadNames() {
         await fetch("http://localhost:3000/user")
@@ -21,15 +27,16 @@
         }
     */
 
+    // basic sanitation of name and pass.
     function logIn() {
 
-        if(name == '' || pass == '')
+        if(userName == '' || password == '')
         {
             toast.push("Invalid Entry");
             return;
         }
-        console.log(name);
-        console.log(pass);
+        console.log(userName);
+        console.log(password);
         loginReq();
     }
 
@@ -38,14 +45,11 @@
         
 
         var req = {
-            "userName": name,
-            "password": pass
+            "userName": userName,
+            "password": password
         }
-
-        console.log(JSON.stringify({userName: "xxx", password: "yyy"}));
-        console.log(JSON.stringify(req));
    
-
+        // query database for username and password.
         const response = await fetch(window.location.origin + "/api/user/login",
         {
             method: 'POST',
@@ -60,90 +64,92 @@
             
         });
 
+        // response to response, check if username and password have been validated by backend.
         response.json().then(data => {
             console.log(JSON.stringify(data));
             const resp = JSON.stringify(data);
-            if(resp == '{"message":"User Not found."}'){
-                toast.push("Incorrect Login Entered.");
+            if(response.status!=200){
+                toast.push(data['message']);
             }
             else
             {
                 toast.push("Signed in.");
+<<<<<<< HEAD
                 localStorage.setItem("loggedIn",true);
+=======
+                currentUserStore.set(userName);
+>>>>>>> 26-polish-frontend-backend
                 goto('/tags')
             }
             
         });
+        
 
     }
+</script>
 
-    </script>
-    
-    <body>
-        <div class = "content">
-            
+    <div class = "content">
+        
+        <div class="inputbox">
             <div class="title">
                 <h1>Please Log In</h1>
             </div>
-    
-            <div class ="input">
-                <input bind:value={name} placeholder = Name><br>
-                <input type="password" bind:value={pass} placeholder = Password><br>
+
+            <div class ="input" style="text-align:left; ">
+                Username<br>
+                <input bind:value={userName}><br>
+                Password<br>
+                <input type="password" bind:value={password}><br>
             </div>
-            
-            <div class = "buttons">
+            <br>
+            <div class = "buttons" style="width:85%">
                 <button on:click={logIn}>
                     Log In
                 </button>
             </div>
-            
-            <div class="title">
-                <h1>----- OR -----</h1>
+        
+            <div style="color:lightblue;">
+                &#8212 &#8212 or &#8212 &#8212
             </div>
             
-            <div class = "buttons">
+            <div class = "buttons" style="width:85%;">
                 <button on:click={() => goto('/signup')}>
                     Sign Up
                 </button>
             </div>
-    
         </div>
-        
-        <!-- Used with loadNames()
-        {#each names as unName}
-            <p>{unName.userName}</p>
-        {/each}
-        -->
-        
-        
-    </body>
+
+    </div>
     
-    <style>
-        .content {
-            max-width: 500px;
-            margin: auto;
-            background: white;
-            text-align: center;
-            padding: 10px;
-        }
-        .title {
+<style>
+    .inputbox {
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        padding: 5px;
+    }
+
+    .content {
+        max-width: 500px;
+        margin: auto;
+        background: white;
         text-align: center;
+        padding: 10px;
+    }
+    .title {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 50px;   
+    }
+    .input {
+        position:sticky;
+        margin: auto;
         vertical-align: middle;
-        line-height: 90px;   
-        }
-        .input {
-            position:sticky;
-            margin: auto;
-            width: 100%;
-            vertical-align: middle;
-            text-align: centre;
-            padding: 10px;
-        }
-        .buttons {
-            position: sticky;
-            margin: auto;
-            width: 25%;
-    
-        }
-    
-    </style>
+        text-align: centre;
+        padding: 10px;
+    }
+    .buttons {
+        position: sticky;
+        margin: auto;
+        width: 40%;
+        
+    }
+</style>

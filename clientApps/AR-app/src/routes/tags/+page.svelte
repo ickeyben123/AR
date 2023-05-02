@@ -1,5 +1,4 @@
 <script>
-
     /*
     Emoji Reference
     Medicine - &#128138
@@ -16,9 +15,10 @@
     import { toast } from '@zerodevx/svelte-toast';
 
     let showAddTags = false, showEditTags = false, showDeleteTags = false, reCreate=false, showError=false, showPlaced=false;
-    var tagData = {tagName:"Default"}, coords={}, tagDelete = {tagId:null};
+    var tagData = {tagName:""}, coords={}, tagDelete = {tagId:null};
 
     let errorMessage = "";
+
 
     // Get data from page.js. Handled via Svelte.
     /** @type {import('./$types').PageData} */  
@@ -127,8 +127,14 @@
 
     // Gets the location of the user via geolocation and then executes the function func, parsing the location as the first parameter.
     function getGeoLocation(func){
+             const options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0,
+             };
+
              if(navigator.geolocation){
-                navigator.geolocation.getCurrentPosition(func,errorGeoLocation);//send the geolocation data to another function
+                navigator.geolocation.getCurrentPosition(func,errorGeoLocation,options);//send the geolocation data to another function
             } else{
                 //this is if the browser doesnt support geolocation, do pop up message or something
                 errorMessage = "Your browser does not support geo";
@@ -162,8 +168,7 @@
             next: 0.2,
             dismissable: false
             })
-
-
+            
             getGeoLocation(async (position)=> {
                 setTagLocation(position);
 
@@ -203,7 +208,7 @@
     function errorGeoLocation(error){
         switch(error.code) {
             case error.PERMISSION_DENIED:
-                error = "User denied the request for Geolocation";
+                error = "Unable to add, user denied the request for Geolocation";
                 break;
             case error.POSITION_UNAVAILABLE:
                 error = "Location information is unavailable";
@@ -215,7 +220,9 @@
                 error = "An unknown error occurred";
                 break;
         }
-        tagData = {tagName:"Default"};//resetting the tagData without having to reload page
+        tagData = {tagName:""};//resetting the tagData without having to reload page
+        errorMessage = error;
+        toast.pop(0);
         showError = true;
     }
 
@@ -243,23 +250,32 @@
 
     function submitInfo() {
         console.log(tagData.tagName);
+        if(tagData.tagName == ""){
+            toast.push('Please include a tag name!',{ classes: ['error'] });
+            showAddTags = false;
+            return;
+        }
         showAddTags = false;
         newTag();
     }
+    onMount(() => {
+        if(tags[0]){
+            tags[0].active=true;
+        }
 
+	});
 
 </script>
 
 
 
 
-<body>
 
 
     <!-- Title for Tags page -->
-<div class="title">
-    <h1>Your Tags</h1>
-</div>
+    <div class="title">
+        <h1>Your Tags</h1>
+    </div>
 
 <!-- /////////// -->
 <!-- TAG DISPLAY -->
@@ -268,6 +284,7 @@
 <!-- Conditional that it only shows tags if the data has loaded -->
     <!-- Goes through each tag in the fetched tags of the user to create
         tag items for manipulation  -->
+    <div class="margin">
         {#each tags || [] as tag }
             <div class="accordionPanel">
                 <!-- Key specifies a part of the html that can be made to 'reload' when
@@ -296,23 +313,24 @@
                             </p>
                         {/key}
                         {#if tag.placed}
-                        <button on:click={() => viewTag(tag)}>Find</button>
+                        <button class="menuButton" on:click={() => viewTag(tag)}>Find</button>
                         {/if}
                         {#if !tag.placed}
-                         <button on:click={() => placeTag(tag)}>Place</button>
+                            <button class="menuButton" on:click={() => placeTag(tag)}>Place</button>
                         {/if}
-                        <button on:click={() => editTag(tag)}>Edit</button>
-                        <button on:click={() => deleteTag(tag)}>Delete</button>
+                        <button class="menuButton" on:click={() => editTag(tag)}>Edit</button>
+                        <button class="menuButton" on:click={() => deleteTag(tag)}>Delete</button>
 
                     </div>
                 {/if}
             </div>
         {/each}
+    </div>
 
-<div class="bottom">
-    <!-- Button to create a tag at the bottom of the page -->
-<button class="bottomButton" on:click={() =>createNewTag()}>Create Tag +</button>
-</div>
+    <div class="bottom">
+        <!-- Button to create a tag at the bottom of the page -->
+        <button class="bottomButton" on:click={() =>createNewTag()}>Create Tag +</button>
+    </div>
 
 <!-- ////// -->
 <!-- MODALS -->
@@ -325,15 +343,15 @@
 <Modal bind:showModal={showAddTags}>
     <div class="title">
         <h2>Enter Tag Name</h2>
-        <input bind:value={tagData.tagName} placeholder = Name><br>
+        <input bind:value={tagData.tagName} placeholder = "Please enter a tag name"><br>
         <h2>Enter Tag Description</h2>
         <input bind:value={tagData.description} placeholder = Empty><br>
         <h2>Select Tag Type</h2>
         <div id="iconBtns">
-            <button class="menuButtonV2 {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
-            <button class="menuButtonV2 {tagData.icon === "2" ? 'active' : ''}" on:click={() => (tagData.icon = "2")}>&#128273</button>
-            <button class="menuButtonV2 {tagData.icon === "3" ? 'active' : ''}" on:click={() => (tagData.icon = "3")}>&#128091</button>
-            <button class="menuButtonV2 {tagData.icon === "4" ? 'active' : ''}" on:click={() => (tagData.icon = "4")}>&#11088</button>
+            <button class="selectButton {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
+            <button class="selectButton {tagData.icon === "2" ? 'active' : ''}" on:click={() => (tagData.icon = "2")}>&#128273</button>
+            <button class="selectButton {tagData.icon === "3" ? 'active' : ''}" on:click={() => (tagData.icon = "3")}>&#128091</button>
+            <button class="selectButton {tagData.icon === "4" ? 'active' : ''}" on:click={() => (tagData.icon = "4")}>&#11088</button>
         </div><br>
         <button class="menuButton" on:click ={() =>submitInfo()}>Submit</button>
     </div>
@@ -353,17 +371,17 @@
         <input bind:value={coords.longitude} placeholder = Empty><br>
         <h2>Change Tag Type</h2>
         <div id="iconBtnsEdit">
-            <button class="menuButtonV2 {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
-            <button class="menuButtonV2 {tagData.icon === "2" ? 'active' : ''}" on:click={() => (tagData.icon = "2")}>&#128273</button>
-            <button class="menuButtonV2 {tagData.icon === "3" ? 'active' : ''}" on:click={() => (tagData.icon = "3")}>&#128091</button>
-            <button class="menuButtonV2 {tagData.icon === "4" ? 'active' : ''}" on:click={() => (tagData.icon = "4")}>&#11088</button>
+            <button class="selectButton {tagData.icon === "1" ? 'active' : ''}" on:click={() => (tagData.icon = "1")}>&#128138</button>
+            <button class="selectButton {tagData.icon === "2" ? 'active' : ''}" on:click={() => (tagData.icon = "2")}>&#128273</button>
+            <button class="selectButton {tagData.icon === "3" ? 'active' : ''}" on:click={() => (tagData.icon = "3")}>&#128091</button>
+            <button class="selectButton {tagData.icon === "4" ? 'active' : ''}" on:click={() => (tagData.icon = "4")}>&#11088</button>
         </div><br>
         <button class="menuButton" on:click ={() =>submitEdit()}>Submit</button>
     </div>
 </Modal>
 
 <Modal bind:showModal={showError}>
-    <h2 style="color: red;">{errorMessage}</h2>
+    <h2 style="color: #FF3535;">{errorMessage}</h2>
 </Modal>
 
 
@@ -389,7 +407,6 @@
 {/if}
 
 
-</body>
 
 <style>
    .title {
@@ -399,19 +416,24 @@
     }
 
     .bottom{
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    color: white;
-    text-align: center;
+        width: 100%;
+        flex: 0 0 50px;/*or just height:50px;*/
+        margin-top: auto;
+        color: white;
+        text-align: center;
+    }
+
+
+    
+    .margin{
+        margin-bottom: 0px;
     }
 
 
     .bottomButton {
-        margin-top:5%;
+
         font-size: large;
-        background-color: rgb(219, 238, 255);
+        
         border-radius: 4px;
         outline: none;
         font-size: larger;
@@ -420,21 +442,33 @@
     }
 
     .menuButton {
-        margin-top:5%;
+       
         font-size: large;
-        background-color: rgb(219, 238, 255);
         border-radius: 4px;
         outline: none;
         font-size: larger;
         width: 100%;
-        max-width: 800px;
+        max-width: 200px;
     }
-
-    .menuButton:hover {
-        background-color: rgb(103, 132, 156);
+    button:hover {
+        background-color: #79b9e7;
         color:white;
         transition-duration: 0.4s;
     }
+
+    .selectButton {
+     
+        font-size: large;
+        background-color: rgb(219, 238, 255);
+        color: black;
+        border-radius: 4px;
+        outline: none;
+        font-size: larger;
+        width: 40%;
+        max-width: 800px;
+    }
+
+
     .active {
         background-color: rgb(61, 114, 158);
         color:white;
@@ -447,11 +481,13 @@
         max-width: 800px;
         margin: auto;
         text-align: centre;
+        margin-bottom: 0px;
     }
     .accordionButton {
         width: 100%;
         display:block;
         background-color: aliceblue;
+        color:black;
         border-radius: 4px;
         text-align: center;
         outline:none;
@@ -472,5 +508,6 @@
         text-align: center;
         background-color:rgb(232, 232, 232);
         border-radius: 4px;
+        margin-bottom: 10px;
     }
 </style>
