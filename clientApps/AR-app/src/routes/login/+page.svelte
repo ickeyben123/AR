@@ -100,7 +100,7 @@
                     Log In
                 </button>
             </div>
-        
+            <br>
             <div style="color:lightblue;">
                 &#8212 &#8212 or &#8212 &#8212
             </div>

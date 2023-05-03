@@ -13,13 +13,14 @@ once more all 3 libraries have been loaded in.
     <script 
       type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'
       on:load={loadComponent}></script>
-      <script 
-      type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'
-      on:load={loadComponent}></script>
+
+      
 </head>
 
 <script>
   import { onMount } from "svelte";
+  import { toast } from '@zerodevx/svelte-toast';
+  import * as THREEx from '@ar-js-org/ar.js/three.js/build/ar-threex-location-only.js'
 
   /** @type {import('./$types').PageData} */  
   export let data;
@@ -30,10 +31,11 @@ once more all 3 libraries have been loaded in.
   let mounted = false;
   let componentLoaded = 0;
   let altitude = 3; 
+  let dist = 0;
 
   // Once the 3 components of our program are loaded ready is set to True
   // which will lead to AR being loaded
-  $: ready = componentLoaded == 3;
+  $: ready = componentLoaded == 2;
 
   
   const loadComponent = () => {
@@ -51,8 +53,8 @@ once more all 3 libraries have been loaded in.
     console.log(item.coords.latitude);
     console.log(item.coords.longitude);
     
-    item.coords.latitude = item.coords.latitude+0.0005;
-    item.coords.longitude = item.coords.longitude+0.0005;
+    item.coords.latitude = item.coords.latitude+0.0001;
+    item.coords.longitude = item.coords.longitude+0.0001;
 
     // parse lat and long into a usable string format.
     latitude = item.coords.latitude.toString();
@@ -69,6 +71,8 @@ once more all 3 libraries have been loaded in.
     tagId = urlParams.get('tagId')
     updateLatLong();
     mounted=true;
+
+    id = navigator.geolocation.watchPosition(success, error, options);
   });
 
   async function setNotPlaced(){
@@ -95,6 +99,33 @@ once more all 3 libraries have been loaded in.
     window.location.href = "/tags"
   }
 
+  let id;
+let target;
+let options;
+
+function success(pos) {
+  const crd = pos.coords;
+
+  toast.push("Congratulations, you reached the target" + (dist));
+}
+
+function error(err) {
+  console.error(`ERROR(${err.code}): ${err.message}`);
+}
+
+target = {
+  latitude: 0,
+  longitude: 0,
+};
+
+options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0,
+};
+
+
+
 
   </script>
 
@@ -118,12 +149,14 @@ true and a-scene will be loaded in.
         tracked by gps
         gpsMinDistance is the minumum distance in metres you need to move before ar is updated
       -->
-      <a-camera gps-new-camera='gpsMinDistance: 1; positionMinAccuracy: 20'></a-camera>
 
+  <a-camera id='camera1' look-controls-enabled='true' arjs-device-orientation-controls='smoothingFactor: 0.1' gps-new-camera='gpsMinDistance: 1'> </a-camera>
       <!--
         place an entity repersenting the tag on the screen with appropriate lat and long
       -->
       <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: {latitude}; longitude: {longitude}" scale="10 10 10"></a-entity>
+
+    
     </a-scene>
     </div>
 {/if}
