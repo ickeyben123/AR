@@ -104,6 +104,7 @@
             <div style="color:lightblue;">
                 &#8212 &#8212 or &#8212 &#8212
             </div>
+            <br>
             
             <div class = "buttons" style="width:85%;">
                 <button on:click={() => goto('/signup')}>
