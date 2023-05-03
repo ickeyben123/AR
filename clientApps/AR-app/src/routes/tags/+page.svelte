@@ -129,7 +129,7 @@
     // Gets the location of the user via geolocation and then executes the function func, parsing the location as the first parameter.
     function getGeoLocation(func){
              const options = {
-                enableHighAccuracy: true,
+                enableHighAccuramincy: true,
                 timeout: 5000,
                 maximumAge: 0,
              };

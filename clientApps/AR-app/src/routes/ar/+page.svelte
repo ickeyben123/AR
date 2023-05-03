@@ -125,7 +125,7 @@ function main() {
    //arjs.setGpsOptions(options={gpsMinAccuracy: 1, gpsMinAccuracy : 20})
 
     // You can change the minimum GPS accuracy needed to register a position - by default 1000m
-    const arjs = new THREEx.LocationBased(scene, camera, { gpsMinAccuracy: 1, gpsMinAccuracy : 20 } );
+    const arjs = new THREEx.LocationBased(scene, camera );
     const cam = new THREEx.WebcamRenderer(renderer, '#video1');
 
     const mouseStep = THREE.MathUtils.degToRad(5);
@@ -219,7 +219,7 @@ function main() {
     function setupObjects(longitude, latitude) {
         // Use position of first GPS update (fake or real)
         const material = new THREE.MeshBasicMaterial({color: 0xffff00});
-        arjs.add(new THREE.Mesh(geom, material), longitude, latitude - 0.0001); // slightly south
+        arjs.add(new THREE.Mesh(geom, material), longitude, latitude - 0.0005); // slightly south
     }
 
     requestAnimationFrame(render);
@@ -257,4 +257,3 @@ main();
       Pickup Tag
     </button>
   </div>
-

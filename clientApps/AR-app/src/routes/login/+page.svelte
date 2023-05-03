@@ -121,13 +121,6 @@
         padding: 5px;
     }
 
-    .content {
-        max-width: 500px;
-        margin: auto;
-        background: white;
-        text-align: center;
-        padding: 10px;
-    }
     .title {
     text-align: center;
     vertical-align: middle;
