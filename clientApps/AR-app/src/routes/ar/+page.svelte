@@ -121,10 +121,11 @@ function main() {
 
     const geom = new THREE.BoxGeometry(20,20,20);
 
-    //const arjs = new THREEx.LocationBased(scene, camera);
+  //const arjs = new THREEx.LocationBased(scene, camera);
+   //arjs.setGpsOptions(options={gpsMinAccuracy: 1, gpsMinAccuracy : 20})
 
     // You can change the minimum GPS accuracy needed to register a position - by default 1000m
-    const arjs = new THREEx.LocationBased(scene, camera, { gpsMinAccuracy: 15 } );
+    const arjs = new THREEx.LocationBased(scene, camera, { gpsMinAccuracy: 1, gpsMinAccuracy : 20 } );
     const cam = new THREEx.WebcamRenderer(renderer, '#video1');
 
     const mouseStep = THREE.MathUtils.degToRad(5);
@@ -217,14 +218,8 @@ function main() {
 
     function setupObjects(longitude, latitude) {
         // Use position of first GPS update (fake or real)
-        const material = new THREE.MeshBasicMaterial({color: 0xff0000});
-        const material2 = new THREE.MeshBasicMaterial({color: 0xffff00});
-        const material3 = new THREE.MeshBasicMaterial({color: 0x0000ff});
-        const material4 = new THREE.MeshBasicMaterial({color: 0x00ff00});
-        arjs.add(new THREE.Mesh(geom, material), longitude, latitude + 0.001); // slightly north
-        arjs.add(new THREE.Mesh(geom, material2), longitude, latitude - 0.001); // slightly south
-        arjs.add(new THREE.Mesh(geom, material3), longitude - 0.001, latitude); // slightly west
-        arjs.add(new THREE.Mesh(geom, material4), longitude + 0.001, latitude); // slightly east
+        const material = new THREE.MeshBasicMaterial({color: 0xffff00});
+        arjs.add(new THREE.Mesh(geom, material), longitude, latitude - 0.0001); // slightly south
     }
 
     requestAnimationFrame(render);
