@@ -14,7 +14,7 @@ self.addEventListener("install", (event) => {
     // Double check the push event
     console.log("received");
       event.waitUntil(
-        self.registration.showNotification("Don't forget to place your tags!!", {
+        self.registration.showNotification("Don't forget to place your tags!", {
           body: "Tag '" + event.data.text() + "' has not been placed again!",
         })
       );
