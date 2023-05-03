@@ -254,7 +254,7 @@ export const deleteCookie = async (req,res) => {
     const id = req.userId;
     let user = await User.findById(id);
     // Remove push notifications
-    user[vapidSubscription] = null;
+    user['vapidSubscription'] = null;
     user.save();
 
 
