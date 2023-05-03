@@ -62,7 +62,7 @@
 		}
 	});
 
-	$: if (sub && localStorage.getItem("loggedIn")) {
+	$: if (sub && localStorage.getItem("userName") != "Not Logged In!") {
 		fetch("/api/user/subscribe", {
 			body: JSON.stringify({ vapidSubscription: sub.toJSON() }),
 			credentials: 'include',
