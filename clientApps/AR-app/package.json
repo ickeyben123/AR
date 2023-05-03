@@ -15,7 +15,8 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"dependencies": {
-        "@ar-js-org/ar.js": "^3.4.5"
+        "@ar-js-org/ar.js": "^3.4.5",
+		"three": "^0.152.2"
     },
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
