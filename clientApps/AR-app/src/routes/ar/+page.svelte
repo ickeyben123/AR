@@ -113,7 +113,7 @@ options = {
 
 
 function main() {
-  const canvas = document.getElementById('canvas1');
+ const canvas = document.getElementById('canvas1');
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, 1.33, 0.1, 10000);
@@ -130,8 +130,7 @@ const box = new THREE.Mesh(geom, mtl);
 const deviceOrientationControls = new THREEx.DeviceOrientationControls(camera);
 
 // Change this to a location close to you (e.g. 0.001 degrees of latitude north of you)
-arjs.add(box,  longitude, latitude + 0.001); 
-console.log("hi?" + longitude);
+arjs.add(box, longitude, latitude+0.001); 
 
 arjs.startGps();
 
