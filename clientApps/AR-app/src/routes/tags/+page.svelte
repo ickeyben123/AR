@@ -9,6 +9,7 @@
 
     import {slide} from 'svelte/transition';
     import Modal from '../Modal.svelte';
+    import { onMount } from 'svelte';
     import { invalidate, invalidateAll } from '$app/navigation';
 
     // For notifications
