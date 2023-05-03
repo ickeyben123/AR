@@ -28,11 +28,12 @@
 <script>
 	import '../global.css'
 	import {slide} from 'svelte/transition';
-	import { onMount } from "svelte";
 
 	//Notifications
-<<<<<<< HEAD
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast'
+	import { onMount } from "svelte";
+	import { getCookie } from 'svelte-cookie';
+	import { currentUserStore } from './stores.js';
 
 	let navMenuActive = false
 	var sub;
@@ -71,13 +72,6 @@
 			method: "POST",
 		});
 	}
-=======
-	import { SvelteToast } from '@zerodevx/svelte-toast';
-	import { onMount } from "svelte";
-	import { getCookie } from 'svelte-cookie';
-	import { currentUserStore } from './stores.js';
-
-	let navMenuActive = false
 
 
 	let currentUser = "";
@@ -94,7 +88,6 @@
 	});
 
 
->>>>>>> 26-polish-frontend-backend
 </script>
 
 <slot></slot>
