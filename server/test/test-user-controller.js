@@ -131,10 +131,10 @@ describe("Users", () => {
   });
 
   it("User can delete itself", async () => {
-    const res = await agent.delete("/");
+    const res = await agent.delete("/user");
+    await agent.post("/user/cookie");
     res.should.have.status(200);
     let user = await User.findOne({ userName: "test_admin_user" });
-    console.log(user); // remove
     chai.expect(user).to.be.null;
   });
 
