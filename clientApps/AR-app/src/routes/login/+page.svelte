@@ -72,6 +72,7 @@
             {
                 toast.push("Signed in.");
                 currentUserStore.set(userName);
+                localStorage.new = true;
                 goto('/tags')
             }
             
@@ -83,12 +84,12 @@
 
     <div class = "content">
         
-        <div class="inputbox">
+        <div class="inputbox centre">
             <div class="title">
                 <h1>Please Log In</h1>
             </div>
 
-            <div class ="input" style="text-align:left; ">
+            <div class ="input">
                 Username<br>
                 <input bind:value={userName}><br>
                 Password<br>
@@ -118,7 +119,9 @@
 <style>
     .inputbox {
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-        padding: 5px;
+        padding: 10px;
+        width: 300px;
+        height:100%;
     }
 
     .title {

@@ -40,7 +40,7 @@
             }
             else
             {
-                toast.push("Signed up.");
+                toast.push("Signed up. Please login with your previously entered details.");
                 goto('/login')
             }
             
@@ -58,7 +58,7 @@
 
     <div class = "content">
         
-        <div class="inputbox">
+        <div class="inputbox centre">
             <div class="title">
                 <h1>Sign Up</h1>
             </div>
@@ -87,14 +87,9 @@
 <style>
     .inputbox {
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-        padding: 5px;
-    }
-    .content {
-        max-width: 500px;
-        margin: auto;
-        background: white;
-        text-align: center;
         padding: 10px;
+        width: 300px;
+        height:100%;
     }
     .title {
     text-align: center;

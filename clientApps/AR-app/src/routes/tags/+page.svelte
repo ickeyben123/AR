@@ -106,7 +106,8 @@
         rerunLoadFunction();
 
     }
-    // called to delete a tag after confirmation that the user wants it deleted
+
+    // Called to delete a tag after confirmation that the user wants it deleted
     async function submitDelete(){
         var tagId = tagDelete.tagId;//get the tag ID
 
@@ -121,8 +122,8 @@
         window.location.reload();
     }
 
+    // Shows the add tag modal
     function createNewTag() {
-        console.log("You made a new tag!");
         showAddTags = true;
     }
 
@@ -143,6 +144,7 @@
             }
     }
 
+    // Called when the user confirms they want to place a tag. Gets geo location to then set the tag's location data.
     async function placeTagViaGeoLocation() {
         console.log("You placed tag " + tagData._id + "!");
         showPlaced = false;
@@ -192,6 +194,7 @@
         }
     }
     
+    // Shows the place tag modal.
     function placeTag(tag){
         tagData = tag;
         coords = tagData.coords;
@@ -227,6 +230,7 @@
         showError = true;
     }
 
+    // Shows the edit tag modal
     function editTag(tag) {
         console.log("You edited tag " + tag.id + "!");
         tagData=tag
@@ -235,7 +239,7 @@
     }
 
 
-
+    // Goes to the AR section to view a tag
     function viewTag(tag) {
         window.location.href = "ar?tagId=" + tag._id;
 
@@ -260,7 +264,8 @@
         newTag();
     }
     onMount(() => {
-        if(tags[0]){
+        if(tags[0] && localStorage.getItem("new") == "true"){
+            localStorage.new = false;
             tags[0].active=true;
         }
 
