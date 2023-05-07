@@ -90,12 +90,6 @@ once more all 3 libraries have been loaded in.
 let target;
 let options;
 
-function success(pos) {
-  const crd = pos.coords;
-
-  toast.push("Congratulations, you reached the target" + (dist));
-}
-
 function error(err) {
   console.error(`ERROR(${err.code}): ${err.message}`);
 }
@@ -235,8 +229,6 @@ const urlParams = new URLSearchParams(queryString);
 tagId = urlParams.get('tagId')
 updateLatLong();
 mounted=true;
-
-id = navigator.geolocation.watchPosition(success, error, options);
 main();
 });
 
