@@ -13,7 +13,7 @@ logo. If a user moves an item they can pick their tag up and place it in
 another place which would change the tag's geo-location. 
 
 
-### How to build this project
+## How to build this project
 
 In order to build this project the user needs to install the IBMCloud CLI, and Docker. 
 
@@ -27,15 +27,15 @@ and thus can be set up if you have sufficient docker knowledge.
 
 Do NOT use the latest IBMCloud cli version, as the specific commands used are deprecated.
 
-Command to build the project:
+###Command to build the project:
 
     sudo ibmcloud dev build [--debug]
 
-Command to run the project:
+###Command to run the project:
 
     sudo ibmcloud dev run
 
-Command to test the project:
+###Command to test the project:
 
     sudo ibmcloud dev test
 
