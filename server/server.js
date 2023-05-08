@@ -7,7 +7,9 @@ import cors from 'cors';
 import morgan from 'morgan';
 import Role from './models/roles.js'
 import cookieSession from 'cookie-session';
+import cron from 'node-cron';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import webPush from 'web-push';
 
 import { fileURLToPath } from 'url';
 
@@ -15,6 +17,9 @@ import healthRoutes from './routes/health-route.js';
 import swaggerRoutes from './routes/swagger-route.js';
 import userRoutes from './routes/user-route.js';
 import tagRoutes from './routes/tag-route.js'
+
+import User from './models/users.js'
+import Tag from './models/tags.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -121,5 +126,38 @@ app.use("/", healthRoutes);
 app.use((req, res, next) => {
   res.sendFile(path.join(__dirname, '../public', '404.html'));
 });
+
+
+webPush.setVapidDetails(
+  "http://localhost:3000",
+  process.env.VAPID_PUBLIC_KEY,
+  process.env.VAPID_PRIVATE_KEY
+);
+
+
+// Schedule cron for forgotten tags:
+cron.schedule("*/15 * * * * *", async function () {
+  const users = await User.find();
+  for await (let user of users) {
+    if(user.vapidSubscription != null){
+      var current = new Date().getTime();
+      var tags =  await Tag.find({
+        owner: user._id
+      });
+      for await (let tag of tags) {
+        if(tag.dateModified){
+          var oneDay = tag.dateModified.getTime() + 30* 1000; //(1 * 24 * 60 * 60 * 1000)
+            if (current > oneDay && tag.placed==false && tag.notified==false) {
+              console.log("Sending Push Notififcation");
+              await webPush.sendNotification(user.vapidSubscription, tag.tagName);
+              tag.notified = true;
+              await tag.save();
+            }
+        }
+      }
+    }
+  }
+});
+
 
 export default app;

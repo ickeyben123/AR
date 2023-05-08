@@ -4,7 +4,6 @@ import Tag from '../models/tags.js'
 import Role from '../models/roles.js'
 import jwt from 'jsonwebtoken'
 import jwtconfig from '../config/jwt.js'
-import * as Validation from '../middleware/validation.js'
 
 /**
  * @typedef {Express.Request} req
@@ -40,7 +39,7 @@ export const addUser = async (req, res) => {
         user.roles = Roles.map(role=> role._id); 
       })
     } else {
-      // Add default user role
+      // Add default user roleloggedIn
       const role = await Role.findOne({ name: "user" });
       user.roles = [role._id];
     }
@@ -61,7 +60,7 @@ export const addUser = async (req, res) => {
  */
 export const getUsers = async (req, res) => {
   try {
-    let users = await User.find();
+    let users = await User.find().populate("roles");
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);
@@ -78,7 +77,7 @@ export const getUsers = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const id = req.userId;
-    let user = await User.find({ _id: id });
+    let user = await User.find({ _id: id }).populate("roles");
     res.status(200).json(user);
   } catch (err) {
     res.status(500).json(err);
@@ -112,7 +111,7 @@ export const updateEmail = async (req, res) => {
 
 /**
  * Updates user password in the database of the user with supplied ID
- * @param {request} req contains the user ID and new password
+ * @param {request} req contains the new password
  * @param {response} res returns the JSON data of the user
  */
 export const updatePassword = async (req, res) => {
@@ -252,6 +251,13 @@ export const loginUser = async (req,res) => {
  */
 export const deleteCookie = async (req,res) => {
   try{
+    const id = req.userId;
+    let user = await User.findById(id);
+    // Remove push notifications
+    user['vapidSubscription'] = null;
+    user.save();
+
+
     res
       .clearCookie("ar-session")
       .clearCookie("ar-session.sig");
@@ -260,4 +266,55 @@ export const deleteCookie = async (req,res) => {
     res.status(500).json({ error: err });
   }
 };
+
+// Sends back the public VAPID key to be used for push notifications
+export const getVAPID = async (req,res) => {
+  res.send(process.env.VAPID_PUBLIC_KEY);
+}
+
+// Saves the endpoint to send push notifications to for users.
+export const saveVAPIDSubscription = async (req,res) => {
+  try {
+    const id = req.userId;
+    let user = await User.findById(id);
+
+    var data = req.body;
+
+    // Set data
+    user['vapidSubscription'] = data['vapidSubscription'];
+    // Save data
+    let savedUser = await user.save();
+    res.status(200).json({ data: savedUser });
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+
+}
+/**
+ * deletes the cookies associated with the user to sign them out
+ * @param {req} req request contains no information
+ * @param {res} res returns the status saying they are logged in or not in form {loggedIn : bool}
+ */
+export const loggedIn = async (req,res) => {
+  try{
+    var logged = false;
+
+    let token = req.session.token;
+  
+    //check token exists
+    if (token) {
+      jwt.verify(token, jwtconfig.secret, (err, decoded) => {
+        if (err) {
+          return res.status(401).send({ message: "Unauthorized!" });
+        }
+        logged=true;
+      })
+    }
+    
+    res.status(200).json({ loggedIn: logged });
+  } catch(err){
+    res.status(500).json({ error: err });
+  }
+};
+
 

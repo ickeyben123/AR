@@ -15,13 +15,19 @@ body {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
+ .error {
+	--toastColor: #FFFDFA;
+	--toastBackground: #FF3535;
+	--toastBarBackground: #b42b2b;
+  }
+
 
 .content {
-	max-width: 500px;
+	max-width: 800px;
+	width: 100%;
 	margin: auto;
 	background: white;
 	text-align: center;
-	padding: 10px;
 }
 
 .centre{

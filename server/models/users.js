@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
 
+    vapidSubscription: {
+        type: Object
+    },
+
     password: {
         type: String,
         required: true

@@ -1,5 +1,4 @@
 <script>
-
     /*
     Emoji Reference
     Medicine - &#128138
@@ -9,18 +8,18 @@
     */
 
     import {slide} from 'svelte/transition';
-    import { onMount } from 'svelte';
     import Modal from '../Modal.svelte';
+    import { onMount } from 'svelte';
     import { invalidate, invalidateAll } from '$app/navigation';
-	import { HtmlTag } from 'svelte/internal';
 
     // For notifications
     import { toast } from '@zerodevx/svelte-toast';
 
     let showAddTags = false, showEditTags = false, showDeleteTags = false, reCreate=false, showError=false, showPlaced=false;
-    var tagData = {tagName:"Default"}, coords={}, tagDelete = {tagId:null};
+    var tagData = {tagName:""}, coords={}, tagDelete = {tagId:null};
 
     let errorMessage = "";
+
 
     // Get data from page.js. Handled via Svelte.
     /** @type {import('./$types').PageData} */  
@@ -107,7 +106,8 @@
         rerunLoadFunction();
 
     }
-    // called to delete a tag after confirmation that the user wants it deleted
+
+    // Called to delete a tag after confirmation that the user wants it deleted
     async function submitDelete(){
         var tagId = tagDelete.tagId;//get the tag ID
 
@@ -122,15 +122,21 @@
         window.location.reload();
     }
 
+    // Shows the add tag modal
     function createNewTag() {
-        console.log("You made a new tag!");
         showAddTags = true;
     }
 
     // Gets the location of the user via geolocation and then executes the function func, parsing the location as the first parameter.
     function getGeoLocation(func){
+             const options = {
+                enableHighAccuramincy: true,
+                timeout: 5000,
+                maximumAge: 0,
+             };
+
              if(navigator.geolocation){
-                navigator.geolocation.getCurrentPosition(func,errorGeoLocation);//send the geolocation data to another function
+                navigator.geolocation.getCurrentPosition(func,errorGeoLocation,options);//send the geolocation data to another function
             } else{
                 //this is if the browser doesnt support geolocation, do pop up message or something
                 errorMessage = "Your browser does not support geo";
@@ -138,6 +144,7 @@
             }
     }
 
+    // Called when the user confirms they want to place a tag. Gets geo location to then set the tag's location data.
     async function placeTagViaGeoLocation() {
         console.log("You placed tag " + tagData._id + "!");
         showPlaced = false;
@@ -164,8 +171,7 @@
             next: 0.2,
             dismissable: false
             })
-
-
+            
             getGeoLocation(async (position)=> {
                 setTagLocation(position);
 
@@ -188,6 +194,7 @@
         }
     }
     
+    // Shows the place tag modal.
     function placeTag(tag){
         tagData = tag;
         coords = tagData.coords;
@@ -205,7 +212,7 @@
     function errorGeoLocation(error){
         switch(error.code) {
             case error.PERMISSION_DENIED:
-                error = "User denied the request for Geolocation";
+                error = "Unable to add, user denied the request for Geolocation";
                 break;
             case error.POSITION_UNAVAILABLE:
                 error = "Location information is unavailable";
@@ -217,10 +224,13 @@
                 error = "An unknown error occurred";
                 break;
         }
-        tagData = {tagName:"Default"};//resetting the tagData without having to reload page
+        tagData = {tagName:""};//resetting the tagData without having to reload page
+        errorMessage = error;
+        toast.pop(0);
         showError = true;
     }
 
+    // Shows the edit tag modal
     function editTag(tag) {
         console.log("You edited tag " + tag.id + "!");
         tagData=tag
@@ -229,7 +239,7 @@
     }
 
 
-
+    // Goes to the AR section to view a tag
     function viewTag(tag) {
         window.location.href = "ar?tagId=" + tag._id;
 
@@ -245,10 +255,21 @@
 
     function submitInfo() {
         console.log(tagData.tagName);
+        if(tagData.tagName == ""){
+            toast.push('Please include a tag name!',{ classes: ['error'] });
+            showAddTags = false;
+            return;
+        }
         showAddTags = false;
         newTag();
     }
+    onMount(() => {
+        if(tags[0] && localStorage.getItem("new") == "true"){
+            localStorage.new = false;
+            tags[0].active=true;
+        }
 
+	});
 
 </script>
 
@@ -258,9 +279,9 @@
 
 
     <!-- Title for Tags page -->
-<div class="title">
-    <h1>Your Tags</h1>
-</div>
+    <div class="title">
+        <h1>Your Tags</h1>
+    </div>
 
 <!-- /////////// -->
 <!-- TAG DISPLAY -->
@@ -269,7 +290,7 @@
 <!-- Conditional that it only shows tags if the data has loaded -->
     <!-- Goes through each tag in the fetched tags of the user to create
         tag items for manipulation  -->
-        <div class="margin">
+    <div class="margin">
         {#each tags || [] as tag }
             <div class="accordionPanel">
                 <!-- Key specifies a part of the html that can be made to 'reload' when
@@ -301,7 +322,7 @@
                         <button class="menuButton" on:click={() => viewTag(tag)}>Find</button>
                         {/if}
                         {#if !tag.placed}
-                         <button class="menuButton" on:click={() => placeTag(tag)}>Place</button>
+                            <button class="menuButton" on:click={() => placeTag(tag)}>Place</button>
                         {/if}
                         <button class="menuButton" on:click={() => editTag(tag)}>Edit</button>
                         <button class="menuButton" on:click={() => deleteTag(tag)}>Delete</button>
@@ -312,10 +333,10 @@
         {/each}
     </div>
 
-<div class="bottom">
-    <!-- Button to create a tag at the bottom of the page -->
-<button class="bottomButton" on:click={() =>createNewTag()}>Create Tag +</button>
-</div>
+    <div class="bottom">
+        <!-- Button to create a tag at the bottom of the page -->
+        <button class="bottomButton" on:click={() =>createNewTag()}>Create Tag +</button>
+    </div>
 
 <!-- ////// -->
 <!-- MODALS -->
@@ -328,7 +349,7 @@
 <Modal bind:showModal={showAddTags}>
     <div class="title">
         <h2>Enter Tag Name</h2>
-        <input bind:value={tagData.tagName} placeholder = Name><br>
+        <input bind:value={tagData.tagName} placeholder = "Please enter a tag name"><br>
         <h2>Enter Tag Description</h2>
         <input bind:value={tagData.description} placeholder = Empty><br>
         <h2>Select Tag Type</h2>
@@ -366,7 +387,7 @@
 </Modal>
 
 <Modal bind:showModal={showError}>
-    <h2 style="color: red;">{errorMessage}</h2>
+    <h2 style="color: #FF3535;">{errorMessage}</h2>
 </Modal>
 
 
@@ -401,11 +422,11 @@
     }
 
     .bottom{
-    width: 100%;
-    flex: 0 0 50px;/*or just height:50px;*/
-  margin-top: auto;
-    color: white;
-    text-align: center;
+        width: 100%;
+        flex: 0 0 50px;/*or just height:50px;*/
+        margin-top: auto;
+        color: white;
+        text-align: center;
     }
 
 
@@ -436,10 +457,10 @@
         max-width: 200px;
     }
     button:hover {
-	background-color: #79b9e7;
-	color:white;
-	transition-duration: 0.4s;
-}
+        background-color: #79b9e7;
+        color:white;
+        transition-duration: 0.4s;
+    }
 
     .selectButton {
      
