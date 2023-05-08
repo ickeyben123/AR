@@ -27,15 +27,15 @@ and thus can be set up if you have sufficient docker knowledge.
 
 Do NOT use the latest IBMCloud cli version, as the specific commands used are deprecated.
 
-###Command to build the project:
+### Command to build the project:
 
     sudo ibmcloud dev build [--debug]
 
-###Command to run the project:
+### Command to run the project:
 
     sudo ibmcloud dev run
 
-###Command to test the project:
+### Command to test the project:
 
     sudo ibmcloud dev test
 
