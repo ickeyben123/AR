@@ -7,21 +7,19 @@ once more all 3 libraries have been loaded in.
 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
-    <!-- <script 
+    <script 
       src="https://aframe.io/releases/1.4.1/aframe.min.js"
       on:load={loadComponent}></script>
     <script 
-      type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'
+      type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/3.4.5/aframe/build/aframe-ar.js'
       on:load={loadComponent}></script>
-
-       -->
+      <script 
+      type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/3.4.5/three.js/build/ar-threex-location-only.js'
+      on:load={loadComponent}></script>
 </head>
 
 <script>
   import { onMount } from "svelte";
-  import { toast } from '@zerodevx/svelte-toast';
-  import * as THREE from 'three';
-  import * as THREEx from '@ar-js-org/ar.js/three.js/build/ar-threex-location-only.js'
 
   /** @type {import('./$types').PageData} */  
   export let data;
@@ -32,11 +30,10 @@ once more all 3 libraries have been loaded in.
   let mounted = false;
   let componentLoaded = 0;
   let altitude = 3; 
-  let dist = 0;
 
   // Once the 3 components of our program are loaded ready is set to True
   // which will lead to AR being loaded
-  $: ready = componentLoaded == 2;
+  $: ready = componentLoaded == 3;
 
   
   const loadComponent = () => {
@@ -54,13 +51,25 @@ once more all 3 libraries have been loaded in.
     console.log(item.coords.latitude);
     console.log(item.coords.longitude);
     
-    item.coords.latitude = item.coords.latitude+0.0001;
-    item.coords.longitude = item.coords.longitude+0.0001;
+    item.coords.latitude = item.coords.latitude+0.0005;
+    item.coords.longitude = item.coords.longitude+0.0005;
 
     // parse lat and long into a usable string format.
     latitude = item.coords.latitude.toString();
     longitude = item.coords.longitude.toString();
   }
+
+  onMount(() => {
+
+    console.log("mounted")
+
+    // url params contain our tagId which we will use to get lat and long.
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    tagId = urlParams.get('tagId')
+    updateLatLong();
+    mounted=true;
+  });
 
   async function setNotPlaced(){
     
@@ -86,158 +95,40 @@ once more all 3 libraries have been loaded in.
     window.location.href = "/tags"
   }
 
-  let id;
-let target;
-let options;
-
-function error(err) {
-  console.error(`ERROR(${err.code}): ${err.message}`);
-}
-
-target = {
-  latitude: 0,
-  longitude: 0,
-};
-
-options = {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0,
-};
-
-
-function main() {
-  const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(80, 2, 0.1, 50000);
-    const renderer = new THREE.WebGLRenderer({ 
-        canvas: document.querySelector('#canvas1') 
-    });
-
-    const geom = new THREE.BoxGeometry(20,20,20);
-
-  //const arjs = new THREEx.LocationBased(scene, camera);
-   //arjs.setGpsOptions(options={gpsMinAccuracy: 1, gpsMinAccuracy : 20})
-
-    // You can change the minimum GPS accuracy needed to register a position - by default 1000m
-    const arjs = new THREEx.LocationBased(scene, camera );
-    const cam = new THREEx.WebcamRenderer(renderer, '#video1');
-
-    const mouseStep = THREE.MathUtils.degToRad(5);
-
-
-    let orientationControls;
-
-    // Orientation controls only work on mobile device
-    if (isMobile()){   
-        orientationControls = new THREEx.DeviceOrientationControls(camera);
-    } 
-
-    let fake = null;
-    let first = true;
-
-    arjs.on("gpsupdate", pos => {
-        if(first) {
-            setupObjects(longitude, latitude);
-            first = false;
-        }
-    });
-
-    arjs.on("gpserror", code => {
-        alert(`GPS error: code ${code}`);
-    });
-
-    // Uncomment to use a fake GPS location
-    //fake = { lat: 51.05, lon : -0.72 };
-    if(fake) {
-        arjs.fakeGps(fake.lon, fake.lat);
-    } else {
-        arjs.startGps();
-    } 
-
-
-    let mousedown = false, lastX = 0;
-
-    // Mouse events for testing on desktop machine
-    if(!isMobile()) {
-        window.addEventListener("mousedown", e=> {
-            mousedown = true;
-        });
-
-        window.addEventListener("mouseup", e=> {
-            mousedown = false;
-        });
-
-        window.addEventListener("mousemove", e=> {
-            if(!mousedown) return;
-            if(e.clientX < lastX) {
-                camera.rotation.y += mouseStep; 
-                if(camera.rotation.y < 0) {
-                    camera.rotation.y += 2 * Math.PI;
-                }
-            } else if (e.clientX > lastX) {
-                camera.rotation.y -= mouseStep;
-                if(camera.rotation.y > 2 * Math.PI) {
-                    camera.rotation.y -= 2 * Math.PI;
-                }
-            }
-            lastX = e.clientX;
-        });
-    }
-
-	function isMobile() {
-    	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        	// true for mobile device
-        	return true;
-    	}
-    	return false;
-	}
-
-    function render(time) {
-        resizeUpdate();
-        if(orientationControls) orientationControls.update();
-        cam.update();
-        renderer.render(scene, camera);
-        requestAnimationFrame(render);
-    }
-
-    function resizeUpdate() {
-        const canvas = renderer.domElement;
-        const width = canvas.clientWidth, height = canvas.clientHeight;
-        if(width != canvas.width || height != canvas.height) {
-            renderer.setSize(width, height, false);
-        }
-        camera.aspect = canvas.clientWidth / canvas.clientHeight;
-        camera.updateProjectionMatrix();
-    }
-
-    function setupObjects(longitude, latitude) {
-        // Use position of first GPS update (fake or real)
-        const material = new THREE.MeshBasicMaterial({color: 0xffff00});
-        arjs.add(new THREE.Mesh(geom, material), longitude, latitude - 0.0005); // slightly south
-    }
-
-    requestAnimationFrame(render);
-}
-
-onMount(() => {
-
-console.log("mounted")
-
-// url params contain our tagId which we will use to get lat and long.
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
-tagId = urlParams.get('tagId')
-updateLatLong();
-mounted=true;
-main();
-});
-
 
   </script>
 
+<!-- 
+each script also calls loadComponent function when loaded
+loadComponent increments componentsLoaded, this is only called 
+once svelte has mounted this page.  
+-->
 
-<video id='video1' autoplay playsinline style='display:none'></video>
-<canvas id="canvas1" style='background-color: black; width:100%; height:100%; display:block'></canvas>
+<!--
+once svelte has mounted and libraries have been loaded ready boolean will be
+true and a-scene will be loaded in.
+-->
+
+
+{#if ready}
+  <div class="table">
+    <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
+      <!-- 
+        a-camera with gps-new-camera parameter specified creates an ar.js version of a-camera which is 
+        tracked by gps
+        gpsMinDistance is the minumum distance in metres you need to move before ar is updated
+      -->
+
+  <a-camera id='camera1' look-controls-enabled='true' arjs-device-orientation-controls='smoothingFactor: 0.1' gps-new-camera='gpsMinDistance: 1'> </a-camera>
+      <!--
+        place an entity repersenting the tag on the screen with appropriate lat and long
+      -->
+      <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: {latitude}; longitude: {longitude}" scale="10 10 10"></a-entity>
+
+    
+    </a-scene>
+    </div>
+{/if}
 
   <div class="content">
     <button style="
@@ -249,3 +140,4 @@ main();
       Pickup Tag
     </button>
   </div>
+
