@@ -45,13 +45,6 @@
             }
             
         });
-        
-        // send notification about the details of the response.
-        if(res.status != 200){
-            toast.push(res.body);
-        }
-
-        goto('/login');
     }
 
 </script>
