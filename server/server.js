@@ -102,7 +102,7 @@ app.use(
 app.use(cors({origin:true,credentials: true}));
 // define first route
 app.get("/", (req, res) => {
-  res.json("Hello lol?.");
+  res.json("Backend response...");
 });
 
 // start node server
