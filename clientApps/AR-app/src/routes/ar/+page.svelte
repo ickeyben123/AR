@@ -20,6 +20,7 @@ once more all 3 libraries have been loaded in.
 
 <script>
   import { onMount } from "svelte";
+  import { toast } from '@zerodevx/svelte-toast';
 
   /** @type {import('./$types').PageData} */  
   export let data;
@@ -34,6 +35,10 @@ once more all 3 libraries have been loaded in.
   // Once the 3 components of our program are loaded ready is set to True
   // which will lead to AR being loaded
   $: ready = componentLoaded == 3;
+
+
+
+
 
   
   const loadComponent = () => {
@@ -51,15 +56,15 @@ once more all 3 libraries have been loaded in.
     console.log(item.coords.latitude);
     console.log(item.coords.longitude);
     
-    item.coords.latitude = item.coords.latitude+0.0005;
-    item.coords.longitude = item.coords.longitude+0.0005;
+    item.coords.latitude = item.coords.latitude+0.0001;
+    item.coords.longitude = item.coords.longitude+0.0001;
 
     // parse lat and long into a usable string format.
     latitude = item.coords.latitude.toString();
     longitude = item.coords.longitude.toString();
   }
 
-  onMount(() => {
+  onMount(async () => {
 
     console.log("mounted")
 
@@ -69,7 +74,62 @@ once more all 3 libraries have been loaded in.
     tagId = urlParams.get('tagId')
     updateLatLong();
     mounted=true;
+
+const el = await waitForElm('[gps-new-camera]');
+
+
+     toast.push(`Got first GPS position: lon ${longitude} lat ${latitude}`);
+    let testEntityAdded = false;
+
+           el.addEventListener("gps-camera-update-position", e => {
+        if(!testEntityAdded) {
+           
+            toast.push(`Got first GPS position: lon ${longitude} lat ${latitude}`);
+            // Add a box to the north of the initial GPS position
+            const entity = document.createElement("a-box");
+            entity.setAttribute("scale", {
+                x: 20, 
+                y: 20,
+                z: 20
+            });
+            entity.setAttribute('material', { color: 'red' } );
+            entity.setAttribute('gps-new-entity-place', {
+                latitude: latitude + 0.001,
+                longitude: longitude
+            });
+            document.querySelector("a-scene").appendChild(entity);
+        }
+        testEntityAdded = true;
+    });
+  
+
+
   });
+
+
+
+  function waitForElm(selector) {
+    return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+            return resolve(document.querySelector(selector));
+        }
+
+        const observer = new MutationObserver(mutations => {
+            if (document.querySelector(selector)) {
+                resolve(document.querySelector(selector));
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+}
+
+
+
 
   async function setNotPlaced(){
     
@@ -119,11 +179,10 @@ true and a-scene will be loaded in.
         gpsMinDistance is the minumum distance in metres you need to move before ar is updated
       -->
 
-  <a-camera id='camera1' look-controls-enabled='true' arjs-device-orientation-controls='smoothingFactor: 0.1' gps-new-camera='gpsMinDistance: 1'> </a-camera>
+      <a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
       <!--
         place an entity repersenting the tag on the screen with appropriate lat and long
       -->
-      <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: {latitude}; longitude: {longitude}" scale="10 10 10"></a-entity>
 
     
     </a-scene>
